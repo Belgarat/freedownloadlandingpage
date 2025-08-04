@@ -1,0 +1,230 @@
+'use client'
+
+import { useState } from 'react'
+import { Mail, Download, Star, BookOpen, ExternalLink } from 'lucide-react'
+import { useAnalytics } from '@/lib/useAnalytics'
+
+export default function Home() {
+  const [email, setEmail] = useState('')
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const { trackEmailSubmit } = useAnalytics()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+
+    setIsLoading(true)
+    try {
+      // Track analytics
+      await trackEmailSubmit(email)
+      
+      // Send ebook via MailerSend
+      const response = await fetch('/api/send-ebook', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          name: email.split('@')[0] // Use email prefix as name
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to send ebook')
+      }
+
+      setIsSubmitted(true)
+    } catch (error) {
+      console.error('Error submitting email:', error)
+      // You can add error state handling here
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-teal-900 via-cyan-900 to-blue-900">
+      <div className="container mx-auto px-4 py-4 sm:py-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header - mobile optimized */}
+          <div className="flex flex-col items-center mb-6 sm:mb-8">
+            <div className="flex items-center space-x-2 mb-3 sm:mb-4">
+              <BookOpen className="h-8 w-8 sm:h-10 sm:w-10 text-amber-400" />
+              <span className="text-2xl sm:text-4xl md:text-5xl font-bold text-white font-serif leading-tight">Fish Cannot Carry Guns</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-gray-200">
+              <span>by Michael Morgan</span>
+              <span className="flex items-center gap-1 text-amber-300 font-semibold">
+                <Star className="w-4 h-4" /> 5.0 <span className="text-gray-300 font-normal">(1 review)</span>
+              </span>
+            </div>
+            <div className="flex flex-wrap justify-center gap-1 sm:gap-2 text-xs text-amber-200 mt-2">
+              <span>#SciFi</span>
+              <span>#Dystopian</span>
+              <span>#Cyberpunk</span>
+              <span>#Androids</span>
+              <span>#DangerForHumanity</span>
+            </div>
+          </div>
+
+          {/* Main Content - mobile optimized */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
+            {/* Book Cover Section */}
+            <div className="space-y-4 sm:space-y-6">
+              <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border border-teal-700/50">
+                <div className="w-64 sm:w-80 md:w-96 h-80 sm:h-96 md:h-[28rem] mx-auto bg-gradient-to-br from-teal-800 to-cyan-800 rounded-lg shadow-lg mb-4 sm:mb-6 flex items-center justify-center border border-teal-600">
+                  <img 
+                    src="/ebook_cover.webp" 
+                    alt="Fish Cannot Carry Guns - Book Cover" 
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">Download Free Sample</h2>
+                {!isSubmitted ? (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-teal-100 mb-2">
+                        Enter your email to get a free sample
+                      </label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-teal-300 w-5 h-5" />
+                        <input
+                          type="email"
+                          id="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="your@email.com"
+                          required
+                          className="w-full pl-10 pr-4 py-3 bg-teal-800/50 border border-teal-600 rounded-lg text-white placeholder-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-base"
+                        />
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="w-full bg-amber-600 hover:bg-amber-700 disabled:bg-amber-800 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 text-base"
+                    >
+                      {isLoading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          <span>Processing...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Download className="w-5 h-5" />
+                          <span>Get Free Sample</span>
+                        </>
+                      )}
+                    </button>
+                  </form>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="bg-green-900/50 border border-green-700 rounded-lg p-4">
+                      <p className="text-green-300 font-medium">
+                        ✓ Thank you! Check your email for the free sample.
+                      </p>
+                    </div>
+                    <a
+                      href="https://www.amazon.com/dp/B0DS55TQ8R"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-block bg-orange-700 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 text-base"
+                    >
+                      <BookOpen className="w-5 h-5" />
+                      <span>Buy on Amazon</span>
+                    </a>
+                  </div>
+                )}
+              </div>
+
+              {/* Substack Subscription Box */}
+              <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-6 text-center border border-teal-700/50">
+                <h3 className="text-lg font-semibold text-white mb-3">Stay Updated with Sci-Fi</h3>
+                <p className="text-teal-100 text-sm mb-4">
+                  Subscribe to Around Sci-Fi for the latest in speculative fiction, author interviews, and exclusive content.
+                </p>
+                <a
+                  href="https://aroundscifi.substack.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-base"
+                >
+                  <span>Visit Substack</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            {/* Book Details Section */}
+            <div className="space-y-6 sm:space-y-8">
+              {/* Description */}
+              <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
+                <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>
+                <p className="text-teal-100 mb-4 text-sm sm:text-base">
+                  Fish Cannot Carry Guns is a collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality.<br/>
+                  For fans of <span className="font-semibold text-amber-300">Black Mirror</span>, cyberpunk noir, and fringe futurism, these slow-burning, unsettling tales challenge what it means to be human in a world ruled by code.
+                </p>
+                <ul className="list-disc pl-5 text-teal-100 mb-4 text-sm sm:text-base">
+                  <li><b>Betrayal Circuit:</b> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li>
+                  <li><b>Devil's Advocate:</b> What if you were trapped in a cell... with the person who killed you?</li>
+                  <li><b>The Old Man and the Fee:</b> On an ordinary day in Siberia, something extraordinary fell from the sky.</li>
+                  <li><b>All of a Sudden:</b> James has been afraid all his life, but the heart of the forest won't stop calling him.</li>
+                  <li><b>Fish Cannot Carry Guns:</b> All his life, John had thought he was safe...</li>
+                </ul>
+                <p className="text-xs text-teal-200">All interior illustrations are original works by the author.</p>
+              </div>
+
+              {/* Author Bio */}
+              <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
+                <h3 className="text-lg font-semibold text-white mb-4">About the Author</h3>
+                <p className="text-teal-100 whitespace-pre-line text-sm sm:text-base">
+                  Is the snowflake responsible for the avalanche?
+                  {"\n"}
+                  I'm a lifelong reader with a love for physics, psychology, and stories that ask hard questions, and don't always offer easy answers.
+                  {"\n"}
+                  Consultant by day, author by night.
+                  {"\n"}
+                  Proud father. Grateful husband.
+                  {"\n"}
+                  Based in the U.S., often on the move.
+                </p>
+              </div>
+
+              {/* Amazon Link */}
+              <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 text-center border border-teal-700/50">
+                <a
+                  href="https://www.amazon.com/dp/B0DS55TQ8R"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-base"
+                >
+                  Buy "Fish Cannot Carry Guns" on Amazon
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer with imprint logo and info - mobile optimized */}
+          <div className="mt-12 sm:mt-16 text-center text-teal-200 text-sm flex flex-col items-center gap-4">
+            <p>© 2025 Michael Morgan. All rights reserved.</p>
+            <div className="flex flex-col items-center gap-2">
+              <a href="https://37indielab.com/" target="_blank" rel="noopener noreferrer" className="inline-block">
+                <img src="/logo_transparent.png" alt="3/7 Indie Lab Logo" className="h-10 sm:h-12 mb-2" style={{maxWidth:'80px'}} />
+              </a>
+              <div className="text-xs text-teal-200 max-w-md px-4">
+                <strong className="text-white">3/7 Indie Lab</strong> — Be independent, be unique.<br/>
+                At 3/7 Indie Lab, we are fiercely independent. We will not conform to mainstream ideas or chase profits. We will always support authors who want to push the boundaries of the publishing market with an independent — and good — writing.<br/>
+                <a href="https://37indielab.com/" target="_blank" rel="noopener noreferrer" className="underline text-teal-300">www.37indielab.com</a>
+                <br/>
+                <span className="italic">3/7 Indie Lab is an author-centric imprint. Our mission is to help independent authors publish their books. All rights, responsibilities, and liabilities associated with the content and distribution of the books remain solely with the respective authors or other entities involved.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+} 

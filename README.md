@@ -16,6 +16,7 @@ A beautiful Next.js 15 landing page for free ebook downloads with email collecti
 - ♿ Accessibility optimized (ARIA, semantic HTML)
 - 🔍 SEO optimized (meta tags, structured data)
 - 📈 Performance optimized (image compression, lazy loading)
+- 🔐 Secure admin panel with password protection
 
 ## Book Information
 
@@ -110,9 +111,27 @@ npm run test:ui
 npm run test:headed
 ```
 
+## Admin Panel
+
+The project includes a secure admin panel accessible at `/admin` with:
+
+- **Password Protection**: Secure authentication with environment variable
+- **Analytics Dashboard**: Real-time statistics from Supabase
+- **Download Tracking**: Monitor ebook downloads and email collection
+- **Responsive Design**: Works on all devices
+- **Session Management**: Persistent login with sessionStorage
+
+### Admin Features
+
+- **Total Downloads**: Count of all ebook downloads
+- **Total Emails**: Count of all collected email addresses
+- **Recent Activity**: Last 7 days statistics
+- **Real-time Updates**: Refresh statistics on demand
+- **Secure Logout**: Clear session data
+
 ## Testing
 
-The project includes a comprehensive Playwright test suite with 12 tests covering:
+The project includes a comprehensive Playwright test suite with 13 tests covering:
 
 - ✅ Landing page UI elements
 - ✅ Email submission functionality
@@ -179,6 +198,9 @@ RESEND_API_KEY=your_resend_api_key_here
 
 # Site Configuration
 NEXT_PUBLIC_SITE_URL=https://yourdomain.com
+
+# Admin Configuration
+ADMIN_PASSWORD=your_secure_admin_password_here
 ```
 
 ## Deployment

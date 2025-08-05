@@ -1,0 +1,231 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { Lock, Eye, EyeOff, BarChart3, Users, Download, Mail } from 'lucide-react'
+
+export default function AdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [stats, setStats] = useState({
+    totalDownloads: 0,
+    totalEmails: 0,
+    recentDownloads: 0,
+    recentEmails: 0
+  })
+  const router = useRouter()
+
+  useEffect(() => {
+    // Check if already authenticated
+    const auth = sessionStorage.getItem('admin_authenticated')
+    if (auth === 'true') {
+      setIsAuthenticated(true)
+      fetchStats()
+    }
+  }, [])
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
+
+    try {
+      const response = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+      })
+
+      if (response.ok) {
+        sessionStorage.setItem('admin_authenticated', 'true')
+        setIsAuthenticated(true)
+        fetchStats()
+      } else {
+        setError('Password non corretta')
+      }
+    } catch (error) {
+      setError('Errore di connessione')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('admin_authenticated')
+    setIsAuthenticated(false)
+    setPassword('')
+  }
+
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('/api/admin/stats')
+      if (response.ok) {
+        const data = await response.json()
+        setStats(data)
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error)
+    }
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-teal-900 via-cyan-900 to-blue-900 flex items-center justify-center p-4">
+        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-8 w-full max-w-md border border-teal-700/50">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-2xl font-bold text-white mb-2">Admin Panel</h1>
+            <p className="text-teal-200">Accedi per visualizzare le statistiche</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-teal-100 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-10 pr-12 py-3 bg-teal-800/50 border border-teal-600 rounded-lg text-white placeholder-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  placeholder="Inserisci password"
+                  required
+                />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-teal-300 w-5 h-5" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-teal-300 hover:text-white"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            {error && (
+              <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 flex items-center space-x-2">
+                <div className="w-5 h-5 bg-red-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs">!</span>
+                </div>
+                <p className="text-red-300 text-sm">{error}</p>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-amber-600 hover:bg-amber-700 disabled:bg-amber-800 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+            >
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <span>Accesso in corso...</span>
+                </>
+              ) : (
+                <>
+                  <Lock className="w-5 h-5" />
+                  <span>Accedi</span>
+                </>
+              )}
+            </button>
+          </form>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-teal-900 via-cyan-900 to-blue-900 p-4">
+      <div className="container mx-auto max-w-6xl">
+        {/* Header */}
+        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-teal-700/50">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
+              <p className="text-teal-200">Statistiche del sito Fish Cannot Carry Guns</p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-teal-200 text-sm">Download Totali</p>
+                <p className="text-3xl font-bold text-white">{stats.totalDownloads}</p>
+              </div>
+              <Download className="w-8 h-8 text-teal-400" />
+            </div>
+          </div>
+
+          <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-teal-200 text-sm">Email Raccolte</p>
+                <p className="text-3xl font-bold text-white">{stats.totalEmails}</p>
+              </div>
+              <Mail className="w-8 h-8 text-teal-400" />
+            </div>
+          </div>
+
+          <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-teal-200 text-sm">Download Recenti</p>
+                <p className="text-3xl font-bold text-white">{stats.recentDownloads}</p>
+              </div>
+              <BarChart3 className="w-8 h-8 text-teal-400" />
+            </div>
+          </div>
+
+          <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-teal-200 text-sm">Email Recenti</p>
+                <p className="text-3xl font-bold text-white">{stats.recentEmails}</p>
+              </div>
+              <Users className="w-8 h-8 text-teal-400" />
+            </div>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
+          <h2 className="text-xl font-bold text-white mb-4">Azioni</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button
+              onClick={fetchStats}
+              className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+            >
+              <BarChart3 className="w-5 h-5" />
+              <span>Aggiorna Statistiche</span>
+            </button>
+            <button
+              onClick={() => window.open('/', '_blank')}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+            >
+              <Eye className="w-5 h-5" />
+              <span>Visualizza Sito</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+} 

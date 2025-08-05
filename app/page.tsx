@@ -269,7 +269,7 @@ export default function Home() {
             
             <div className="space-y-4 text-sm">
               <p className="text-teal-100">
-                We've sent your free sample to <span className="font-semibold text-white">{email}</span>
+                We've sent your free copy to <span className="font-semibold text-white">{email}</span>
               </p>
               
               <div className="bg-amber-900/30 border border-amber-700 rounded-lg p-3">

@@ -42,19 +42,18 @@ export async function GET(
       )
     }
 
-    // Check if token has already been used
-    if (tokenData.used) {
+    // Check if token has already been used (only after 24 hours)
+    const tokenCreatedAt = new Date(tokenData.created_at)
+    const hoursSinceCreation = (now.getTime() - tokenCreatedAt.getTime()) / (1000 * 60 * 60)
+    
+    if (hoursSinceCreation > 24) {
       return NextResponse.json(
-        { error: 'Download link has already been used' },
+        { error: 'Download link has expired (24 hours)' },
         { status: 410 }
       )
     }
 
-    // Mark token as used
-    await supabaseAdmin
-      .from('download_tokens')
-      .update({ used: true })
-      .eq('token', token)
+    // Note: We don't mark token as used immediately - it can be used multiple times within 24 hours
 
     // Track download in analytics
     await supabaseAdmin

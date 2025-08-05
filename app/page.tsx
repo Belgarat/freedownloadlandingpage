@@ -215,15 +215,18 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Amazon Link */}
+              {/* Goodreads Link */}
               <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 text-center border border-teal-700/50">
+                <p className="text-teal-100 mb-3 text-sm">
+                  Support independent authors by adding this book to your Goodreads reading list
+                </p>
                 <a
-                  href="https://www.amazon.com/dp/B0DS55TQ8R"
+                  href="https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-base"
+                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-base"
                 >
-                  Buy "Fish Cannot Carry Guns" on Amazon
+                  Add to Goodreads
                 </a>
               </div>
             </div>

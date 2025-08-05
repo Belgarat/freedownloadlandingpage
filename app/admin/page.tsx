@@ -84,6 +84,16 @@ export default function AdminPage() {
             <h1 className="text-2xl font-bold text-white mb-2">Admin Panel</h1>
             <p className="text-teal-200">Accedi per visualizzare le statistiche</p>
           </div>
+          
+          {/* Back to Homepage Link */}
+          <div className="text-center mb-6">
+            <a
+              href="/"
+              className="text-teal-300 hover:text-white transition-colors duration-200 text-sm underline"
+            >
+              ← Torna alla Homepage
+            </a>
+          </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>

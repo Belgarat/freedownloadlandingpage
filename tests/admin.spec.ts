@@ -72,6 +72,15 @@ test.describe('Admin Panel', () => {
     await expect(passwordInput).toHaveAttribute('required')
   })
 
+  test('should have back to homepage link', async ({ page }) => {
+    // Check back to homepage link is visible
+    await expect(page.getByText('← Torna alla Homepage')).toBeVisible()
+    
+    // Check link points to homepage
+    const backLink = page.getByText('← Torna alla Homepage')
+    await expect(backLink).toHaveAttribute('href', '/')
+  })
+
   test('should have responsive design', async ({ page }) => {
     // Test mobile view
     await page.setViewportSize({ width: 375, height: 667 })

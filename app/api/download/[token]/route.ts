@@ -75,7 +75,7 @@ export async function GET(
 
     // Serve the PDF file
     try {
-      const filePath = join(process.cwd(), 'public', 'ebooks', 'fish-cannot-carry-guns-sample.pdf')
+      const filePath = join(process.cwd(), 'public', 'ebooks', 'fish-cannot-carry-guns-sample.pdf.pdf')
       const fileBuffer = readFileSync(filePath)
       
       return new NextResponse(fileBuffer, {

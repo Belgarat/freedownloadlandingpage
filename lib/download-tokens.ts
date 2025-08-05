@@ -31,6 +31,6 @@ export const validateDownloadToken = (token: string, email: string): boolean => 
 }
 
 export const createDownloadUrl = (token: string): string => {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://fishcannotcarryguns.aroundscifi.us'
   return `${baseUrl}/api/download/${token}`
 } 

@@ -60,7 +60,7 @@ export const BOOK_CONFIG = {
 
 export const EMAIL_CONFIG = {
   senderName: 'Fish Cannot Carry Guns',
-  senderEmail: 'noreply@yourdomain.com', // Update this with your verified domain
+  senderEmail: 'noreply@fishcannotcarryguns.aroundscifi.us', // Updated with verified domain
   replyTo: 'info@37indielab.com',
   subjectPrefix: 'Your Free Ebook:',
   templateExpiryHours: 24,
@@ -70,7 +70,7 @@ export const EMAIL_CONFIG = {
 export const SITE_CONFIG = {
   title: 'Fish Cannot Carry Guns - Free Ebook Sample',
   description: 'Download your free sample of Fish Cannot Carry Guns by Michael Morgan. A collection of speculative short stories for fans of Black Mirror and cyberpunk noir.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://fishcannotcarryguns.aroundscifi.us',
   theme: {
     primary: '#0f766e', // teal-700
     secondary: '#0891b2', // cyan-600

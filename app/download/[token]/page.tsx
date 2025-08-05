@@ -74,7 +74,7 @@ export default function DownloadPage({ params }: DownloadPageProps) {
         const url = window.URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
-        a.download = 'fish-cannot-carry-guns-sample.pdf'
+        a.download = 'fish-cannot-carry-guns.pdf'
         document.body.appendChild(a)
         a.click()
         window.URL.revokeObjectURL(url)

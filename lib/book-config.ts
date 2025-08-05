@@ -68,7 +68,7 @@ export const EMAIL_CONFIG = {
 }
 
 export const SITE_CONFIG = {
-  title: 'Fish Cannot Carry Guns - Free Ebook Sample',
+  title: 'Fish Cannot Carry Guns - Free Ebook',
   description: 'Download your free copy of Fish Cannot Carry Guns by Michael B. Morgan. A collection of speculative short stories for fans of Black Mirror and cyberpunk noir.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://fishcannotcarryguns.aroundscifi.us',
   theme: {

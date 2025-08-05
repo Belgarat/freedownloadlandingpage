@@ -74,13 +74,13 @@ export async function GET(
 
     // Serve the PDF file
     try {
-      const filePath = join(process.cwd(), 'public', 'ebooks', 'fish-cannot-carry-guns-sample.pdf')
+      const filePath = join(process.cwd(), 'public', 'ebooks', 'fish-cannot-carry-guns.pdf')
       const fileBuffer = readFileSync(filePath)
       
       return new NextResponse(fileBuffer, {
         headers: {
           'Content-Type': 'application/pdf',
-          'Content-Disposition': 'inline; filename="fish-cannot-carry-guns-sample.pdf"',
+          'Content-Disposition': 'inline; filename="fish-cannot-carry-guns.pdf"',
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Pragma': 'no-cache',
           'Expires': '0'

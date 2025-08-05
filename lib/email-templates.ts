@@ -63,15 +63,6 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
             </p>
           </div>
           
-          <p>If you enjoy the sample, you can purchase the full book on Amazon:</p>
-          
-          <div style="text-align: center; margin: 20px 0;">
-            <a href="${amazonUrl}" 
-               style="background: #dc2626; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
-              Buy Full Book on Amazon
-            </a>
-          </div>
-          
           <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
           
           <div style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 15px; margin: 20px 0; border-radius: 5px;">

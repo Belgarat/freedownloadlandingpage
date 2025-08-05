@@ -150,13 +150,13 @@ export default function Home() {
                       </p>
                     </div>
                     <a
-                      href="https://www.amazon.com/dp/B0DS55TQ8R"
+                      href="https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full inline-block bg-orange-700 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 text-base"
+                      className="w-full inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 text-base"
                     >
                       <BookOpen className="w-5 h-5" />
-                      <span>Buy on Amazon</span>
+                      <span>Add to Goodreads</span>
                     </a>
                   </div>
                 )}

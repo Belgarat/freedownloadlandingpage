@@ -20,7 +20,7 @@ export default function PrivacyPage() {
               </p>
               <p>
                 <strong>Data Controller:</strong> Michael B. Morgan<br/>
-                <strong>Email:</strong> privacy@fishcannotcarryguns.aroundscifi.us<br/>
+                <strong>Email:</strong> info@37indielab.com<br/>
                 <strong>Last updated:</strong> {new Date().toLocaleDateString('en-US')}
               </p>
             </section>
@@ -136,7 +136,7 @@ export default function PrivacyPage() {
               <div className="bg-teal-800/30 rounded-lg p-4">
                 <p className="mb-3">To exercise your GDPR rights or for any privacy questions:</p>
                 <div className="space-y-2 text-sm">
-                  <p><strong>Email:</strong> privacy@fishcannotcarryguns.aroundscifi.us</p>
+                  <p><strong>Email:</strong> info@37indielab.com</p>
                   <p><strong>Data Controller:</strong> Michael B. Morgan</p>
                   <p><strong>Response time:</strong> Within 30 days of request</p>
                 </div>

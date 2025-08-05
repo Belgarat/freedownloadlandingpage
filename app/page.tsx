@@ -189,7 +189,7 @@ export default function Home() {
             <div className="space-y-6 sm:space-y-8">
               {/* Description */}
               <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
-                <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>ebook
+                <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>
                 <ul className="list-disc pl-5 text-teal-100 mb-4 text-sm sm:text-base">
                   <li><b>Betrayal Circuit:</b> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li>
                   <li><b>Devil's Advocate:</b> What if you were trapped in a cell... with the person who killed you?</li>

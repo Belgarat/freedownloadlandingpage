@@ -186,10 +186,6 @@ export default function Home() {
               {/* Description */}
               <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>
-                <p className="text-teal-100 mb-4 text-sm sm:text-base">
-                  Fish Cannot Carry Guns is a collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality.<br/>
-                  For fans of <span className="font-semibold text-amber-300">Black Mirror</span>, cyberpunk noir, and fringe futurism, these slow-burning, unsettling tales challenge what it means to be human in a world ruled by code.
-                </p>
                 <ul className="list-disc pl-5 text-teal-100 mb-4 text-sm sm:text-base">
                   <li><b>Betrayal Circuit:</b> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li>
                   <li><b>Devil's Advocate:</b> What if you were trapped in a cell... with the person who killed you?</li>

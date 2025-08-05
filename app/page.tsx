@@ -58,6 +58,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-900 via-cyan-900 to-blue-900">
+      {/* Skip to main content link for accessibility */}
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded z-50">
+        Skip to main content
+      </a>
       <div className="container mx-auto px-4 py-4 sm:py-8">
         <div className="max-w-4xl mx-auto">
           {/* Header - mobile optimized */}
@@ -82,7 +86,7 @@ export default function Home() {
           </div>
 
           {/* Main Content - mobile optimized */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
+          <main id="main-content" className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
             {/* Book Cover Section */}
             <div className="space-y-4 sm:space-y-6">
               <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border border-teal-700/50">
@@ -101,7 +105,7 @@ export default function Home() {
                         Enter your email to get your free copy
                       </label>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-teal-300 w-5 h-5" />
+                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-teal-300 w-5 h-5" aria-hidden="true" />
                         <input
                           type="email"
                           id="email"
@@ -119,8 +123,8 @@ export default function Home() {
                     
                     {/* Error Display */}
                     {error && (
-                      <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 flex items-center space-x-2">
-                        <AlertCircle className="w-5 h-5 text-red-300 flex-shrink-0" />
+                      <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 flex items-center space-x-2" role="alert" aria-live="polite">
+                        <AlertCircle className="w-5 h-5 text-red-300 flex-shrink-0" aria-hidden="true" />
                         <p className="text-red-300 text-sm">{error}</p>
                       </div>
                     )}
@@ -132,13 +136,13 @@ export default function Home() {
                     >
                       {isLoading ? (
                         <>
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" aria-hidden="true"></div>
                           <span>Processing...</span>
                         </>
                       ) : (
                         <>
-                          <Download className="w-5 h-5" />
-                          <span>Get Free Copy</span>
+                                                <Download className="w-5 h-5" aria-hidden="true" />
+                      <span>Get Free Copy</span>
                         </>
                       )}
                     </button>
@@ -156,7 +160,7 @@ export default function Home() {
                       rel="noopener noreferrer"
                       className="w-full inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 text-base"
                     >
-                      <BookOpen className="w-5 h-5" />
+                      <BookOpen className="w-5 h-5" aria-hidden="true" />
                       <span>Add to Goodreads</span>
                     </a>
                   </div>
@@ -176,7 +180,7 @@ export default function Home() {
                   className="inline-flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-base"
                 >
                   <span>Visit Substack</span>
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="w-4 h-4" aria-hidden="true" />
                 </a>
               </div>
             </div>
@@ -185,7 +189,7 @@ export default function Home() {
             <div className="space-y-6 sm:space-y-8">
               {/* Description */}
               <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
-                <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>
+                <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>ebook
                 <ul className="list-disc pl-5 text-teal-100 mb-4 text-sm sm:text-base">
                   <li><b>Betrayal Circuit:</b> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li>
                   <li><b>Devil's Advocate:</b> What if you were trapped in a cell... with the person who killed you?</li>
@@ -227,7 +231,7 @@ export default function Home() {
                 </a>
               </div>
             </div>
-          </div>
+          </main>
 
           {/* Footer with imprint logo and info - mobile optimized */}
           <div className="mt-12 sm:mt-16 text-center text-teal-200 text-sm flex flex-col items-center gap-4">
@@ -255,18 +259,19 @@ export default function Home() {
 
       {/* Success Modal */}
       {showSuccessModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true" aria-labelledby="modal-title">
           <div className="bg-teal-900 border border-teal-700 rounded-lg p-6 max-w-md w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-6 h-6 text-green-400" />
-                <h3 className="text-lg font-semibold text-white">Email Sent Successfully!</h3>
+                <h3 id="modal-title" className="text-lg font-semibold text-white">Email Sent Successfully!</h3>
               </div>
               <button
                 onClick={closeSuccessModal}
                 className="text-teal-300 hover:text-white transition-colors"
+                aria-label="Close success modal"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
             
@@ -299,6 +304,7 @@ export default function Home() {
                 <button
                   onClick={closeSuccessModal}
                   className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded text-xs transition-colors"
+                  aria-label="Close modal"
                 >
                   Close
                 </button>

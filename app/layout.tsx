@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import BookSchema from '@/components/BookSchema'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Fish Cannot Carry Guns - Free Ebook Download',
-  description: 'A collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality. For fans of Black Mirror, cyberpunk noir, and fringe futurism.',
+  description: 'Download Fish Cannot Carry Guns by Michael B. Morgan - Free ebook with speculative short stories for fans of Black Mirror and cyberpunk. Complete collection available now.',
   keywords: 'ebook, science fiction, speculative fiction, short stories, cyberpunk, free download, Michael B. Morgan',
   authors: [{ name: 'Michael B. Morgan' }],
   openGraph: {
@@ -51,6 +52,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <BookSchema />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   )

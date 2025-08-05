@@ -1,9 +1,14 @@
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { Metadata } from 'next'
 import BookSchema from '@/components/BookSchema'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'arial']
+})
 
 export const metadata: Metadata = {
   title: 'Fish Cannot Carry Guns - Free Ebook Download',
@@ -54,6 +59,13 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <BookSchema />
+        {/* Preload critical resources */}
+        <link rel="preload" href="/ebook_cover_small.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/favicon-32x32.png" as="image" type="image/png" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={inter.className}>{children}</body>
     </html>

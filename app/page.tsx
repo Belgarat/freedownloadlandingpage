@@ -1,52 +1,40 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail, Download, Star, BookOpen, ExternalLink, X, CheckCircle, AlertCircle } from 'lucide-react'
-import { useAnalytics } from '@/lib/useAnalytics'
+import { Mail, Download, AlertCircle, CheckCircle, X, BookOpen, ExternalLink, Star } from 'lucide-react'
 import CookieConsent from '@/components/CookieConsent'
 
 export default function Home() {
   const [email, setEmail] = useState('')
-  const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
-  const { trackEmailSubmit } = useAnalytics()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email) return
-
     setIsLoading(true)
     setError('')
-    
+
     try {
-      // Track analytics
-      await trackEmailSubmit(email)
-      
-      // Send ebook via API
       const response = await fetch('/api/send-ebook', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email,
-          name: email.split('@')[0] // Use email prefix as name
-        }),
+        body: JSON.stringify({ email }),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to send ebook')
+        throw new Error(data.error || 'Failed to send email')
       }
 
       setIsSubmitted(true)
       setShowSuccessModal(true)
-    } catch (error) {
-      console.error('Error submitting email:', error)
-      setError(error instanceof Error ? error.message : 'An unexpected error occurred')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
       setIsLoading(false)
     }
@@ -107,6 +95,8 @@ export default function Home() {
                       loading="lazy"
                       decoding="async"
                       fetchPriority="high"
+                      width="384"
+                      height="512"
                     />
                   </picture>
                 </div>
@@ -125,7 +115,7 @@ export default function Home() {
                           value={email}
                           onChange={(e) => {
                             setEmail(e.target.value)
-                            setError('') // Clear error when user types
+                            setError('')
                           }}
                           placeholder="your@email.com"
                           required
@@ -154,8 +144,8 @@ export default function Home() {
                         </>
                       ) : (
                         <>
-                                                <Download className="w-5 h-5" aria-hidden="true" />
-                      <span>Get Free Copy</span>
+                          <Download className="w-5 h-5" aria-hidden="true" />
+                          <span>Get Free Copy</span>
                         </>
                       )}
                     </button>
@@ -183,7 +173,7 @@ export default function Home() {
               {/* Substack Subscription Box */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-6 text-center border border-teal-700/50">
                 <p className="text-teal-100 text-sm mb-4">
-                I write Around SciFi on Substack. If you'd like, drop by. It's a nice space where curious readers and talented authors share their love for speculative worlds.
+                  I write Around SciFi on Substack. If you'd like, drop by. It's a nice space where curious readers and talented authors share their love for speculative worlds.
                 </p>
                 <a
                   href="https://aroundscifi.substack.com/"
@@ -203,11 +193,9 @@ export default function Home() {
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>
                 <ul className="list-disc pl-5 text-teal-100 mb-4 text-sm sm:text-base">
-                  <li><b>Betrayal Circuit:</b> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li>
-                  <li><b>Devil's Advocate:</b> What if you were trapped in a cell... with the person who killed you?</li>
-                  <li><b>The Old Man and the Fee:</b> On an ordinary day in Siberia, something extraordinary fell from the sky.</li>
-                  <li><b>All of a Sudden:</b> James has been afraid all his life, but the heart of the forest won't stop calling him.</li>
-                  <li><b>Fish Cannot Carry Guns:</b> All his life, John had thought he was safe...</li>
+                  <li><strong>Betrayal Circuit:</strong> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li>
+                  <li><strong>Devil's Advocate:</strong> What if you were trapped in a cell... with the person who killed you?</li>
+                  <li><strong>Fish Cannot Carry Guns:</strong> All his life, John had thought he was safe...</li>
                 </ul>
                 <p className="text-xs text-teal-200">All interior illustrations are original works by the author.</p>
               </div>
@@ -216,15 +204,7 @@ export default function Home() {
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Author</h3>
                 <p className="text-teal-100 whitespace-pre-line text-sm sm:text-base">
-                  Is the snowflake responsible for the avalanche?
-                  {"\n"}
-                  I'm a lifelong reader with a love for physics, psychology, and stories that ask hard questions, and don't always offer easy answers.
-                  {"\n"}
-                  Consultant by day, author by night.
-                  {"\n"}
-                  Proud father. Grateful husband.
-                  {"\n"}
-                  Based in the U.S., often on the move.
+                  Is the snowflake responsible for the avalanche? I'm a lifelong reader with a love for physics, psychology, and stories that ask hard questions, and don't always offer easy answers. Consultant by day, author by night. Proud father. Grateful husband. Based in the U.S., often on the move.
                 </p>
               </div>
 
@@ -253,18 +233,6 @@ export default function Home() {
                 Privacy Policy
               </a>
             </div>
-            <div className="flex flex-col items-center gap-2">
-              <a href="https://37indielab.com/" target="_blank" rel="noopener noreferrer" className="inline-block">
-                <img src="/logo_transparent.png" alt="3/7 Indie Lab Logo" className="h-10 sm:h-12 mb-2" style={{maxWidth:'80px'}} />
-              </a>
-              <div className="text-xs text-teal-200 max-w-md px-4">
-                <strong className="text-white">3/7 Indie Lab</strong> — Be independent, be unique.<br/>
-                At 3/7 Indie Lab, we are fiercely independent. We will not conform to mainstream ideas or chase profits. We will always support authors who want to push the boundaries of the publishing market with an independent — and good — writing.<br/>
-                <a href="https://37indielab.com/" target="_blank" rel="noopener noreferrer" className="underline text-teal-300">www.37indielab.com</a>
-                <br/>
-                <span className="italic">3/7 Indie Lab is an author-centric imprint. Our mission is to help independent authors publish their books. All rights, responsibilities, and liabilities associated with the content and distribution of the books remain solely with the respective authors or other entities involved.</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -289,7 +257,7 @@ export default function Home() {
             
             <div className="space-y-4 text-sm">
               <p className="text-teal-100">
-                We've sent your free copy to <span className="font-semibold text-white">{email}</span>
+                We've sent your free sample to <span className="font-semibold text-white">{email}</span>
               </p>
               
               <div className="bg-amber-900/30 border border-amber-700 rounded-lg p-3">

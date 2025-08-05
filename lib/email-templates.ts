@@ -74,6 +74,29 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
           
           <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
           
+          <div style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <h3 style="margin: 0 0 10px 0; color: #0c4a6e;">Support Independent Authors</h3>
+            <p style="margin: 0 0 15px 0; color: #0c4a6e;">
+              Since this sample is completely free, we'd be grateful if you could support ${authorName} in these ways:
+            </p>
+            <ul style="margin: 0; padding-left: 20px; color: #0c4a6e;">
+              <li><strong>Add to Goodreads:</strong> Mark "${bookTitle}" as "Want to Read" on Goodreads to help other readers discover it</li>
+              <li><strong>Subscribe to Substack:</strong> Follow <a href="https://aroundscifi.substack.com/" style="color: #0ea5e9;">Around Sci-Fi</a> for the latest in speculative fiction and author interviews</li>
+            </ul>
+            <div style="text-align: center; margin-top: 15px;">
+              <a href="https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns" 
+                 style="background: #0ea5e9; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; margin-right: 10px;">
+                Add to Goodreads
+              </a>
+              <a href="https://aroundscifi.substack.com/" 
+                 style="background: #f59e0b; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px;">
+                Subscribe to Substack
+              </a>
+            </div>
+          </div>
+          
+          <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+          
           <div style="font-size: 14px; color: #6b7280;">
             <p><strong>About the Author:</strong></p>
             <p>${authorName} is a lifelong reader with a love for physics, psychology, and stories that ask hard questions, and don't always offer easy answers. Consultant by day, author by night.</p>
@@ -105,6 +128,11 @@ Download your free sample: ${downloadUrl}
 ⚠️ This link expires in 24 hours
 
 If you enjoy the sample, purchase the full book: ${amazonUrl}
+
+Support Independent Authors:
+Since this sample is completely free, we'd be grateful if you could support ${authorName} by:
+- Adding "${bookTitle}" to your Goodreads "Want to Read" list: https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns
+- Subscribing to Around Sci-Fi on Substack: https://aroundscifi.substack.com/
 
 About the Author:
 ${authorName} is a lifelong reader with a love for physics, psychology, and stories that ask hard questions, and don't always offer easy answers. Consultant by day, author by night.

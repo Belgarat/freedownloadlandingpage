@@ -89,7 +89,7 @@ export default function Home() {
           <main id="main-content" className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
             {/* Book Cover Section */}
             <div className="space-y-4 sm:space-y-6">
-              <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border border-teal-700/50">
+              <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border border-teal-700/50">
                 <div className="w-64 sm:w-80 md:w-96 h-80 sm:h-96 md:h-[28rem] mx-auto bg-gradient-to-br from-teal-800 to-cyan-800 rounded-lg shadow-lg mb-4 sm:mb-6 flex items-center justify-center border border-teal-600">
                   <img 
                     src="/ebook_cover.webp" 
@@ -168,7 +168,7 @@ export default function Home() {
               </div>
 
               {/* Substack Subscription Box */}
-              <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-6 text-center border border-teal-700/50">
+              <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-6 text-center border border-teal-700/50">
                 <p className="text-teal-100 text-sm mb-4">
                 I write Around SciFi on Substack. If you'd like, drop by. It's a nice space where curious readers and talented authors share their love for speculative worlds.
                 </p>
@@ -187,7 +187,7 @@ export default function Home() {
             {/* Book Details Section */}
             <div className="space-y-6 sm:space-y-8">
               {/* Description */}
-              <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
+              <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>
                 <ul className="list-disc pl-5 text-teal-100 mb-4 text-sm sm:text-base">
                   <li><b>Betrayal Circuit:</b> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li>
@@ -200,7 +200,7 @@ export default function Home() {
               </div>
 
               {/* Author Bio */}
-              <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
+              <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Author</h3>
                 <p className="text-teal-100 whitespace-pre-line text-sm sm:text-base">
                   Is the snowflake responsible for the avalanche?
@@ -216,7 +216,7 @@ export default function Home() {
               </div>
 
               {/* Goodreads Link */}
-              <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 text-center border border-teal-700/50">
+              <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 text-center border border-teal-700/50">
                 <p className="text-teal-100 mb-3 text-sm">
                   Support independent authors by adding this book to your Goodreads reading list
                 </p>
@@ -259,7 +259,7 @@ export default function Home() {
       {/* Success Modal */}
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-          <div className="bg-teal-900 border border-teal-700 rounded-lg p-6 max-w-md w-full mx-4">
+          <div className="bg-[#073E44] border border-teal-700 rounded-lg p-6 max-w-md w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-6 h-6 text-green-400" />

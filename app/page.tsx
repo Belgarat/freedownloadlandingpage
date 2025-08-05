@@ -90,7 +90,7 @@ export default function Home() {
             {/* Book Cover Section */}
             <div className="space-y-4 sm:space-y-6">
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border border-teal-700/50">
-                <div className="w-64 sm:w-80 md:w-96 h-80 sm:h-96 md:h-[28rem] mx-auto bg-gradient-to-br from-teal-800 to-cyan-800 rounded-lg shadow-lg mb-4 sm:mb-6 flex items-center justify-center border border-teal-600">
+                <div className="w-64 sm:w-80 md:w-96 mx-auto bg-gradient-to-br from-teal-800 to-cyan-800 rounded-lg shadow-lg mb-4 sm:mb-6 flex items-center justify-center">
                   <img 
                     src="/ebook_cover.webp" 
                     alt="Fish Cannot Carry Guns - Book Cover" 

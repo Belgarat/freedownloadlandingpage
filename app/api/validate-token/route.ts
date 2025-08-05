@@ -1,18 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { readFileSync } from 'fs'
-import { join } from 'path'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ token: string }> }
-) {
+export async function POST(request: NextRequest) {
   try {
-    const { token } = await params
+    const body = await request.json()
+    const { token } = body
 
     if (!token) {
       return NextResponse.json(
-        { error: 'Download token is required' },
+        { error: 'Token is required' },
         { status: 400 }
       )
     }
@@ -53,15 +49,13 @@ export async function GET(
       )
     }
 
-    // Note: We don't mark token as used immediately - it can be used multiple times within 24 hours
-
-    // Track download in analytics
+    // Track validation in analytics
     await supabaseAdmin
       .from('analytics')
       .insert([
         {
           email: tokenData.email,
-          action: 'ebook_downloaded',
+          action: 'download_page_visited',
           timestamp: new Date().toISOString(),
           user_agent: request.headers.get('user-agent') || 'unknown',
           referrer: request.headers.get('referer') || 'unknown',
@@ -72,32 +66,17 @@ export async function GET(
         }
       ])
 
-    // Serve the PDF file
-    try {
-      const filePath = join(process.cwd(), 'public', 'ebooks', 'fish-cannot-carry-guns-sample.pdf')
-      const fileBuffer = readFileSync(filePath)
-      
-      return new NextResponse(fileBuffer, {
-        headers: {
-          'Content-Type': 'application/pdf',
-          'Content-Disposition': 'inline; filename="fish-cannot-carry-guns-sample.pdf"',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
-      })
-    } catch (fileError) {
-      console.error('File read error:', fileError)
-      return NextResponse.json(
-        { error: 'Ebook file not found' },
-        { status: 404 }
-      )
-    }
+    return NextResponse.json({
+      success: true,
+      valid: true,
+      email: tokenData.email,
+      expiresAt: tokenData.expires_at
+    })
 
   } catch (error) {
-    console.error('Download error:', error)
+    console.error('Token validation error:', error)
     return NextResponse.json(
-      { error: 'Failed to process download request' },
+      { error: 'Failed to validate token' },
       { status: 500 }
     )
   }

@@ -1,13 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail, Download, Star, BookOpen, ExternalLink } from 'lucide-react'
+import { Mail, Download, Star, BookOpen, ExternalLink, X, CheckCircle, AlertCircle } from 'lucide-react'
 import { useAnalytics } from '@/lib/useAnalytics'
 
 export default function Home() {
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
   const { trackEmailSubmit } = useAnalytics()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -15,11 +17,13 @@ export default function Home() {
     if (!email) return
 
     setIsLoading(true)
+    setError('')
+    
     try {
       // Track analytics
       await trackEmailSubmit(email)
       
-      // Send ebook via MailerSend
+      // Send ebook via API
       const response = await fetch('/api/send-ebook', {
         method: 'POST',
         headers: {
@@ -31,18 +35,24 @@ export default function Home() {
         }),
       })
 
+      const data = await response.json()
+
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to send ebook')
+        throw new Error(data.error || 'Failed to send ebook')
       }
 
       setIsSubmitted(true)
+      setShowSuccessModal(true)
     } catch (error) {
       console.error('Error submitting email:', error)
-      // You can add error state handling here
+      setError(error instanceof Error ? error.message : 'An unexpected error occurred')
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const closeSuccessModal = () => {
+    setShowSuccessModal(false)
   }
 
   return (
@@ -95,13 +105,25 @@ export default function Home() {
                           type="email"
                           id="email"
                           value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          onChange={(e) => {
+                            setEmail(e.target.value)
+                            setError('') // Clear error when user types
+                          }}
                           placeholder="your@email.com"
                           required
                           className="w-full pl-10 pr-4 py-3 bg-teal-800/50 border border-teal-600 rounded-lg text-white placeholder-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-base"
                         />
                       </div>
                     </div>
+                    
+                    {/* Error Display */}
+                    {error && (
+                      <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 flex items-center space-x-2">
+                        <AlertCircle className="w-5 h-5 text-red-300 flex-shrink-0" />
+                        <p className="text-red-300 text-sm">{error}</p>
+                      </div>
+                    )}
+                    
                     <button
                       type="submit"
                       disabled={isLoading}
@@ -225,6 +247,61 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-teal-900 border border-teal-700 rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-6 h-6 text-green-400" />
+                <h3 className="text-lg font-semibold text-white">Email Sent Successfully!</h3>
+              </div>
+              <button
+                onClick={closeSuccessModal}
+                className="text-teal-300 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4 text-sm">
+              <p className="text-teal-100">
+                We've sent your free sample to <span className="font-semibold text-white">{email}</span>
+              </p>
+              
+              <div className="bg-amber-900/30 border border-amber-700 rounded-lg p-3">
+                <p className="text-amber-200 text-xs">
+                  <strong>Important:</strong> Please check your spam/junk folder if you don't see the email in your inbox.
+                </p>
+              </div>
+              
+              <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-3">
+                <p className="text-blue-200 text-xs">
+                  <strong>Marketing Request:</strong> Since this sample is completely free, we'd be grateful if you could add "Fish Cannot Carry Guns" to your Goodreads reading list once you've had a chance to read it. Your support helps independent authors like Michael Morgan continue writing.
+                </p>
+              </div>
+              
+              <div className="flex space-x-2">
+                <a
+                  href="https://www.goodreads.com/book/show/123456789-fish-cannot-carry-guns"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded text-xs transition-colors"
+                >
+                  Add to Goodreads
+                </a>
+                <button
+                  onClick={closeSuccessModal}
+                  className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded text-xs transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 } 

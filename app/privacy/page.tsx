@@ -19,7 +19,7 @@ export default function PrivacyPage() {
                 when you visit our website and request the download of the ebook "Fish Cannot Carry Guns".
               </p>
               <p>
-                <strong>Data Controller:</strong> Michael Morgan<br/>
+                <strong>Data Controller:</strong> Michael B. Morgan<br/>
                 <strong>Email:</strong> privacy@fishcannotcarryguns.aroundscifi.us<br/>
                 <strong>Last updated:</strong> {new Date().toLocaleDateString('en-US')}
               </p>
@@ -137,7 +137,7 @@ export default function PrivacyPage() {
                 <p className="mb-3">To exercise your GDPR rights or for any privacy questions:</p>
                 <div className="space-y-2 text-sm">
                   <p><strong>Email:</strong> privacy@fishcannotcarryguns.aroundscifi.us</p>
-                  <p><strong>Data Controller:</strong> Michael Morgan</p>
+                  <p><strong>Data Controller:</strong> Michael B. Morgan</p>
                   <p><strong>Response time:</strong> Within 30 days of request</p>
                 </div>
               </div>

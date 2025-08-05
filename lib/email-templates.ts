@@ -13,7 +13,7 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
     name = 'there',
     downloadUrl,
     bookTitle = 'Fish Cannot Carry Guns',
-    authorName = 'Michael Morgan',
+    authorName = 'Michael B. Morgan',
     amazonUrl = 'https://www.amazon.com/dp/B0DS55TQ8R',
     publisherName = '3/7 Indie Lab',
     publisherUrl = 'https://37indielab.com'

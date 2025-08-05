@@ -14,7 +14,7 @@ A beautiful Next.js 15 landing page for ebook downloads with email collection, R
 
 ## Book Information
 
-This landing page is designed for the book "Fish Cannot Carry Guns" by Michael Morgan - a collection of speculative short stories for fans of Black Mirror, cyberpunk noir, and fringe futurism.
+This landing page is designed for the book "Fish Cannot Carry Guns" by Michael B. Morgan - a collection of speculative short stories for fans of Black Mirror, cyberpunk noir, and fringe futurism.
 
 ## Setup Instructions
 

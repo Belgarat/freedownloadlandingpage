@@ -67,7 +67,7 @@ export default function Home() {
               <span className="text-2xl sm:text-4xl md:text-5xl font-bold text-white font-serif leading-tight">Fish Cannot Carry Guns</span>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-gray-200">
-              <span>by Michael Morgan</span>
+              <span>by Michael B. Morgan</span>
               <span className="flex items-center gap-1 text-amber-300 font-semibold">
                 <Star className="w-4 h-4" /> 5.0 <span className="text-gray-300 font-normal">(1 review)</span>
               </span>
@@ -231,7 +231,7 @@ export default function Home() {
 
           {/* Footer with imprint logo and info - mobile optimized */}
           <div className="mt-12 sm:mt-16 text-center text-teal-200 text-sm flex flex-col items-center gap-4">
-            <p>© 2025 Michael Morgan. All rights reserved.</p>
+            <p>© 2025 Michael B. Morgan. All rights reserved.</p>
             <div className="flex flex-wrap justify-center gap-4 text-xs">
               <a href="/privacy" className="underline hover:text-white transition-colors">
                 Privacy Policy
@@ -283,7 +283,7 @@ export default function Home() {
               
               <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-3">
                 <p className="text-blue-200 text-xs">
-                  <strong>Support Independent Authors:</strong> Since this book is completely free, we'd be grateful if you could add "Fish Cannot Carry Guns" to your Goodreads reading list once you've had a chance to read it. Your support helps independent authors like Michael Morgan continue writing.
+                  <strong>Support Independent Authors:</strong> Since this book is completely free, we'd be grateful if you could add "Fish Cannot Carry Guns" to your Goodreads reading list once you've had a chance to read it. Your support helps independent authors like Michael B. Morgan continue writing.
                 </p>
               </div>
               

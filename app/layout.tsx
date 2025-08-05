@@ -7,8 +7,8 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Fish Cannot Carry Guns - Free Ebook Download',
   description: 'A collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality. For fans of Black Mirror, cyberpunk noir, and fringe futurism.',
-  keywords: 'ebook, science fiction, speculative fiction, short stories, cyberpunk, free download, Michael Morgan',
-  authors: [{ name: 'Michael Morgan' }],
+  keywords: 'ebook, science fiction, speculative fiction, short stories, cyberpunk, free download, Michael B. Morgan',
+  authors: [{ name: 'Michael B. Morgan' }],
   openGraph: {
     title: 'Fish Cannot Carry Guns - Free Ebook Download',
     description: 'A collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality. For fans of Black Mirror, cyberpunk noir, and fringe futurism.',

@@ -1,7 +1,7 @@
 export const BOOK_CONFIG = {
   title: 'Fish Cannot Carry Guns',
   subtitle: 'A Collection of Speculative Sci-Fi Tales',
-  author: 'Michael Morgan',
+  author: 'Michael B. Morgan',
   authorBio: 'Is the snowflake responsible for the avalanche? I\'m a lifelong reader with a love for physics, psychology, and stories that ask hard questions, and don\'t always offer easy answers. Consultant by day, author by night. Proud father. Grateful husband. Based in the U.S., often on the move.',
   publisher: '3/7 Indie Lab',
   publisherUrl: 'https://37indielab.com',
@@ -69,7 +69,7 @@ export const EMAIL_CONFIG = {
 
 export const SITE_CONFIG = {
   title: 'Fish Cannot Carry Guns - Free Ebook Sample',
-  description: 'Download your free sample of Fish Cannot Carry Guns by Michael Morgan. A collection of speculative short stories for fans of Black Mirror and cyberpunk noir.',
+  description: 'Download your free copy of Fish Cannot Carry Guns by Michael B. Morgan. A collection of speculative short stories for fans of Black Mirror and cyberpunk noir.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://fishcannotcarryguns.aroundscifi.us',
   theme: {
     primary: '#0f766e', // teal-700

@@ -32,7 +32,7 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="background: linear-gradient(135deg, #0f766e, #0891b2, #1e40af); padding: 30px; border-radius: 10px; color: white;">
           <h1 style="margin: 0 0 20px 0; font-size: 24px;">${bookTitle}</h1>
-          <p style="margin: 0; font-size: 16px;">Your free ebook sample is ready!</p>
+          <p style="margin: 0; font-size: 16px;">Your free ebook is ready!</p>
         </div>
         
         <div style="padding: 30px; background: #f8f9fa; border-radius: 0 0 10px 10px;">
@@ -40,12 +40,12 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
           
           <p>Hi ${name},</p>
           
-          <p>Thank you for downloading your free sample of <strong>${bookTitle}</strong> by ${authorName}.</p>
+          <p>Thank you for downloading your free copy of <strong>${bookTitle}</strong> by ${authorName}.</p>
           
           <p>This collection of speculative short stories delves into how technology fractures identity, erodes trust, and distorts reality. For fans of Black Mirror, cyberpunk noir, and fringe futurism.</p>
           
           <div style="background: #e8f5e8; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0; border-radius: 5px;">
-            <h3 style="margin: 0 0 10px 0; color: #065f46;">What's included in your sample:</h3>
+            <h3 style="margin: 0 0 10px 0; color: #065f46;">What's included in your free copy:</h3>
             <ul style="margin: 0; padding-left: 20px;">
               <li><strong>Betrayal Circuit:</strong> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li>
               <li><strong>Devil's Advocate:</strong> What if you were trapped in a cell... with the person who killed you?</li>
@@ -56,7 +56,7 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
           <div style="text-align: center; margin: 30px 0;">
             <a href="${downloadUrl}" 
                style="background: #f59e0b; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
-              Download Your Free Sample (PDF)
+              Download Your Free Copy (PDF)
             </a>
             <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">
               ⏰ This link expires in 24 hours
@@ -68,7 +68,7 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
           <div style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 15px; margin: 20px 0; border-radius: 5px;">
             <h3 style="margin: 0 0 10px 0; color: #0c4a6e;">Support Independent Authors</h3>
             <p style="margin: 0 0 15px 0; color: #0c4a6e;">
-              Since this sample is completely free, we'd be grateful if you could support ${authorName} in these ways:
+              Since this book is completely free, we'd be grateful if you could support ${authorName} in these ways:
             </p>
             <ul style="margin: 0; padding-left: 20px; color: #0c4a6e;">
               <li><strong>Add to Goodreads:</strong> Mark "${bookTitle}" as "Want to Read" on Goodreads to help other readers discover it</li>
@@ -95,7 +95,7 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
             <p><strong>Publisher:</strong> <a href="${publisherUrl}" style="color: #0f766e;">${publisherName}</a> - Be independent, be unique.</p>
             
             <p style="margin-top: 30px; font-size: 12px; color: #9ca3af;">
-              You received this email because you requested a free sample of "${bookTitle}". 
+              You received this email because you requested a free copy of "${bookTitle}". 
               If you didn't request this, please ignore this email.
             </p>
           </div>
@@ -104,24 +104,22 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
       </html>
     `,
     text: `
-${bookTitle} - Your Free Ebook Sample
+${bookTitle} - Your Free Ebook
 
 Thank you for your interest in "${bookTitle}" by ${authorName}!
 
 This collection of speculative short stories delves into how technology fractures identity, erodes trust, and distorts reality. For fans of Black Mirror, cyberpunk noir, and fringe futurism.
 
-What's included in your sample:
+What's included in your free copy:
 - Betrayal Circuit: Captain Stalworth believes he can trust Private Jude Veil. He is wrong.
 - Devil's Advocate: What if you were trapped in a cell... with the person who killed you?
 - Fish Cannot Carry Guns: All his life, John had thought he was safe...
 
-Download your free sample: ${downloadUrl}
+Download your free copy: ${downloadUrl}
 ⚠️ This link expires in 24 hours
 
-If you enjoy the sample, purchase the full book: ${amazonUrl}
-
 Support Independent Authors:
-Since this sample is completely free, we'd be grateful if you could support ${authorName} by:
+Since this book is completely free, we'd be grateful if you could support ${authorName} by:
 - Adding "${bookTitle}" to your Goodreads "Want to Read" list: https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns
 - Subscribing to Around Sci-Fi on Substack: https://aroundscifi.substack.com/
 
@@ -131,7 +129,7 @@ ${authorName} is a lifelong reader with a love for physics, psychology, and stor
 Publisher: ${publisherName} - Be independent, be unique.
 ${publisherUrl}
 
-You received this email because you requested a free sample. If you didn't request this, please ignore this email.
+You received this email because you requested a free copy. If you didn't request this, please ignore this email.
     `
   }
 }

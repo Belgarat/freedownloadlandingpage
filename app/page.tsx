@@ -93,12 +93,12 @@ export default function Home() {
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
-                <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">Download Free Sample</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">Download Your Free Copy</h2>
                 {!isSubmitted ? (
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium text-teal-100 mb-2">
-                        Enter your email to get a free sample
+                        Enter your email to get your free copy
                       </label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-teal-300 w-5 h-5" />
@@ -138,7 +138,7 @@ export default function Home() {
                       ) : (
                         <>
                           <Download className="w-5 h-5" />
-                          <span>Get Free Sample</span>
+                          <span>Get Free Copy</span>
                         </>
                       )}
                     </button>
@@ -147,7 +147,7 @@ export default function Home() {
                   <div className="space-y-4">
                     <div className="bg-green-900/50 border border-green-700 rounded-lg p-4">
                       <p className="text-green-300 font-medium">
-                        ✓ Thank you! Check your email for the free sample.
+                        ✓ Thank you! Check your email for your free copy.
                       </p>
                     </div>
                     <a
@@ -283,7 +283,7 @@ export default function Home() {
               
               <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-3">
                 <p className="text-blue-200 text-xs">
-                  <strong>Support Independent Authors:</strong> Since this sample is completely free, we'd be grateful if you could add "Fish Cannot Carry Guns" to your Goodreads reading list once you've had a chance to read it. Your support helps independent authors like Michael Morgan continue writing.
+                  <strong>Support Independent Authors:</strong> Since this book is completely free, we'd be grateful if you could add "Fish Cannot Carry Guns" to your Goodreads reading list once you've had a chance to read it. Your support helps independent authors like Michael Morgan continue writing.
                 </p>
               </div>
               

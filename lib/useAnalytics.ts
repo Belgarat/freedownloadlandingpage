@@ -13,10 +13,25 @@ interface AnalyticsEvent {
 export const useAnalytics = () => {
   const [hasTrackedPageView, setHasTrackedPageView] = useState(false)
   const [hasTrackedScroll, setHasTrackedScroll] = useState(false)
+  const [analyticsConsent, setAnalyticsConsent] = useState(false)
   const startTime = useRef(Date.now())
   const scrollDepth = useRef(0)
 
+  // Check for analytics consent
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedConsent = localStorage.getItem('cookieConsent')
+      if (savedConsent) {
+        const consent = JSON.parse(savedConsent)
+        setAnalyticsConsent(consent.analytics)
+      }
+    }
+  }, [])
+
   const trackEvent = async (event: Omit<AnalyticsEvent, 'timestamp' | 'userAgent' | 'referrer'>) => {
+    // Only track if user has given consent for analytics
+    if (!analyticsConsent) return
+    
     try {
       await fetch('/api/analytics', {
         method: 'POST',

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Mail, Download, Star, BookOpen, ExternalLink, X, CheckCircle, AlertCircle } from 'lucide-react'
 import { useAnalytics } from '@/lib/useAnalytics'
+import CookieConsent from '@/components/CookieConsent'
 
 export default function Home() {
   const [email, setEmail] = useState('')
@@ -235,6 +236,11 @@ export default function Home() {
           {/* Footer with imprint logo and info - mobile optimized */}
           <div className="mt-12 sm:mt-16 text-center text-teal-200 text-sm flex flex-col items-center gap-4">
             <p>© 2025 Michael Morgan. All rights reserved.</p>
+            <div className="flex flex-wrap justify-center gap-4 text-xs">
+              <a href="/privacy" className="underline hover:text-white transition-colors">
+                Privacy Policy
+              </a>
+            </div>
             <div className="flex flex-col items-center gap-2">
               <a href="https://37indielab.com/" target="_blank" rel="noopener noreferrer" className="inline-block">
                 <img src="/logo_transparent.png" alt="3/7 Indie Lab Logo" className="h-10 sm:h-12 mb-2" style={{maxWidth:'80px'}} />
@@ -305,6 +311,9 @@ export default function Home() {
           </div>
         </div>
       )}
+      
+      {/* Cookie Consent Banner */}
+      <CookieConsent />
     </div>
   )
 } 

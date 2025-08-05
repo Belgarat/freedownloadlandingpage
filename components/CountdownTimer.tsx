@@ -48,10 +48,10 @@ export default function CountdownTimer({ endDate, className = '' }: CountdownTim
       <div className={`bg-red-900/50 border border-red-700 rounded-lg p-4 text-center ${className}`}>
         <div className="flex items-center justify-center space-x-2 mb-2">
           <Clock className="w-5 h-5 text-red-300" />
-          <span className="text-red-300 font-semibold">Offerta Scaduta</span>
+          <span className="text-red-300 font-semibold">Offer Expired</span>
         </div>
         <p className="text-red-200 text-sm">
-          L'offerta gratuita è terminata. Grazie per l'interesse!
+          The free offer has ended. Thank you for your interest!
         </p>
       </div>
     )
@@ -61,17 +61,17 @@ export default function CountdownTimer({ endDate, className = '' }: CountdownTim
     <div className={`bg-amber-900/50 border border-amber-700 rounded-lg p-4 text-center ${className}`}>
       <div className="flex items-center justify-center space-x-2 mb-3">
         <Clock className="w-5 h-5 text-amber-300" />
-        <span className="text-amber-300 font-semibold">Offerta Limitata</span>
+        <span className="text-amber-300 font-semibold">Limited Time Offer</span>
       </div>
       
       <div className="grid grid-cols-4 gap-2 mb-3">
         <div className="bg-amber-800/50 rounded p-2">
           <div className="text-2xl font-bold text-white">{timeLeft.days}</div>
-          <div className="text-xs text-amber-200">Giorni</div>
+          <div className="text-xs text-amber-200">Days</div>
         </div>
         <div className="bg-amber-800/50 rounded p-2">
           <div className="text-2xl font-bold text-white">{timeLeft.hours.toString().padStart(2, '0')}</div>
-          <div className="text-xs text-amber-200">Ore</div>
+          <div className="text-xs text-amber-200">Hours</div>
         </div>
         <div className="bg-amber-800/50 rounded p-2">
           <div className="text-2xl font-bold text-white">{timeLeft.minutes.toString().padStart(2, '0')}</div>
@@ -84,7 +84,7 @@ export default function CountdownTimer({ endDate, className = '' }: CountdownTim
       </div>
       
       <p className="text-amber-200 text-sm">
-        Rimangono solo {timeLeft.days} giorni per scaricare gratuitamente!
+        Only {timeLeft.days} days left to download for free!
       </p>
     </div>
   )

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail, Download, AlertCircle, CheckCircle, X, BookOpen, ExternalLink, Star } from 'lucide-react'
+import { Mail, Download, AlertCircle, CheckCircle, X, BookOpen, ExternalLink, Star, Palette } from 'lucide-react'
 import CookieConsent from '@/components/CookieConsent'
 import CountdownTimer from '@/components/CountdownTimer'
 
@@ -79,6 +79,11 @@ export default function Home() {
 
           {/* Main Content - mobile optimized */}
           <main id="main-content" className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
+            {/* Countdown Timer - Mobile Only (above book cover) */}
+            <div className="lg:hidden">
+              <CountdownTimer endDate={offerEndDate} className="mb-4" />
+            </div>
+            
             {/* Book Cover Section */}
             <div className="space-y-4 sm:space-y-6">
               
@@ -216,14 +221,17 @@ export default function Home() {
                     </div>
                   </div>
                                   <div className="bg-amber-900/20 border border-amber-700/50 rounded p-3 mt-4">
-                    <p className="text-sm text-amber-200 font-medium text-center">
-                      ✨ All interior illustrations are original works by the author
+                    <p className="text-sm text-amber-200 font-medium text-center flex items-center justify-center gap-2">
+                      <Palette className="w-4 h-4 text-amber-300" />
+                      All interior illustrations are original works by the author
                     </p>
                   </div>
               </div>
 
-              {/* Countdown Timer */}
-              <CountdownTimer endDate={offerEndDate} className="mb-4" />
+              {/* Countdown Timer - Desktop Only */}
+              <div className="hidden lg:block">
+                <CountdownTimer endDate={offerEndDate} className="mb-4" />
+              </div>
 
               {/* Author Bio */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">

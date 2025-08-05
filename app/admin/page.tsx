@@ -46,10 +46,10 @@ export default function AdminPage() {
         setIsAuthenticated(true)
         fetchStats()
       } else {
-        setError('Password non corretta')
+        setError('Incorrect password')
       }
     } catch (error) {
-      setError('Errore di connessione')
+      setError('Connection error')
     } finally {
       setIsLoading(false)
     }
@@ -82,7 +82,7 @@ export default function AdminPage() {
               <Lock className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">Admin Panel</h1>
-            <p className="text-teal-200">Accedi per visualizzare le statistiche</p>
+            <p className="text-teal-200">Sign in to view statistics</p>
           </div>
           
           {/* Back to Homepage Link */}
@@ -91,7 +91,7 @@ export default function AdminPage() {
               href="/"
               className="text-teal-300 hover:text-white transition-colors duration-200 text-sm underline"
             >
-              ← Torna alla Homepage
+              ← Back to Homepage
             </a>
           </div>
 
@@ -107,7 +107,7 @@ export default function AdminPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-10 pr-12 py-3 bg-teal-800/50 border border-teal-600 rounded-lg text-white placeholder-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  placeholder="Inserisci password"
+                  placeholder="Enter password"
                   required
                 />
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-teal-300 w-5 h-5" />
@@ -138,12 +138,12 @@ export default function AdminPage() {
               {isLoading ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  <span>Accesso in corso...</span>
+                  <span>Signing in...</span>
                 </>
               ) : (
                 <>
                   <Lock className="w-5 h-5" />
-                  <span>Accedi</span>
+                  <span>Sign In</span>
                 </>
               )}
             </button>
@@ -161,7 +161,7 @@ export default function AdminPage() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
-              <p className="text-teal-200">Statistiche del sito Fish Cannot Carry Guns</p>
+              <p className="text-teal-200">Fish Cannot Carry Guns site statistics</p>
             </div>
             <button
               onClick={handleLogout}
@@ -177,7 +177,7 @@ export default function AdminPage() {
           <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-teal-200 text-sm">Download Totali</p>
+                <p className="text-teal-200 text-sm">Total Downloads</p>
                 <p className="text-3xl font-bold text-white">{stats.totalDownloads}</p>
               </div>
               <Download className="w-8 h-8 text-teal-400" />
@@ -187,7 +187,7 @@ export default function AdminPage() {
           <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-teal-200 text-sm">Email Raccolte</p>
+                <p className="text-teal-200 text-sm">Emails Collected</p>
                 <p className="text-3xl font-bold text-white">{stats.totalEmails}</p>
               </div>
               <Mail className="w-8 h-8 text-teal-400" />
@@ -197,7 +197,7 @@ export default function AdminPage() {
           <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-teal-200 text-sm">Download Recenti</p>
+                <p className="text-teal-200 text-sm">Recent Downloads</p>
                 <p className="text-3xl font-bold text-white">{stats.recentDownloads}</p>
               </div>
               <BarChart3 className="w-8 h-8 text-teal-400" />
@@ -207,7 +207,7 @@ export default function AdminPage() {
           <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-teal-200 text-sm">Email Recenti</p>
+                <p className="text-teal-200 text-sm">Recent Emails</p>
                 <p className="text-3xl font-bold text-white">{stats.recentEmails}</p>
               </div>
               <Users className="w-8 h-8 text-teal-400" />
@@ -217,21 +217,21 @@ export default function AdminPage() {
 
         {/* Actions */}
         <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
-          <h2 className="text-xl font-bold text-white mb-4">Azioni</h2>
+          <h2 className="text-xl font-bold text-white mb-4">Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
               onClick={fetchStats}
               className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
             >
               <BarChart3 className="w-5 h-5" />
-              <span>Aggiorna Statistiche</span>
+              <span>Refresh Statistics</span>
             </button>
             <button
               onClick={() => window.open('/', '_blank')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
             >
               <Eye className="w-5 h-5" />
-              <span>Visualizza Sito</span>
+              <span>View Site</span>
             </button>
           </div>
         </div>

@@ -38,7 +38,7 @@ test.describe('Admin Panel', () => {
     await loginButton.click()
 
     // Should show error message (with longer timeout for API call)
-    await expect(page.getByText('Password non corretta')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByText('Incorrect password')).toBeVisible({ timeout: 10000 })
   })
 
   test('should show loading state during login', async ({ page }) => {

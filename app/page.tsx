@@ -278,13 +278,13 @@ export default function Home() {
               
               <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-3">
                 <p className="text-blue-200 text-xs">
-                  <strong>Marketing Request:</strong> Since this sample is completely free, we'd be grateful if you could add "Fish Cannot Carry Guns" to your Goodreads reading list once you've had a chance to read it. Your support helps independent authors like Michael Morgan continue writing.
+                  <strong>Support Independent Authors:</strong> Since this sample is completely free, we'd be grateful if you could add "Fish Cannot Carry Guns" to your Goodreads reading list once you've had a chance to read it. Your support helps independent authors like Michael Morgan continue writing.
                 </p>
               </div>
               
               <div className="flex space-x-2">
                 <a
-                  href="https://www.goodreads.com/book/show/123456789-fish-cannot-carry-guns"
+                  href="https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded text-xs transition-colors"

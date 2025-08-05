@@ -81,75 +81,75 @@ export default function CookieConsent() {
         </div>
         
         <p className="text-sm mb-4 text-gray-300">
-          Utilizziamo cookie tecnici per il funzionamento del sito e cookie di analytics 
-          per migliorare la tua esperienza. I cookie tecnici sono sempre necessari per il funzionamento del sito.
+          We use technical cookies for site functionality and analytics cookies 
+          to improve your experience. Technical cookies are always necessary for site operation.
         </p>
 
-        {showDetails && (
-          <div className="bg-gray-800 rounded-lg p-4 mb-4">
-            <h4 className="font-semibold mb-3">Dettagli Cookie</h4>
-            <div className="space-y-3 text-sm">
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium">Cookie Tecnici (Necessari)</span>
-                  <span className="text-green-400">Sempre Attivi</span>
-                </div>
-                <p className="text-gray-400 text-xs">
-                  Gestione sessioni, sicurezza, download file. Non possono essere disabilitati.
-                </p>
-              </div>
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium">Cookie Analytics</span>
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={preferences.analytics}
-                      onChange={(e) => setPreferences(prev => ({ ...prev, analytics: e.target.checked }))}
-                      className="rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-sm">Consenti</span>
-                  </label>
-                </div>
-                <p className="text-gray-400 text-xs">
-                  Analisi del traffico, miglioramento del sito. Puoi disabilitarli in qualsiasi momento.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+                 {showDetails && (
+           <div className="bg-gray-800 rounded-lg p-4 mb-4">
+             <h4 className="font-semibold mb-3">Cookie Details</h4>
+             <div className="space-y-3 text-sm">
+               <div>
+                 <div className="flex items-center justify-between mb-1">
+                   <span className="font-medium">Technical Cookies (Necessary)</span>
+                   <span className="text-green-400">Always Active</span>
+                 </div>
+                 <p className="text-gray-400 text-xs">
+                   Session management, security, file downloads. Cannot be disabled.
+                 </p>
+               </div>
+               <div>
+                 <div className="flex items-center justify-between mb-1">
+                   <span className="font-medium">Analytics Cookies</span>
+                   <label className="flex items-center space-x-2">
+                     <input
+                       type="checkbox"
+                       checked={preferences.analytics}
+                       onChange={(e) => setPreferences(prev => ({ ...prev, analytics: e.target.checked }))}
+                       className="rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500"
+                     />
+                     <span className="text-sm">Allow</span>
+                   </label>
+                 </div>
+                 <p className="text-gray-400 text-xs">
+                   Traffic analysis, site improvement. You can disable them at any time.
+                 </p>
+               </div>
+             </div>
+           </div>
+         )}
 
         <div className="flex flex-col sm:flex-row gap-3">
-          <button
-            onClick={() => setShowDetails(!showDetails)}
-            className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm"
-          >
-            <Settings className="w-4 h-4" />
-            <span>Personalizza</span>
-          </button>
-          
-          <button
-            onClick={acceptNecessary}
-            className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg transition-colors text-sm"
-          >
-            Solo Necessari
-          </button>
-          
-          <button
-            onClick={acceptAll}
-            className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors text-sm"
-          >
-            Accetta Tutti
-          </button>
+                     <button
+             onClick={() => setShowDetails(!showDetails)}
+             className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-sm"
+           >
+             <Settings className="w-4 h-4" />
+             <span>Customize</span>
+           </button>
+           
+           <button
+             onClick={acceptNecessary}
+             className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg transition-colors text-sm"
+           >
+             Necessary Only
+           </button>
+           
+           <button
+             onClick={acceptAll}
+             className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors text-sm"
+           >
+             Accept All
+           </button>
         </div>
 
-        <div className="mt-3 text-xs text-gray-400">
-          Continuando a navigare, accetti la nostra{' '}
-          <a href="/privacy" className="underline hover:text-white">
-            Privacy Policy
-          </a>
-          .
-        </div>
+                 <div className="mt-3 text-xs text-gray-400">
+           By continuing to browse, you accept our{' '}
+           <a href="/privacy" className="underline hover:text-white">
+             Privacy Policy
+           </a>
+           .
+         </div>
       </div>
     </div>
   )

@@ -13,39 +13,39 @@ export default function PrivacyPage() {
           
           <div className="space-y-8 text-teal-100">
             <section>
-              <h2 className="text-xl font-semibold text-white mb-4">Informazioni Generali</h2>
+              <h2 className="text-xl font-semibold text-white mb-4">General Information</h2>
               <p className="mb-4">
-                Questa Privacy Policy descrive come raccogliamo, utilizziamo e proteggiamo le tue informazioni personali 
-                quando visiti il nostro sito web e richiedi il download dell'ebook "Fish Cannot Carry Guns".
+                This Privacy Policy describes how we collect, use, and protect your personal information 
+                when you visit our website and request the download of the ebook "Fish Cannot Carry Guns".
               </p>
               <p>
-                <strong>Titolare del Trattamento:</strong> Michael Morgan<br/>
+                <strong>Data Controller:</strong> Michael Morgan<br/>
                 <strong>Email:</strong> privacy@fishcannotcarryguns.aroundscifi.us<br/>
-                <strong>Ultimo aggiornamento:</strong> {new Date().toLocaleDateString('it-IT')}
+                <strong>Last updated:</strong> {new Date().toLocaleDateString('en-US')}
               </p>
             </section>
             
             <section>
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
                 <User className="w-5 h-5" />
-                <span>Dati Personali Raccolti</span>
+                <span>Personal Data Collected</span>
               </h2>
               <div className="space-y-3">
                 <div className="bg-teal-800/30 rounded-lg p-4">
                   <h3 className="font-semibold text-amber-300 mb-2">Email Address</h3>
-                  <p className="text-sm">Raccolta per inviarti l'ebook richiesto e gestire il download.</p>
+                  <p className="text-sm">Collected to send you the requested ebook and manage downloads.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-amber-300 mb-2">Indirizzo IP</h3>
-                  <p className="text-sm">Raccolto automaticamente per sicurezza e prevenzione abusi.</p>
+                  <h3 className="font-semibold text-amber-300 mb-2">IP Address</h3>
+                  <p className="text-sm">Automatically collected for security and abuse prevention.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
                   <h3 className="font-semibold text-amber-300 mb-2">User Agent</h3>
-                  <p className="text-sm">Informazioni sul browser per compatibilità e analytics.</p>
+                  <p className="text-sm">Browser information for compatibility and analytics.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
                   <h3 className="font-semibold text-amber-300 mb-2">Timestamp</h3>
-                  <p className="text-sm">Data e ora delle interazioni per analytics e sicurezza.</p>
+                  <p className="text-sm">Date and time of interactions for analytics and security.</p>
                 </div>
               </div>
             </section>
@@ -53,20 +53,20 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
                 <Lock className="w-5 h-5" />
-                <span>Base Legale del Trattamento</span>
+                <span>Legal Basis for Processing</span>
               </h2>
               <div className="space-y-3">
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-400 mb-2">Consenso</h3>
-                  <p className="text-sm">Per cookie di analytics e tracking del comportamento.</p>
+                  <h3 className="font-semibold text-green-400 mb-2">Consent</h3>
+                  <p className="text-sm">For analytics cookies and behavior tracking.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-400 mb-2">Interesse Legittimo</h3>
-                  <p className="text-sm">Per sicurezza, prevenzione abusi e miglioramento del servizio.</p>
+                  <h3 className="font-semibold text-green-400 mb-2">Legitimate Interest</h3>
+                  <p className="text-sm">For security, abuse prevention, and service improvement.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-400 mb-2">Esecuzione Contratto</h3>
-                  <p className="text-sm">Per inviarti l'ebook richiesto e gestire il download.</p>
+                  <h3 className="font-semibold text-green-400 mb-2">Contract Performance</h3>
+                  <p className="text-sm">To send you the requested ebook and manage downloads.</p>
                 </div>
               </div>
             </section>
@@ -74,42 +74,42 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
                 <Clock className="w-5 h-5" />
-                <span>Conservazione dei Dati</span>
+                <span>Data Retention</span>
               </h2>
               <ul className="space-y-2 text-sm">
-                <li><strong>Email:</strong> Conservata per 2 anni o fino alla richiesta di cancellazione</li>
-                <li><strong>Analytics:</strong> Conservati per 2 anni</li>
-                <li><strong>Log di sicurezza:</strong> Conservati per 1 anno</li>
-                <li><strong>Token di download:</strong> Scadono automaticamente dopo 24 ore</li>
+                <li><strong>Email:</strong> Retained for 2 years or until deletion request</li>
+                <li><strong>Analytics:</strong> Retained for 2 years</li>
+                <li><strong>Security logs:</strong> Retained for 1 year</li>
+                <li><strong>Download tokens:</strong> Automatically expire after 24 hours</li>
               </ul>
             </section>
             
             <section>
-              <h2 className="text-xl font-semibold text-white mb-4">I Tuoi Diritti GDPR</h2>
+              <h2 className="text-xl font-semibold text-white mb-4">Your GDPR Rights</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-amber-300 mb-2">Diritto di Accesso</h3>
-                  <p className="text-sm">Ottenere copia dei tuoi dati personali.</p>
+                  <h3 className="font-semibold text-amber-300 mb-2">Right of Access</h3>
+                  <p className="text-sm">Obtain a copy of your personal data.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-amber-300 mb-2">Diritto di Rettifica</h3>
-                  <p className="text-sm">Correggere dati inesatti o incompleti.</p>
+                  <h3 className="font-semibold text-amber-300 mb-2">Right of Rectification</h3>
+                  <p className="text-sm">Correct inaccurate or incomplete data.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-amber-300 mb-2">Diritto alla Cancellazione</h3>
-                  <p className="text-sm">Richiedere la cancellazione dei tuoi dati.</p>
+                  <h3 className="font-semibold text-amber-300 mb-2">Right to Erasure</h3>
+                  <p className="text-sm">Request deletion of your data.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-amber-300 mb-2">Diritto alla Portabilità</h3>
-                  <p className="text-sm">Ricevere i tuoi dati in formato strutturato.</p>
+                  <h3 className="font-semibold text-amber-300 mb-2">Right to Portability</h3>
+                  <p className="text-sm">Receive your data in a structured format.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-amber-300 mb-2">Diritto di Opposizione</h3>
-                  <p className="text-sm">Opporti al trattamento per interesse legittimo.</p>
+                  <h3 className="font-semibold text-amber-300 mb-2">Right to Object</h3>
+                  <p className="text-sm">Object to processing for legitimate interests.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-amber-300 mb-2">Diritto di Limitazione</h3>
-                  <p className="text-sm">Limitare il trattamento in determinate circostanze.</p>
+                  <h3 className="font-semibold text-amber-300 mb-2">Right to Restriction</h3>
+                  <p className="text-sm">Restrict processing in certain circumstances.</p>
                 </div>
               </div>
             </section>
@@ -118,12 +118,12 @@ export default function PrivacyPage() {
               <h2 className="text-xl font-semibold text-white mb-4">Cookie Policy</h2>
               <div className="space-y-3">
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-400 mb-2">Cookie Tecnici (Necessari)</h3>
-                  <p className="text-sm">Gestione sessioni, sicurezza, download file. Non possono essere disabilitati.</p>
+                  <h3 className="font-semibold text-green-400 mb-2">Technical Cookies (Necessary)</h3>
+                  <p className="text-sm">Session management, security, file downloads. Cannot be disabled.</p>
                 </div>
                 <div className="bg-teal-800/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-blue-400 mb-2">Cookie Analytics (Opzionali)</h3>
-                  <p className="text-sm">Analisi del traffico e miglioramento del sito. Puoi disabilitarli in qualsiasi momento.</p>
+                  <h3 className="font-semibold text-blue-400 mb-2">Analytics Cookies (Optional)</h3>
+                  <p className="text-sm">Traffic analysis and site improvement. You can disable them at any time.</p>
                 </div>
               </div>
             </section>
@@ -131,26 +131,26 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
                 <Mail className="w-5 h-5" />
-                <span>Contatti</span>
+                <span>Contact</span>
               </h2>
               <div className="bg-teal-800/30 rounded-lg p-4">
-                <p className="mb-3">Per esercitare i tuoi diritti GDPR o per qualsiasi domanda sulla privacy:</p>
+                <p className="mb-3">To exercise your GDPR rights or for any privacy questions:</p>
                 <div className="space-y-2 text-sm">
                   <p><strong>Email:</strong> privacy@fishcannotcarryguns.aroundscifi.us</p>
-                  <p><strong>Responsabile del Trattamento:</strong> Michael Morgan</p>
-                  <p><strong>Tempo di risposta:</strong> Entro 30 giorni dalla richiesta</p>
+                  <p><strong>Data Controller:</strong> Michael Morgan</p>
+                  <p><strong>Response time:</strong> Within 30 days of request</p>
                 </div>
               </div>
             </section>
             
             <section>
-              <h2 className="text-xl font-semibold text-white mb-4">Sicurezza</h2>
+              <h2 className="text-xl font-semibold text-white mb-4">Security</h2>
               <div className="bg-teal-800/30 rounded-lg p-4">
                 <ul className="space-y-2 text-sm">
-                  <li>• Tutti i dati sono protetti con crittografia SSL/TLS</li>
-                  <li>• Accesso ai dati limitato al personale autorizzato</li>
-                  <li>• Monitoraggio continuo per rilevare accessi non autorizzati</li>
-                  <li>• Backup regolari e sicuri dei dati</li>
+                  <li>• All data is protected with SSL/TLS encryption</li>
+                  <li>• Data access limited to authorized personnel</li>
+                  <li>• Continuous monitoring to detect unauthorized access</li>
+                  <li>• Regular and secure data backups</li>
                 </ul>
               </div>
             </section>
@@ -160,7 +160,7 @@ export default function PrivacyPage() {
                 href="/"
                 className="inline-flex items-center space-x-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors"
               >
-                <span>← Torna alla Home</span>
+                <span>← Back to Home</span>
               </Link>
             </div>
           </div>

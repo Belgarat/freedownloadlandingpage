@@ -91,11 +91,24 @@ export default function Home() {
             <div className="space-y-4 sm:space-y-6">
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border border-teal-700/50">
                 <div className="w-64 sm:w-80 md:w-96 mx-auto bg-gradient-to-br from-teal-800 to-cyan-800 rounded-lg shadow-lg mb-4 sm:mb-6 flex items-center justify-center">
-                  <img 
-                    src="/ebook_cover.webp" 
-                    alt="Fish Cannot Carry Guns - Book Cover" 
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+                  <picture>
+                    <source 
+                      media="(min-width: 768px)" 
+                      srcSet="/ebook_cover.webp"
+                    />
+                    <source 
+                      media="(min-width: 640px)" 
+                      srcSet="/ebook_cover_medium.webp"
+                    />
+                    <img 
+                      src="/ebook_cover_small.webp" 
+                      alt="Fish Cannot Carry Guns - Book Cover" 
+                      className="w-full h-full object-cover rounded-lg"
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="high"
+                    />
+                  </picture>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">Download Your Free Copy</h2>
                 {!isSubmitted ? (
@@ -276,7 +289,7 @@ export default function Home() {
             
             <div className="space-y-4 text-sm">
               <p className="text-teal-100">
-                We've sent your free sample to <span className="font-semibold text-white">{email}</span>
+                We've sent your free copy to <span className="font-semibold text-white">{email}</span>
               </p>
               
               <div className="bg-amber-900/30 border border-amber-700 rounded-lg p-3">

@@ -169,9 +169,8 @@ export default function Home() {
 
               {/* Substack Subscription Box */}
               <div className="bg-teal-900/50 backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-6 text-center border border-teal-700/50">
-                <h3 className="text-lg font-semibold text-white mb-3">Stay Updated with Sci-Fi</h3>
                 <p className="text-teal-100 text-sm mb-4">
-                  Subscribe to Around Sci-Fi for the latest in speculative fiction, author interviews, and exclusive content.
+                I write Around SciFi on Substack. If you'd like, drop by. It's a nice space where curious readers and talented authors share their love for speculative worlds.
                 </p>
                 <a
                   href="https://aroundscifi.substack.com/"

@@ -6,6 +6,11 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   
+  // Environment variables
+  env: {
+    NEXT_PUBLIC_OFFER_END_DATE: process.env.OFFER_END_DATE,
+  },
+  
   // Image optimization
   images: {
     formats: ['image/webp', 'image/avif'],

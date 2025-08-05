@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Mail, Download, AlertCircle, CheckCircle, X, BookOpen, ExternalLink, Star } from 'lucide-react'
 import CookieConsent from '@/components/CookieConsent'
+import CountdownTimer from '@/components/CountdownTimer'
 
 export default function Home() {
   const [email, setEmail] = useState('')
@@ -10,6 +11,9 @@ export default function Home() {
   const [error, setError] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+  
+  // Get offer end date from environment
+  const offerEndDate = process.env.NEXT_PUBLIC_OFFER_END_DATE || '2025-03-15T23:59:59Z'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -77,6 +81,7 @@ export default function Home() {
           <main id="main-content" className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
             {/* Book Cover Section */}
             <div className="space-y-4 sm:space-y-6">
+              
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border border-teal-700/50">
                 <div className="w-64 sm:w-80 md:w-96 mx-auto bg-gradient-to-br from-teal-800 to-cyan-800 rounded-lg shadow-lg mb-4 sm:mb-6 flex items-center justify-center">
                   <picture>
@@ -197,8 +202,28 @@ export default function Home() {
                   <li><strong>Devil's Advocate:</strong> What if you were trapped in a cell... with the person who killed you?</li>
                   <li><strong>Fish Cannot Carry Guns:</strong> All his life, John had thought he was safe...</li>
                 </ul>
-                <p className="text-xs text-teal-200">All interior illustrations are original works by the author.</p>
+                                  {/* Review e tag */}
+                  <div className="flex flex-col items-center gap-3 text-sm text-gray-200 mb-4">
+                    <span className="flex items-center gap-1 text-amber-300 font-semibold">
+                      <Star className="w-4 h-4" /> 5.0 <span className="text-gray-300 font-normal">(1 review)</span>
+                    </span>
+                    <div className="flex items-center gap-1 text-xs text-amber-200">
+                      <span>#SciFi</span>
+                      <span>#Dystopian</span>
+                      <span>#Cyberpunk</span>
+                      <span>#Androids</span>
+                      <span>#DangerForHumanity</span>
+                    </div>
+                  </div>
+                                  <div className="bg-amber-900/20 border border-amber-700/50 rounded p-3 mt-4">
+                    <p className="text-sm text-amber-200 font-medium text-center">
+                      ✨ All interior illustrations are original works by the author
+                    </p>
+                  </div>
               </div>
+
+              {/* Countdown Timer */}
+              <CountdownTimer endDate={offerEndDate} className="mb-4" />
 
               {/* Author Bio */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">

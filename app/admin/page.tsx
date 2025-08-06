@@ -14,7 +14,12 @@ export default function AdminPage() {
     totalDownloads: 0,
     totalEmails: 0,
     recentDownloads: 0,
-    recentEmails: 0
+    recentEmails: 0,
+    downloadRequests: 0,
+    downloadCompletionRate: 0,
+    anonymousVisits: 0,
+    anonymousDownloads: 0,
+    anonymousEmails: 0
   })
   const router = useRouter()
 

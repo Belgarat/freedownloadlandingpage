@@ -272,7 +272,7 @@ export default function Home() {
               </a>
               <div className="text-xs text-teal-200 max-w-md px-4">
                 <strong className="text-white">3/7 Indie Lab</strong> — Be independent, be unique.<br/>
-                At 3/7 Indie Lab, we are fiercely independent. We will not conform to mainstream ideas or chase profits. We will always support authors who want to push the boundaries of the publishing market with an independent — and good — writing.<br/>
+                At 3/7 Indie Lab, we are fiercely independent. We will always support authors who want to push the boundaries of the publishing market with independent writing.<br/>
                 <a href="https://37indielab.com/" target="_blank" rel="noopener noreferrer" className="underline text-teal-300">www.37indielab.com</a>
                 <br/>
                 <span className="italic">3/7 Indie Lab is an author-centric imprint. Our mission is to help independent authors publish their books. All rights, responsibilities, and liabilities associated with the content and distribution of the books remain solely with the respective authors or other entities involved.</span>

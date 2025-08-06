@@ -55,13 +55,13 @@ export async function GET(
 
     // Note: We don't mark token as used immediately - it can be used multiple times within 24 hours
 
-    // Track download in analytics
+    // Track download request in analytics (with consent)
     await supabaseAdmin
       .from('analytics')
       .insert([
         {
           email: tokenData.email,
-          action: 'ebook_downloaded',
+          action: 'download_requested',
           timestamp: new Date().toISOString(),
           user_agent: request.headers.get('user-agent') || 'unknown',
           referrer: request.headers.get('referer') || 'unknown',
@@ -69,8 +69,17 @@ export async function GET(
                      request.headers.get('x-real-ip') || 
                      'unknown',
           created_at: new Date().toISOString(),
+          metadata: JSON.stringify({
+            token_id: tokenData.id,
+            file_size: '2.1MB', // Approximate PDF size
+            download_method: 'direct_link'
+          })
         }
       ])
+
+    // Always track anonymously (GDPR compliant)
+    const { AnonymousCounterService } = await import('@/lib/anonymous-counters')
+    await AnonymousCounterService.incrementDownloads()
 
     // Serve the PDF file
     try {
@@ -83,7 +92,9 @@ export async function GET(
           'Content-Disposition': 'inline; filename="fish-cannot-carry-guns.pdf"',
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Pragma': 'no-cache',
-          'Expires': '0'
+          'Expires': '0',
+          'X-Download-Token': token, // Include token for client-side tracking
+          'X-File-Size': fileBuffer.length.toString() // Include file size
         }
       })
     } catch (fileError) {

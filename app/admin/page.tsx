@@ -172,45 +172,84 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-teal-200 text-sm">Total Downloads</p>
-                <p className="text-3xl font-bold text-white">{stats.totalDownloads}</p>
+        {/* Anonymous Counters (Always Available) */}
+        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-teal-700/50">
+          <h2 className="text-xl font-bold text-white mb-4">Anonymous Counters (GDPR Compliant)</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Users className="w-6 h-6 text-teal-400 mr-2" />
+                <span className="text-teal-200 text-sm">Total Visits</span>
               </div>
-              <Download className="w-8 h-8 text-teal-400" />
+              <p className="text-3xl font-bold text-white">{stats.anonymousVisits}</p>
+              <p className="text-xs text-teal-300">All visitors</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Download className="w-6 h-6 text-teal-400 mr-2" />
+                <span className="text-teal-200 text-sm">Total Downloads</span>
+              </div>
+              <p className="text-3xl font-bold text-white">{stats.anonymousDownloads}</p>
+              <p className="text-xs text-teal-300">All downloads</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Mail className="w-6 h-6 text-teal-400 mr-2" />
+                <span className="text-teal-200 text-sm">Total Emails</span>
+              </div>
+              <p className="text-3xl font-bold text-white">{stats.anonymousEmails}</p>
+              <p className="text-xs text-teal-300">All submissions</p>
             </div>
           </div>
+        </div>
 
-          <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-teal-200 text-sm">Emails Collected</p>
-                <p className="text-3xl font-bold text-white">{stats.totalEmails}</p>
+        {/* Consent Analytics (With User Consent) */}
+        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-teal-700/50">
+          <h2 className="text-xl font-bold text-white mb-4">Detailed Analytics (With Consent)</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 border border-teal-700/50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-teal-200 text-sm">Completed Downloads</p>
+                  <p className="text-2xl font-bold text-white">{stats.totalDownloads}</p>
+                  <p className="text-xs text-teal-300">{stats.downloadCompletionRate}% completion</p>
+                </div>
+                <Download className="w-6 h-6 text-teal-400" />
               </div>
-              <Mail className="w-8 h-8 text-teal-400" />
             </div>
-          </div>
 
-          <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-teal-200 text-sm">Recent Downloads</p>
-                <p className="text-3xl font-bold text-white">{stats.recentDownloads}</p>
+            <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 border border-teal-700/50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-teal-200 text-sm">Download Requests</p>
+                  <p className="text-2xl font-bold text-white">{stats.downloadRequests}</p>
+                  <p className="text-xs text-teal-300">Total link clicks</p>
+                </div>
+                <BarChart3 className="w-6 h-6 text-teal-400" />
               </div>
-              <BarChart3 className="w-8 h-8 text-teal-400" />
             </div>
-          </div>
 
-          <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-teal-200 text-sm">Recent Emails</p>
-                <p className="text-3xl font-bold text-white">{stats.recentEmails}</p>
+            <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 border border-teal-700/50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-teal-200 text-sm">Emails Collected</p>
+                  <p className="text-2xl font-bold text-white">{stats.totalEmails}</p>
+                </div>
+                <Mail className="w-6 h-6 text-teal-400" />
               </div>
-              <Users className="w-8 h-8 text-teal-400" />
+            </div>
+
+            <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 border border-teal-700/50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-teal-200 text-sm">Recent Activity</p>
+                  <p className="text-2xl font-bold text-white">{stats.recentDownloads + stats.recentEmails}</p>
+                  <p className="text-xs text-teal-300">Last 7 days</p>
+                </div>
+                <Users className="w-6 h-6 text-teal-400" />
+              </div>
             </div>
           </div>
         </div>

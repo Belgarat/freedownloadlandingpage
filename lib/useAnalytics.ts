@@ -56,6 +56,25 @@ export const useAnalytics = () => {
     }
   }, [])
 
+  const trackAnonymousEvent = async (action: string) => {
+    // Always track anonymously (GDPR compliant)
+    try {
+      const response = await fetch('/api/analytics/anonymous', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action }),
+      })
+      
+      if (!response.ok) {
+        console.error('Anonymous analytics API error:', response.status, response.statusText)
+      }
+    } catch (error) {
+      console.error('Anonymous analytics tracking error:', error)
+    }
+  }
+
   const trackEvent = async (event: Omit<AnalyticsEvent, 'timestamp' | 'userAgent' | 'referrer'>) => {
     // Only track if user has given consent for analytics
     if (!analyticsConsent) return
@@ -84,10 +103,16 @@ export const useAnalytics = () => {
 
   // Track page view on mount
   useEffect(() => {
-    if (!hasTrackedPageView && analyticsConsent) {
-      trackEvent({
-        action: 'page_view',
-      })
+    if (!hasTrackedPageView) {
+      // Always track anonymously (GDPR compliant)
+      trackAnonymousEvent('page_view')
+      
+      // Track with consent if available
+      if (analyticsConsent) {
+        trackEvent({
+          action: 'page_view',
+        })
+      }
       setHasTrackedPageView(true)
     }
   }, [hasTrackedPageView, analyticsConsent])
@@ -156,12 +181,18 @@ export const useAnalytics = () => {
   }, [analyticsConsent])
 
   const trackEmailSubmit = async (email: string) => {
-    await trackEvent({
-      action: 'email_submitted',
-      email,
-      timeOnPage: Date.now() - startTime.current,
-      scrollDepth: scrollDepth.current,
-    })
+    // Always track anonymously (GDPR compliant)
+    trackAnonymousEvent('email_submitted')
+    
+    // Track with consent if available
+    if (analyticsConsent) {
+      await trackEvent({
+        action: 'email_submitted',
+        email,
+        timeOnPage: Date.now() - startTime.current,
+        scrollDepth: scrollDepth.current,
+      })
+    }
   }
 
   return { trackEmailSubmit }

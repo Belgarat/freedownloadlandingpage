@@ -31,8 +31,13 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // Get anonymous counters (always available)
+    const { AnonymousCounterService } = await import('@/lib/anonymous-counters')
+    const anonymousCounters = await AnonymousCounterService.getCounters()
+
     // Calculate statistics
-    const totalDownloads = analytics?.filter(item => item.action === 'ebook_downloaded').length || 0
+    const totalDownloads = analytics?.filter(item => item.action === 'download_completed').length || 0
+    const downloadRequests = analytics?.filter(item => item.action === 'download_requested').length || 0
     const totalEmails = tokens?.length || 0
     
     // Recent stats (last 7 days)
@@ -40,7 +45,7 @@ export async function GET(request: NextRequest) {
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
     
     const recentDownloads = analytics?.filter(item => 
-      item.action === 'ebook_downloaded' && 
+      item.action === 'download_completed' && 
       new Date(item.created_at) > sevenDaysAgo
     ).length || 0
     
@@ -48,11 +53,22 @@ export async function GET(request: NextRequest) {
       new Date(token.created_at) > sevenDaysAgo
     ).length || 0
 
+    // Calculate completion rate
+    const downloadCompletionRate = downloadRequests > 0 
+      ? Math.round((totalDownloads / downloadRequests) * 100) 
+      : 0
+
     return NextResponse.json({
       totalDownloads,
+      downloadRequests,
+      downloadCompletionRate,
       totalEmails,
       recentDownloads,
       recentEmails,
+      // Anonymous counters (always available)
+      anonymousVisits: anonymousCounters.totalVisits,
+      anonymousDownloads: anonymousCounters.totalDownloads,
+      anonymousEmails: anonymousCounters.totalEmailSubmissions,
       analytics: analytics || [],
       tokens: tokens || []
     })

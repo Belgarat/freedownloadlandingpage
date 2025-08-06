@@ -12,10 +12,11 @@ export interface AnalyticsEvent {
   scrollDepth?: number
   timeOnPage?: number
   metadata?: Record<string, any>
+  externalLink?: string
 }
 
 export interface AnonymousAnalyticsEvent {
-  action: 'page_view' | 'download_requested' | 'email_submitted'
+  action: 'page_view' | 'download_requested' | 'email_submitted' | 'external_link_click'
 }
 
 export interface AnalyticsResponse {

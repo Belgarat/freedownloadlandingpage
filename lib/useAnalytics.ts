@@ -8,6 +8,7 @@ interface AnalyticsEvent {
   email?: string
   scrollDepth?: number
   timeOnPage?: number
+  externalLink?: string
 }
 
 export const useAnalytics = () => {
@@ -195,5 +196,20 @@ export const useAnalytics = () => {
     }
   }
 
-  return { trackEmailSubmit }
+  const trackExternalLinkClick = async (linkUrl: string) => {
+    // Always track anonymously (GDPR compliant)
+    trackAnonymousEvent('external_link_click')
+    
+    // Track with consent if available
+    if (analyticsConsent) {
+      await trackEvent({
+        action: 'external_link_click',
+        externalLink: linkUrl,
+        timeOnPage: Date.now() - startTime.current,
+        scrollDepth: scrollDepth.current,
+      })
+    }
+  }
+
+  return { trackEmailSubmit, trackExternalLinkClick }
 } 

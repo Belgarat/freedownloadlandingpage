@@ -4,6 +4,7 @@ export interface AnonymousCounters {
   totalVisits: number
   totalDownloads: number
   totalEmailSubmissions: number
+  totalExternalLinks: number
   lastUpdated: string
 }
 
@@ -32,7 +33,7 @@ export class AnonymousCounterService {
         // Fallback: manual increment
         const { data: existing, error: selectError } = await supabaseAdmin
           .from('anonymous_counters')
-          .select('total_visits')
+          .select('*')
           .eq('key', this.COUNTERS_KEY)
           .single()
 
@@ -50,6 +51,9 @@ export class AnonymousCounterService {
           .from('anonymous_counters')
           .update({ 
             total_visits: newVisits,
+            total_downloads: existing?.total_downloads || 0,
+            total_email_submissions: existing?.total_email_submissions || 0,
+            total_external_links: existing?.total_external_links || 0,
             last_updated: new Date().toISOString()
           })
           .eq('key', this.COUNTERS_KEY)
@@ -85,7 +89,7 @@ export class AnonymousCounterService {
         // Fallback: manual increment
         const { data: existing, error: selectError } = await supabaseAdmin
           .from('anonymous_counters')
-          .select('total_downloads')
+          .select('*')
           .eq('key', this.COUNTERS_KEY)
           .single()
 
@@ -102,7 +106,10 @@ export class AnonymousCounterService {
         const { error: manualError } = await supabaseAdmin
           .from('anonymous_counters')
           .update({ 
+            total_visits: existing?.total_visits || 0,
             total_downloads: newDownloads,
+            total_email_submissions: existing?.total_email_submissions || 0,
+            total_external_links: existing?.total_external_links || 0,
             last_updated: new Date().toISOString()
           })
           .eq('key', this.COUNTERS_KEY)
@@ -138,7 +145,7 @@ export class AnonymousCounterService {
         // Fallback: manual increment
         const { data: existing, error: selectError } = await supabaseAdmin
           .from('anonymous_counters')
-          .select('total_email_submissions')
+          .select('*')
           .eq('key', this.COUNTERS_KEY)
           .single()
 
@@ -155,7 +162,10 @@ export class AnonymousCounterService {
         const { error: manualError } = await supabaseAdmin
           .from('anonymous_counters')
           .update({ 
+            total_visits: existing?.total_visits || 0,
+            total_downloads: existing?.total_downloads || 0,
             total_email_submissions: newEmails,
+            total_external_links: existing?.total_external_links || 0,
             last_updated: new Date().toISOString()
           })
           .eq('key', this.COUNTERS_KEY)
@@ -171,6 +181,62 @@ export class AnonymousCounterService {
 
     } catch (error) {
       console.error('❌ [AnonymousCounters] Error incrementing email submissions counter:', error)
+    }
+  }
+
+  /**
+   * Increment external links counter (always allowed, no personal data)
+   */
+  static async incrementExternalLinks(): Promise<void> {
+    try {
+      console.log('🔍 [AnonymousCounters] Incrementing external links...')
+      
+      // Use SQL increment instead of upsert
+      const { error: updateError } = await supabaseAdmin
+        .rpc('increment_external_links')
+
+      if (updateError) {
+        console.error('❌ [AnonymousCounters] Error incrementing external links:', updateError)
+        
+        // Fallback: manual increment
+        const { data: existing, error: selectError } = await supabaseAdmin
+          .from('anonymous_counters')
+          .select('*')
+          .eq('key', this.COUNTERS_KEY)
+          .single()
+
+        if (selectError) {
+          console.error('❌ [AnonymousCounters] Error selecting external links:', selectError)
+          return
+        }
+
+        const currentLinks = existing?.total_external_links || 0
+        const newLinks = currentLinks + 1
+        
+        console.log(`📊 [AnonymousCounters] Current external links: ${currentLinks}, New external links: ${newLinks}`)
+
+        const { error: manualError } = await supabaseAdmin
+          .from('anonymous_counters')
+          .update({ 
+            total_visits: existing?.total_visits || 0,
+            total_downloads: existing?.total_downloads || 0,
+            total_email_submissions: existing?.total_email_submissions || 0,
+            total_external_links: newLinks,
+            last_updated: new Date().toISOString()
+          })
+          .eq('key', this.COUNTERS_KEY)
+
+        if (manualError) {
+          console.error('❌ [AnonymousCounters] Error manual update external links:', manualError)
+        } else {
+          console.log('✅ [AnonymousCounters] External links incremented successfully (manual)')
+        }
+      } else {
+        console.log('✅ [AnonymousCounters] External links incremented successfully (RPC)')
+      }
+
+    } catch (error) {
+      console.error('❌ [AnonymousCounters] Error incrementing external links counter:', error)
     }
   }
 
@@ -193,6 +259,7 @@ export class AnonymousCounterService {
           totalVisits: 0,
           totalDownloads: 0,
           totalEmailSubmissions: 0,
+          totalExternalLinks: 0,
           lastUpdated: new Date().toISOString()
         }
       }
@@ -203,6 +270,7 @@ export class AnonymousCounterService {
         totalVisits: counters?.total_visits || 0,
         totalDownloads: counters?.total_downloads || 0,
         totalEmailSubmissions: counters?.total_email_submissions || 0,
+        totalExternalLinks: counters?.total_external_links || 0,
         lastUpdated: counters?.last_updated || new Date().toISOString()
       }
     } catch (error) {
@@ -211,6 +279,7 @@ export class AnonymousCounterService {
         totalVisits: 0,
         totalDownloads: 0,
         totalEmailSubmissions: 0,
+        totalExternalLinks: 0,
         lastUpdated: new Date().toISOString()
       }
     }

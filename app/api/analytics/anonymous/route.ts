@@ -13,23 +13,27 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // GDPR-compliant anonymous tracking (no personal data)
-    switch (action) {
-      case 'page_view':
-        await AnonymousCounterService.incrementVisits()
-        break
-      case 'download_requested':
-        await AnonymousCounterService.incrementDownloads()
-        break
-      case 'email_submitted':
-        await AnonymousCounterService.incrementEmailSubmissions()
-        break
-      default:
-        return NextResponse.json(
-          { error: 'Invalid action' },
-          { status: 400 }
-        )
-    }
+                    // GDPR-compliant anonymous tracking (no personal data)
+                switch (action) {
+                  case 'page_view':
+                    await AnonymousCounterService.incrementVisits()
+                    break
+                  case 'download_requested':
+                    await AnonymousCounterService.incrementDownloads()
+                    break
+                  case 'email_submitted':
+                    await AnonymousCounterService.incrementEmailSubmissions()
+                    break
+                  case 'external_link_click':
+                    // Track external link clicks separately
+                    await AnonymousCounterService.incrementExternalLinks()
+                    break
+                  default:
+                    return NextResponse.json(
+                      { error: 'Invalid action' },
+                      { status: 400 }
+                    )
+                }
 
     return NextResponse.json({ success: true })
 

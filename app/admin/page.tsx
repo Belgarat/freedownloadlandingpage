@@ -20,7 +20,8 @@ export default function AdminPage() {
     downloadCompletionRate: 0,
     anonymousVisits: 0,
     anonymousDownloads: 0,
-    anonymousEmails: 0
+    anonymousEmails: 0,
+    anonymousExternalLinks: 0
   })
   const router = useRouter()
 

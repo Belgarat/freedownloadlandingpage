@@ -70,6 +70,7 @@ export async function GET(request: NextRequest) {
       anonymousVisits: anonymousCounters.totalVisits,
       anonymousDownloads: anonymousCounters.totalDownloads,
       anonymousEmails: anonymousCounters.totalEmailSubmissions,
+      anonymousExternalLinks: anonymousCounters.totalExternalLinks,
       analytics: analytics || [],
       tokens: tokens || []
     }

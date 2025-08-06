@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { AnonymousCounterService } from '@/lib/anonymous-counters'
+import { AdminStats } from '@/types/admin'
 
 export async function GET() {
   try {
@@ -52,16 +54,28 @@ export async function GET() {
       ? ((completedDownloads || 0) / downloadRequests) * 100
       : 0
 
-    return NextResponse.json({
-      pageViews: pageViews || 0,
-      scrollToBottom: scrollToBottom || 0,
-      emailSubmissions: emailSubmissions || 0,
+    // Get anonymous counters
+    const anonymousCounters = await AnonymousCounterService.getCounters()
+
+    const stats: AdminStats = {
+      totalDownloads: completedDownloads || 0,
       downloadRequests: downloadRequests || 0,
-      completedDownloads: completedDownloads || 0,
-      avgTimeOnPage: Math.round(avgTimeOnPage),
-      emailConversionRate: Math.round(emailConversionRate * 100) / 100,
       downloadCompletionRate: Math.round(downloadCompletionRate * 100) / 100,
-    })
+      totalEmails: emailSubmissions || 0,
+      recentDownloads: completedDownloads || 0,
+      recentEmails: emailSubmissions || 0,
+      // Anonymous counters (always available)
+      anonymousVisits: anonymousCounters.totalVisits,
+      anonymousDownloads: anonymousCounters.totalDownloads,
+      anonymousEmails: anonymousCounters.totalEmailSubmissions,
+      anonymousGoodreadsClicks: anonymousCounters.totalGoodreadsClicks,
+      anonymousSubstackClicks: anonymousCounters.totalSubstackClicks,
+      anonymousPublisherClicks: anonymousCounters.totalPublisherClicks,
+      analytics: [],
+      tokens: []
+    }
+
+    return NextResponse.json(stats)
   } catch (error) {
     console.error('Analytics stats error:', error)
     return NextResponse.json(

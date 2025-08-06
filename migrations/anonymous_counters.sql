@@ -5,14 +5,16 @@ CREATE TABLE IF NOT EXISTS anonymous_counters (
   total_visits INTEGER DEFAULT 0,
   total_downloads INTEGER DEFAULT 0,
   total_email_submissions INTEGER DEFAULT 0,
-  total_external_links INTEGER DEFAULT 0,
+  total_goodreads_clicks INTEGER DEFAULT 0,
+  total_substack_clicks INTEGER DEFAULT 0,
+  total_publisher_clicks INTEGER DEFAULT 0,
   last_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Insert initial counter record
-INSERT INTO anonymous_counters (key, total_visits, total_downloads, total_email_submissions, total_external_links)
-VALUES ('anonymous_counters', 0, 0, 0, 0)
+INSERT INTO anonymous_counters (key, total_visits, total_downloads, total_email_submissions, total_goodreads_clicks, total_substack_clicks, total_publisher_clicks)
+VALUES ('anonymous_counters', 0, 0, 0, 0, 0, 0)
 ON CONFLICT (key) DO NOTHING;
 
 -- Add RLS policies for security

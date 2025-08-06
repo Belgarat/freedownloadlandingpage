@@ -18,10 +18,12 @@ export default function AdminPage() {
     recentEmails: 0,
     downloadRequests: 0,
     downloadCompletionRate: 0,
-    anonymousVisits: 0,
-    anonymousDownloads: 0,
-    anonymousEmails: 0,
-    anonymousExternalLinks: 0
+          anonymousVisits: 0,
+      anonymousDownloads: 0,
+      anonymousEmails: 0,
+      anonymousGoodreadsClicks: 0,
+      anonymousSubstackClicks: 0,
+      anonymousPublisherClicks: 0
   })
   const router = useRouter()
 
@@ -208,6 +210,36 @@ export default function AdminPage() {
               </div>
               <p className="text-3xl font-bold text-white">{stats.anonymousEmails}</p>
               <p className="text-xs text-teal-300">All submissions</p>
+            </div>
+          </div>
+        </div>
+
+        {/* External Links Performance */}
+        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-teal-700/50">
+          <h2 className="text-xl font-bold text-white mb-4">External Links Performance</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center bg-[#073E44] backdrop-blur-sm rounded-lg p-4 border border-teal-700/50">
+              <div className="flex items-center justify-center mb-2">
+                <span className="text-blue-200 text-sm">Goodreads Clicks</span>
+              </div>
+              <p className="text-3xl font-bold text-blue-400">{stats.anonymousGoodreadsClicks}</p>
+              <p className="text-xs text-blue-300">Book reviews platform</p>
+            </div>
+            
+            <div className="text-center bg-[#073E44] backdrop-blur-sm rounded-lg p-4 border border-teal-700/50">
+              <div className="flex items-center justify-center mb-2">
+                <span className="text-orange-200 text-sm">Substack Clicks</span>
+              </div>
+              <p className="text-3xl font-bold text-orange-400">{stats.anonymousSubstackClicks}</p>
+              <p className="text-xs text-orange-300">Content platform</p>
+            </div>
+            
+            <div className="text-center bg-[#073E44] backdrop-blur-sm rounded-lg p-4 border border-teal-700/50">
+              <div className="flex items-center justify-center mb-2">
+                <span className="text-purple-200 text-sm">Publisher Clicks</span>
+              </div>
+              <p className="text-3xl font-bold text-purple-400">{stats.anonymousPublisherClicks}</p>
+              <p className="text-xs text-purple-300">Publisher website</p>
             </div>
           </div>
         </div>

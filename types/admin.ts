@@ -16,7 +16,9 @@ export interface AdminStats {
   anonymousVisits: number
   anonymousDownloads: number
   anonymousEmails: number
-  anonymousExternalLinks: number
+  anonymousGoodreadsClicks: number
+  anonymousSubstackClicks: number
+  anonymousPublisherClicks: number
   
   // Raw data (optional)
   analytics?: any[]

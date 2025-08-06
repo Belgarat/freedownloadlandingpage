@@ -14,7 +14,7 @@ export default function Home() {
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   
   // Initialize analytics
-  const { trackEmailSubmit, trackExternalLinkClick } = useAnalytics()
+  const { trackEmailSubmit, trackGoodreadsClick, trackSubstackClick, trackPublisherClick } = useAnalytics()
   
   // Get offer end date from environment
   const offerEndDate = process.env.NEXT_PUBLIC_OFFER_END_DATE || '2025-03-15T23:59:59Z'
@@ -197,7 +197,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-base"
-                  onClick={() => trackExternalLinkClick('https://aroundscifi.substack.com/')}
+                  onClick={trackSubstackClick}
                 >
                   <span>Visit Substack</span>
                   <ExternalLink className="w-4 h-4" aria-hidden="true" />
@@ -259,7 +259,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-base"
-                  onClick={() => trackExternalLinkClick('https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns')}
+                  onClick={trackGoodreadsClick}
                 >
                   Add to Goodreads
                 </a>
@@ -276,25 +276,25 @@ export default function Home() {
               </a>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <a 
-                href="https://37indielab.com/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="inline-block"
-                onClick={() => trackExternalLinkClick('https://37indielab.com/')}
-              >
+                              <a 
+                  href="https://37indielab.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="inline-block"
+                  onClick={trackPublisherClick}
+                >
                 <img src="/logo_transparent.png" alt="3/7 Indie Lab Logo" className="h-10 sm:h-12 mb-2" style={{maxWidth:'80px'}} />
               </a>
               <div className="text-xs text-teal-200 max-w-md px-4">
                 <strong className="text-white">3/7 Indie Lab</strong> — Be independent, be unique.<br/>
                 At 3/7 Indie Lab, we are fiercely independent. We will always support authors who want to push the boundaries of the publishing market with independent writing.<br/>
-                <a 
-                  href="https://37indielab.com/" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="underline text-teal-300"
-                  onClick={() => trackExternalLinkClick('https://37indielab.com/')}
-                >
+                                  <a
+                    href="https://37indielab.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline text-teal-300"
+                    onClick={trackPublisherClick}
+                  >
                   www.37indielab.com
                 </a>
                 <br/>

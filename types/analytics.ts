@@ -16,7 +16,7 @@ export interface AnalyticsEvent {
 }
 
 export interface AnonymousAnalyticsEvent {
-  action: 'page_view' | 'download_requested' | 'email_submitted' | 'external_link_click'
+  action: 'page_view' | 'download_requested' | 'email_submitted' | 'goodreads_click' | 'substack_click' | 'publisher_click'
 }
 
 export interface AnalyticsResponse {

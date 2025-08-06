@@ -196,20 +196,50 @@ export const useAnalytics = () => {
     }
   }
 
-  const trackExternalLinkClick = async (linkUrl: string) => {
+  const trackGoodreadsClick = async () => {
     // Always track anonymously (GDPR compliant)
-    trackAnonymousEvent('external_link_click')
+    trackAnonymousEvent('goodreads_click')
     
     // Track with consent if available
     if (analyticsConsent) {
       await trackEvent({
-        action: 'external_link_click',
-        externalLink: linkUrl,
+        action: 'goodreads_click',
+        externalLink: 'https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns',
         timeOnPage: Date.now() - startTime.current,
         scrollDepth: scrollDepth.current,
       })
     }
   }
 
-  return { trackEmailSubmit, trackExternalLinkClick }
+  const trackSubstackClick = async () => {
+    // Always track anonymously (GDPR compliant)
+    trackAnonymousEvent('substack_click')
+    
+    // Track with consent if available
+    if (analyticsConsent) {
+      await trackEvent({
+        action: 'substack_click',
+        externalLink: 'https://aroundscifi.substack.com/',
+        timeOnPage: Date.now() - startTime.current,
+        scrollDepth: scrollDepth.current,
+      })
+    }
+  }
+
+  const trackPublisherClick = async () => {
+    // Always track anonymously (GDPR compliant)
+    trackAnonymousEvent('publisher_click')
+    
+    // Track with consent if available
+    if (analyticsConsent) {
+      await trackEvent({
+        action: 'publisher_click',
+        externalLink: 'https://37indielab.com/',
+        timeOnPage: Date.now() - startTime.current,
+        scrollDepth: scrollDepth.current,
+      })
+    }
+  }
+
+  return { trackEmailSubmit, trackGoodreadsClick, trackSubstackClick, trackPublisherClick }
 } 

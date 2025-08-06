@@ -24,9 +24,14 @@ export async function POST(request: NextRequest) {
                   case 'email_submitted':
                     await AnonymousCounterService.incrementEmailSubmissions()
                     break
-                  case 'external_link_click':
-                    // Track external link clicks separately
-                    await AnonymousCounterService.incrementExternalLinks()
+                  case 'goodreads_click':
+                    await AnonymousCounterService.incrementGoodreadsClicks()
+                    break
+                  case 'substack_click':
+                    await AnonymousCounterService.incrementSubstackClicks()
+                    break
+                  case 'publisher_click':
+                    await AnonymousCounterService.incrementPublisherClicks()
                     break
                   default:
                     return NextResponse.json(

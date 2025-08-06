@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { AnonymousCounterService } from '@/lib/anonymous-counters'
+import { AnonymousAnalyticsEvent, AnonymousAnalyticsResponse } from '@/types/analytics'
 
 export async function POST(request: NextRequest) {
   try {
-    const { action } = await request.json()
+    const { action }: AnonymousAnalyticsEvent = await request.json()
 
     if (!action) {
       return NextResponse.json(

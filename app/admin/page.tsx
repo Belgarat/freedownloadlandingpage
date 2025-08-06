@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Lock, Eye, EyeOff, BarChart3, Users, Download, Mail } from 'lucide-react'
+import { AdminStats } from '@/types/admin'
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -10,7 +11,7 @@ export default function AdminPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<AdminStats>({
     totalDownloads: 0,
     totalEmails: 0,
     recentDownloads: 0,

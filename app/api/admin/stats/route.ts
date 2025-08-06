@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { AdminStats } from '@/types/admin'
 
 export async function GET(request: NextRequest) {
   try {
@@ -58,7 +59,7 @@ export async function GET(request: NextRequest) {
       ? Math.round((totalDownloads / downloadRequests) * 100) 
       : 0
 
-    return NextResponse.json({
+    const stats: AdminStats = {
       totalDownloads,
       downloadRequests,
       downloadCompletionRate,
@@ -71,7 +72,9 @@ export async function GET(request: NextRequest) {
       anonymousEmails: anonymousCounters.totalEmailSubmissions,
       analytics: analytics || [],
       tokens: tokens || []
-    })
+    }
+
+    return NextResponse.json(stats)
   } catch (error) {
     console.error('Stats API error:', error)
     return NextResponse.json(

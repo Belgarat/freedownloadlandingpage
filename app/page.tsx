@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Mail, Download, AlertCircle, CheckCircle, X, BookOpen, ExternalLink, Star, Palette } from 'lucide-react'
 import CookieConsent from '@/components/CookieConsent'
 import CountdownTimer from '@/components/CountdownTimer'
+import { useAnalytics } from '@/lib/useAnalytics'
 
 export default function Home() {
   const [email, setEmail] = useState('')
@@ -11,6 +12,9 @@ export default function Home() {
   const [error, setError] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+  
+  // Initialize analytics
+  const { trackEmailSubmit } = useAnalytics()
   
   // Get offer end date from environment
   const offerEndDate = process.env.NEXT_PUBLIC_OFFER_END_DATE || '2025-03-15T23:59:59Z'
@@ -35,6 +39,9 @@ export default function Home() {
         throw new Error(data.error || 'Failed to send email')
       }
 
+      // Track successful email submission
+      await trackEmailSubmit(email)
+      
       setIsSubmitted(true)
       setShowSuccessModal(true)
     } catch (err) {

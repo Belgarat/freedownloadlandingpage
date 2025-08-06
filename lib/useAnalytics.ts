@@ -20,10 +20,38 @@ export const useAnalytics = () => {
   // Check for analytics consent
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const savedConsent = localStorage.getItem('cookieConsent')
-      if (savedConsent) {
-        const consent = JSON.parse(savedConsent)
-        setAnalyticsConsent(consent.analytics)
+      const checkConsent = () => {
+        const savedConsent = localStorage.getItem('cookieConsent')
+        if (savedConsent) {
+          const consent = JSON.parse(savedConsent)
+          setAnalyticsConsent(consent.analytics)
+        } else {
+          setAnalyticsConsent(false)
+        }
+      }
+      
+      // Check initial consent
+      checkConsent()
+      
+      // Listen for consent changes
+      const handleStorageChange = (e: StorageEvent) => {
+        if (e.key === 'cookieConsent') {
+          checkConsent()
+        }
+      }
+      
+      window.addEventListener('storage', handleStorageChange)
+      
+      // Also listen for custom events (for same-tab updates)
+      const handleConsentChange = () => {
+        checkConsent()
+      }
+      
+      window.addEventListener('consentChanged', handleConsentChange)
+      
+      return () => {
+        window.removeEventListener('storage', handleStorageChange)
+        window.removeEventListener('consentChanged', handleConsentChange)
       }
     }
   }, [])
@@ -33,7 +61,7 @@ export const useAnalytics = () => {
     if (!analyticsConsent) return
     
     try {
-      await fetch('/api/analytics', {
+      const response = await fetch('/api/analytics', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,6 +73,10 @@ export const useAnalytics = () => {
           referrer: document.referrer,
         }),
       })
+      
+      if (!response.ok) {
+        console.error('Analytics API error:', response.status, response.statusText)
+      }
     } catch (error) {
       console.error('Analytics tracking error:', error)
     }
@@ -52,16 +84,18 @@ export const useAnalytics = () => {
 
   // Track page view on mount
   useEffect(() => {
-    if (!hasTrackedPageView) {
+    if (!hasTrackedPageView && analyticsConsent) {
       trackEvent({
         action: 'page_view',
       })
       setHasTrackedPageView(true)
     }
-  }, [hasTrackedPageView])
+  }, [hasTrackedPageView, analyticsConsent])
 
   // Track scroll events
   useEffect(() => {
+    if (!analyticsConsent) return
+
     const handleScroll = () => {
       const scrollTop = window.scrollY
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
@@ -82,11 +116,18 @@ export const useAnalytics = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [hasTrackedScroll])
+  }, [hasTrackedScroll, analyticsConsent])
 
   // Track time on page when user leaves
   useEffect(() => {
-    const handleBeforeUnload = () => {
+    if (!analyticsConsent) return
+
+    let hasTrackedExit = false
+
+    const trackExit = () => {
+      if (hasTrackedExit) return
+      hasTrackedExit = true
+      
       const timeOnPage = Date.now() - startTime.current
       trackEvent({
         action: 'page_exit',
@@ -95,9 +136,24 @@ export const useAnalytics = () => {
       })
     }
 
+    // Track when page is about to unload (more reliable than beforeunload)
+    const handlePageHide = () => {
+      trackExit()
+    }
+
+    // Fallback to beforeunload
+    const handleBeforeUnload = () => {
+      trackExit()
+    }
+
+    window.addEventListener('pagehide', handlePageHide)
     window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [])
+
+    return () => {
+      window.removeEventListener('pagehide', handlePageHide)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [analyticsConsent])
 
   const trackEmailSubmit = async (email: string) => {
     await trackEvent({

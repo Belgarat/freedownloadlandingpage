@@ -42,6 +42,9 @@ export default function CookieConsent() {
     setPreferences(consent)
     setShowBanner(false)
     
+    // Emit custom event for analytics hook
+    window.dispatchEvent(new Event('consentChanged'))
+    
     // Abilita/disabilita analytics
     if (analyticsConsent) {
       // Abilita analytics tracking

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useConfig } from './useConfig'
 
 interface AnalyticsEvent {
   action: string
@@ -12,11 +13,15 @@ interface AnalyticsEvent {
 }
 
 export const useAnalytics = () => {
+  const { isAnalyticsEnabled, isTrackingEnabled, isDevelopmentMode } = useConfig()
   const [hasTrackedPageView, setHasTrackedPageView] = useState(false)
   const [hasTrackedScroll, setHasTrackedScroll] = useState(false)
   const [analyticsConsent, setAnalyticsConsent] = useState(false)
   const startTime = useRef(Date.now())
   const scrollDepth = useRef(0)
+
+  // Check if analytics should be disabled based on configuration
+  const shouldDisableAnalytics = isDevelopmentMode || !isAnalyticsEnabled || !isTrackingEnabled
 
   // Check for analytics consent
   useEffect(() => {
@@ -58,6 +63,12 @@ export const useAnalytics = () => {
   }, [])
 
   const trackAnonymousEvent = async (action: string) => {
+    // Disable tracking if in development mode or analytics disabled
+    if (shouldDisableAnalytics) {
+      console.log(`🔕 Analytics disabled: ${action} (development mode or config disabled)`)
+      return
+    }
+
     // Always track anonymously (GDPR compliant)
     try {
       const response = await fetch('/api/analytics/anonymous', {
@@ -77,6 +88,12 @@ export const useAnalytics = () => {
   }
 
   const trackEvent = async (event: Omit<AnalyticsEvent, 'timestamp' | 'userAgent' | 'referrer'>) => {
+    // Disable tracking if in development mode or analytics disabled
+    if (shouldDisableAnalytics) {
+      console.log(`🔕 Analytics disabled: ${event.action} (development mode or config disabled)`)
+      return
+    }
+
     // Only track if user has given consent for analytics
     if (!analyticsConsent) return
     
@@ -116,11 +133,11 @@ export const useAnalytics = () => {
       }
       setHasTrackedPageView(true)
     }
-  }, [hasTrackedPageView, analyticsConsent])
+  }, [hasTrackedPageView, analyticsConsent, shouldDisableAnalytics])
 
   // Track scroll events
   useEffect(() => {
-    if (!analyticsConsent) return
+    if (!analyticsConsent || shouldDisableAnalytics) return
 
     const handleScroll = () => {
       const scrollTop = window.scrollY
@@ -142,11 +159,11 @@ export const useAnalytics = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [hasTrackedScroll, analyticsConsent])
+  }, [hasTrackedScroll, analyticsConsent, shouldDisableAnalytics])
 
   // Track time on page when user leaves
   useEffect(() => {
-    if (!analyticsConsent) return
+    if (!analyticsConsent || shouldDisableAnalytics) return
 
     let hasTrackedExit = false
 
@@ -179,7 +196,7 @@ export const useAnalytics = () => {
       window.removeEventListener('pagehide', handlePageHide)
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
-  }, [analyticsConsent])
+  }, [analyticsConsent, shouldDisableAnalytics])
 
   const trackEmailSubmit = async (email: string) => {
     // Always track anonymously (GDPR compliant)

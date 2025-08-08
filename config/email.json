@@ -1,18 +1,18 @@
 {
   "sender": {
-    "name": "Fish Cannot Carry Guns",
-    "email": "noreply@fishcannotcarryguns.aroundscifi.us",
-    "replyTo": "info@37indielab.com"
+    "name": "Test Sender",
+    "email": "test@test.com",
+    "replyTo": "reply@test.com"
   },
   "templates": {
     "welcome": {
-      "subject": "Your Free Ebook: Fish Cannot Carry Guns",
-      "html": "<!DOCTYPE html><html><head><meta charset='utf-8'><title>Your Free Ebook</title></head><body><h1>Thank you for downloading Fish Cannot Carry Guns!</h1><p>Hi {name},</p><p>Thank you for downloading your free copy of <strong>Fish Cannot Carry Guns</strong> by Michael B. Morgan.</p><p>Your download link is ready:</p><p><a href='{downloadUrl}' style='background: #0f766e; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;'>Download Your Free Ebook</a></p><p>This link will expire in 24 hours for security reasons.</p><h2>About the Book</h2><p>Fish Cannot Carry Guns is a collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality. For fans of Black Mirror, cyberpunk noir, and fringe futurism.</p><h2>Stories Included:</h2><ul><li><strong>Betrayal Circuit:</strong> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li><li><strong>Devil's Advocate:</strong> What if you were trapped in a cell... with the person who killed you?</li><li><strong>The Old Man and the Fee:</strong> On an ordinary day in Siberia, something extraordinary fell from the sky.</li><li><strong>All of a Sudden:</strong> James has been afraid all his life, but the heart of the forest won't stop calling him.</li><li><strong>Fish Cannot Carry Guns:</strong> All his life, John had thought he was safe...</li></ul><p>Enjoy your reading!</p><p>Best regards,<br>Michael B. Morgan</p><hr><p><small>If you have any issues with the download, please reply to this email.</small></p></body></html>",
-      "text": "Thank you for downloading Fish Cannot Carry Guns!\n\nHi {name},\n\nThank you for downloading your free copy of Fish Cannot Carry Guns by Michael B. Morgan.\n\nYour download link: {downloadUrl}\n\nThis link will expire in 24 hours for security reasons.\n\nAbout the Book:\nFish Cannot Carry Guns is a collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality.\n\nStories Included:\n- Betrayal Circuit: Captain Stalworth believes he can trust Private Jude Veil. He is wrong.\n- Devil's Advocate: What if you were trapped in a cell... with the person who killed you?\n- The Old Man and the Fee: On an ordinary day in Siberia, something extraordinary fell from the sky.\n- All of a Sudden: James has been afraid all his life, but the heart of the forest won't stop calling him.\n- Fish Cannot Carry Guns: All his life, John had thought he was safe...\n\nEnjoy your reading!\n\nBest regards,\nMichael B. Morgan"
+      "subject": "Welcome",
+      "html": "<p>Welcome</p>",
+      "text": "Welcome"
     },
     "download": {
-      "subject": "Your Download is Ready",
-      "message": "Click the button below to download your free copy of Fish Cannot Carry Guns"
+      "subject": "Download",
+      "message": "Download message"
     }
   },
   "settings": {
@@ -20,4 +20,4 @@
     "maxRetries": 3,
     "tracking": false
   }
-} 
+}

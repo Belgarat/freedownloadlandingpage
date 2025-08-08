@@ -1,54 +1,35 @@
 {
   "meta": {
-    "title": "Fish Cannot Carry Guns - Free Ebook Download",
-    "description": "Download Fish Cannot Carry Guns by Michael B. Morgan - Free ebook with speculative short stories for fans of Black Mirror and cyberpunk. Complete collection available now.",
-    "keywords": "ebook, science fiction, speculative fiction, short stories, cyberpunk, free download, Michael B. Morgan, Fish Cannot Carry Guns",
-    "author": "Michael B. Morgan",
+    "title": "Test SEO",
+    "description": "Test description",
+    "keywords": "test,keywords",
+    "author": "Test Author",
     "robots": "index, follow",
-    "canonical": "https://fishcannotcarryguns.aroundscifi.us"
+    "canonical": "https://test.com"
   },
   "openGraph": {
-    "title": "Fish Cannot Carry Guns - Free Ebook",
-    "description": "Download your free copy of Fish Cannot Carry Guns by Michael B. Morgan. A collection of speculative short stories for fans of Black Mirror and cyberpunk noir.",
+    "title": "Test OG",
+    "description": "Test OG desc",
     "type": "website",
-    "url": "https://fishcannotcarryguns.aroundscifi.us",
-    "image": "https://fishcannotcarryguns.aroundscifi.us/ebook_cover.webp",
-    "siteName": "Fish Cannot Carry Guns"
+    "url": "https://test.com",
+    "image": "https://test.com/image.jpg",
+    "siteName": "Test Site"
   },
   "twitter": {
     "card": "summary_large_image",
-    "title": "Fish Cannot Carry Guns - Free Ebook",
-    "description": "Download your free copy of Fish Cannot Carry Guns by Michael B. Morgan",
-    "image": "https://fishcannotcarryguns.aroundscifi.us/ebook_cover.webp"
+    "title": "Test Twitter",
+    "description": "Test Twitter desc",
+    "image": "https://test.com/image.jpg"
   },
   "structuredData": {
     "book": {
       "@type": "Book",
-      "name": "Fish Cannot Carry Guns",
-      "author": {
-        "@type": "Person",
-        "name": "Michael B. Morgan"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "3/7 Indie Lab"
-      },
-      "description": "A collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality.",
-      "isbn": "979-1298569133",
-      "bookFormat": "https://schema.org/EBook",
-      "inLanguage": "en",
-      "datePublished": "2025-07-09",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock"
-      }
+      "name": "Test Book"
     }
   },
   "sitemap": {
     "enabled": true,
-    "priority": 1.0,
+    "priority": 1,
     "changefreq": "weekly"
   }
-} 
+}

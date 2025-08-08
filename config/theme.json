@@ -1,17 +1,17 @@
 {
   "colors": {
-    "primary": "#0f766e",
-    "secondary": "#0891b2",
-    "accent": "#f59e0b",
-    "background": "linear-gradient(135deg, #0f766e 0%, #0891b2 50%, #1e40af 100%)",
+    "primary": "#000000",
+    "secondary": "#ffffff",
+    "accent": "#ff0000",
+    "background": "linear-gradient(135deg, #000000 0%, #ffffff 50%, #ff0000 100%)",
     "text": {
       "primary": "#ffffff",
-      "secondary": "#e5e7eb",
-      "muted": "#9ca3af"
+      "secondary": "#cccccc",
+      "muted": "#999999"
     },
-    "success": "#10b981",
-    "error": "#ef4444",
-    "warning": "#f59e0b"
+    "success": "#00ff00",
+    "error": "#ff0000",
+    "warning": "#ffff00"
   },
   "fonts": {
     "heading": "serif",
@@ -42,4 +42,4 @@
     "debug": true,
     "hotReload": true
   }
-} 
+}

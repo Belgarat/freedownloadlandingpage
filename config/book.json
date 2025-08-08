@@ -19,43 +19,29 @@
   "format": "Kindle Edition",
   "isFree": true,
   "price": null,
-  "categories": ["SciFi", "Dystopian", "Cyberpunk", "Androids", "DangerForHumanity"],
+  "categories": [
+    "SciFi",
+    "Dystopian",
+    "Cyberpunk",
+    "Androids",
+    "DangerForHumanity"
+  ],
   "stories": [
     {
-      "title": "Betrayal Circuit",
-      "description": "Captain Stalworth believes he can trust Private Jude Veil. He is wrong."
-    },
-    {
-      "title": "Devil's Advocate",
-      "description": "What if you were trapped in a cell... with the person who killed you?"
-    },
-    {
-      "title": "The Old Man and the Fee",
-      "description": "On an ordinary day in Siberia, something extraordinary fell from the sky."
-    },
-    {
-      "title": "All of a Sudden",
-      "description": "James has been afraid all his life, but the heart of the forest won't stop calling him."
-    },
-    {
-      "title": "Fish Cannot Carry Guns",
-      "description": "All his life, John had thought he was safe..."
+      "title": "Test Story",
+      "description": "Test"
     }
   ],
   "awards": [
     {
-      "title": "2023 Whistler Independent Book Awards Fiction Winner",
+      "title": "Test Award",
       "type": "Winner"
-    },
-    {
-      "title": "2022 Chanticleer International Book Awards Literary & Contemporary Fiction Finalist",
-      "type": "Finalist"
     }
   ],
   "rankings": {
-    "kindleStore": "#820,022",
-    "sciFiAnthologies": "#1,452",
-    "cyberpunkSciFi": "#1,525",
-    "cyberpunkBooks": "#2,259"
+    "kindleStore": "#1",
+    "sciFiAnthologies": "#1",
+    "cyberpunkSciFi": "#1",
+    "cyberpunkBooks": "#1"
   }
-} 
+}

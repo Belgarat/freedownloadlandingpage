@@ -1,53 +1,40 @@
+import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { Metadata } from 'next'
-import BookSchema from '@/components/BookSchema'
+import ConfigStatus from '@/components/ConfigStatus'
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  display: 'swap',
-  preload: true,
-  fallback: ['system-ui', 'arial']
-})
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Fish Cannot Carry Guns - Free Ebook Download',
   description: 'Download Fish Cannot Carry Guns by Michael B. Morgan - Free ebook with speculative short stories for fans of Black Mirror and cyberpunk. Complete collection available now.',
-  keywords: 'ebook, science fiction, speculative fiction, short stories, cyberpunk, free download, Michael B. Morgan',
+  keywords: 'ebook, science fiction, speculative fiction, short stories, cyberpunk, free download, Michael B. Morgan, Fish Cannot Carry Guns',
   authors: [{ name: 'Michael B. Morgan' }],
   openGraph: {
-    title: 'Fish Cannot Carry Guns - Free Ebook Download',
-    description: 'A collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality. For fans of Black Mirror, cyberpunk noir, and fringe futurism.',
+    title: 'Fish Cannot Carry Guns - Free Ebook',
+    description: 'Download your free copy of Fish Cannot Carry Guns by Michael B. Morgan. A collection of speculative short stories for fans of Black Mirror and cyberpunk noir.',
     type: 'website',
+    url: 'https://fishcannotcarryguns.aroundscifi.us',
     images: [
       {
-        url: '/ebook_cover.webp',
+        url: 'https://fishcannotcarryguns.aroundscifi.us/ebook_cover.webp',
         width: 1200,
-        height: 1600,
+        height: 630,
         alt: 'Fish Cannot Carry Guns Book Cover',
       },
     ],
+    siteName: 'Fish Cannot Carry Guns',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Fish Cannot Carry Guns - Free Ebook Download',
-    description: 'A collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality.',
-    images: ['/ebook_cover.webp'],
+    title: 'Fish Cannot Carry Guns - Free Ebook',
+    description: 'Download your free copy of Fish Cannot Carry Guns by Michael B. Morgan',
+    images: ['https://fishcannotcarryguns.aroundscifi.us/ebook_cover.webp'],
   },
-  icons: {
-    icon: [
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    other: [
-      { rel: 'android-chrome', url: '/android-chrome-192x192.png', sizes: '192x192' },
-      { rel: 'android-chrome', url: '/android-chrome-512x512.png', sizes: '512x512' },
-    ],
+  robots: 'index, follow',
+  alternates: {
+    canonical: 'https://fishcannotcarryguns.aroundscifi.us',
   },
-  manifest: '/site.webmanifest',
 }
 
 export default function RootLayout({
@@ -58,16 +45,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <BookSchema />
-        {/* Preload critical resources */}
-        <link rel="preload" href="/ebook_cover_small.webp" as="image" type="image/webp" />
-        <link rel="preload" href="/favicon-32x32.png" as="image" type="image/png" />
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>" />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <ConfigStatus />
+      </body>
     </html>
   )
 } 

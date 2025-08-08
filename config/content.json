@@ -1,0 +1,49 @@
+{
+  "aboutBook": "<p><strong>Fish Cannot Carry Guns</strong> is a collection of speculative short stories that delve into how technology fractures identity, erodes trust, and distorts reality. For fans of Black Mirror, cyberpunk noir, and fringe futurism, these slow-burning, unsettling tales challenge what it means to be human in a world ruled by code.</p><p>Each story explores the intersection of humanity and technology, asking questions about trust, identity, and the price of progress. From androids questioning their programming to humans trapped in digital prisons, these tales push the boundaries of what we think we know about consciousness and reality.</p>",
+  "authorBio": "<p>Is the snowflake responsible for the avalanche? I'm a lifelong reader with a love for physics, psychology, and stories that ask hard questions, and don't always offer easy answers.</p><p>Consultant by day, author by night. Proud father. Grateful husband. Based in the U.S., often on the move.</p><p>When I'm not writing stories that make readers question reality, I'm exploring the intersection of technology and human nature through my consulting work.</p>",
+  "stories": [
+    {
+      "title": "Betrayal Circuit",
+      "description": "Captain Stalworth believes he can trust Private Jude Veil. He is wrong.",
+      "content": "<p>In a future where loyalty is programmed and trust is a commodity, Captain Stalworth discovers that even the most reliable systems can be corrupted from within.</p>"
+    },
+    {
+      "title": "Devil's Advocate",
+      "description": "What if you were trapped in a cell... with the person who killed you?",
+      "content": "<p>A psychological thriller that explores the nature of justice, revenge, and the thin line between victim and perpetrator.</p>"
+    },
+    {
+      "title": "The Old Man and the Fee",
+      "description": "On an ordinary day in Siberia, something extraordinary fell from the sky.",
+      "content": "<p>When an alien artifact lands in a remote Siberian village, the locals must decide whether to embrace the unknown or preserve their way of life.</p>"
+    },
+    {
+      "title": "All of a Sudden",
+      "description": "James has been afraid all his life, but the heart of the forest won't stop calling him.",
+      "content": "<p>A coming-of-age story set in a world where nature itself has become sentient and demanding.</p>"
+    },
+    {
+      "title": "Fish Cannot Carry Guns",
+      "description": "All his life, John had thought he was safe...",
+      "content": "<p>The title story explores themes of safety, paranoia, and the weapons we carry both literally and metaphorically.</p>"
+    }
+  ],
+  "testimonials": [
+    {
+      "text": "A masterful collection that will make you question everything you think you know about technology and humanity.",
+      "author": "Sarah Chen",
+      "rating": 5,
+      "source": "Goodreads"
+    },
+    {
+      "text": "Each story is a gem that lingers in your mind long after reading. Highly recommended for fans of Black Mirror.",
+      "author": "Marcus Rodriguez",
+      "rating": 5,
+      "source": "Amazon"
+    }
+  ],
+  "footer": {
+    "copyright": "© 2025 Michael B. Morgan. All rights reserved.",
+    "supportText": "Support Independent Authors: Since this book is completely free, we'd be grateful if you could add \"Fish Cannot Carry Guns\" to your Goodreads reading list once you've had a chance to read it. Your support helps independent authors like Michael B. Morgan continue writing."
+  }
+} 

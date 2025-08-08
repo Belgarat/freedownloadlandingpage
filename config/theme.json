@@ -1,0 +1,45 @@
+{
+  "colors": {
+    "primary": "#0f766e",
+    "secondary": "#0891b2",
+    "accent": "#f59e0b",
+    "background": "linear-gradient(135deg, #0f766e 0%, #0891b2 50%, #1e40af 100%)",
+    "text": {
+      "primary": "#ffffff",
+      "secondary": "#e5e7eb",
+      "muted": "#9ca3af"
+    },
+    "success": "#10b981",
+    "error": "#ef4444",
+    "warning": "#f59e0b"
+  },
+  "fonts": {
+    "heading": "serif",
+    "body": "system-ui",
+    "mono": "ui-monospace"
+  },
+  "layout": {
+    "type": "hero-focus",
+    "showCountdown": true,
+    "showStories": true,
+    "showTestimonials": true,
+    "showAwards": true,
+    "showRankings": true
+  },
+  "spacing": {
+    "container": "max-w-7xl",
+    "section": "py-20",
+    "element": "mb-6"
+  },
+  "animations": {
+    "enabled": true,
+    "duration": "300ms",
+    "easing": "ease-in-out"
+  },
+  "development": {
+    "analytics": false,
+    "tracking": false,
+    "debug": true,
+    "hotReload": true
+  }
+} 

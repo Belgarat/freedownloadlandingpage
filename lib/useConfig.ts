@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import configLoader, { AppConfig, BookConfig, MarketingConfig, ContentConfig, ThemeConfig, SEOConfig, EmailConfig } from './config-loader'
+import { AppConfig, BookConfig, MarketingConfig, ContentConfig, ThemeConfig, SEOConfig, EmailConfig } from './config-loader'
 
 export function useConfig() {
   const [config, setConfig] = useState<AppConfig | null>(null)
@@ -14,15 +14,32 @@ export function useConfig() {
         setLoading(true)
         setError(null)
         
-        const loadedConfig = await configLoader.loadConfig()
-        setConfig(loadedConfig)
+        const response = await fetch('/api/config')
+        const result = await response.json()
         
-        // Start watching for changes in development mode
-        if (loadedConfig.theme.development.hotReload) {
-          await configLoader.watchConfig((newConfig) => {
-            console.log('🔄 Configuration updated via hook')
-            setConfig(newConfig)
-          })
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to load configuration')
+        }
+        
+        setConfig(result.data)
+        
+        // In development mode, poll for changes
+        if (result.data?.theme?.development?.hotReload) {
+          const pollInterval = setInterval(async () => {
+            try {
+              const pollResponse = await fetch('/api/config')
+              const pollResult = await pollResponse.json()
+              
+              if (pollResult.success && JSON.stringify(pollResult.data) !== JSON.stringify(config)) {
+                console.log('🔄 Configuration updated via polling')
+                setConfig(pollResult.data)
+              }
+            } catch (err) {
+              console.error('Error polling config:', err)
+            }
+          }, 2000) // Poll every 2 seconds
+          
+          return () => clearInterval(pollInterval)
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load configuration')
@@ -33,13 +50,6 @@ export function useConfig() {
     }
 
     loadConfig()
-
-    // Cleanup
-    return () => {
-      if (config?.theme.development.hotReload) {
-        configLoader.stopWatching()
-      }
-    }
   }, [])
 
   return {

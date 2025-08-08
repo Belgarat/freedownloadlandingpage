@@ -1,3 +1,8 @@
+// Server-side only - don't import in browser
+if (typeof window !== 'undefined') {
+  throw new Error('ConfigLoader is server-side only')
+}
+
 import fs from 'fs'
 import path from 'path'
 import chokidar from 'chokidar'

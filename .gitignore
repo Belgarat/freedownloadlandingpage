@@ -122,5 +122,5 @@ temp/
 
 # Local Netlify folder
 .netlify
-app/api/send-ebook/landingfree.code-workspace
+app/api/send-ebook/booklandingstack.code-workspace
 package-lock.json

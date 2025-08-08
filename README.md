@@ -1,6 +1,6 @@
-# Fish Cannot Carry Guns - Free Ebook Landing Page
+# Book Landing Stack - Fish Cannot Carry Guns Landing Page
 
-A beautiful Next.js 15 landing page for free ebook downloads with email collection, Resend integration, Supabase analytics tracking, and comprehensive Playwright testing.
+A beautiful Next.js 15 landing page for free ebook downloads with email collection, Resend integration, Supabase analytics tracking, and comprehensive Playwright testing. This is an example implementation of the Book Landing Stack framework.
 
 ## Features
 
@@ -20,7 +20,7 @@ A beautiful Next.js 15 landing page for free ebook downloads with email collecti
 
 ## Book Information
 
-This landing page is designed for the book "Fish Cannot Carry Guns" by Michael B. Morgan - a collection of speculative short stories for fans of Black Mirror, cyberpunk noir, and fringe futurism. The entire ebook is offered for free download.
+This landing page is designed for the book "Fish Cannot Carry Guns" by Michael B. Morgan - a collection of speculative short stories for fans of Black Mirror, cyberpunk noir, and fringe futurism. The entire ebook is offered for free download. This serves as a reference implementation of the Book Landing Stack framework.
 
 ## Setup Instructions
 
@@ -154,7 +154,7 @@ The project includes a comprehensive Playwright test suite with 13 tests coverin
 ## Project Structure
 
 ```
-landingfree/
+booklandingstack/
 ├── app/                    # Next.js App Router
 │   ├── api/               # API routes
 │   │   ├── analytics/     # Analytics tracking
@@ -240,6 +240,10 @@ npm start
 - **Open Graph**: Social media sharing optimization
 - **Twitter Cards**: Twitter-specific meta tags
 - **Sitemap**: Automatic sitemap generation
+
+## About Book Landing Stack
+
+This project serves as a reference implementation of the Book Landing Stack framework - an open source solution for creating high-converting landing pages specifically designed for indie authors and book marketing.
 
 ## License
 

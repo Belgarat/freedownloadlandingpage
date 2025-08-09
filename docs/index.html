@@ -66,6 +66,7 @@
                         <a href="#about" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">About</a>
                         <a href="#features" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">Features</a>
                         <a href="#roadmap" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">Roadmap</a>
+                        <a href="#whatsnew" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">What's New</a>
                         <a href="#community" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">Community</a>
                     </div>
                 </div>
@@ -82,11 +83,14 @@
     <section class="gradient-bg text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
             <div class="text-center">
-                <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                <h1 class="text-5xl md:text-7xl font-bold mb-3">
                     Book Landing Stack
                 </h1>
+                <div class="inline-flex items-center justify-center gap-2 mb-6">
+                    <span class="text-sm font-semibold bg-white/10 text-white px-3 py-1 rounded-full border border-white/20">v2.0.0-alpha.2</span>
+                </div>
                 <p class="text-xl md:text-2xl mb-8 text-gray-100">
-                    The open source framework for indie book landing pages that actually convert
+                    Open source stack for high-converting book landing pages — JSON configs, Admin Panel, Theme Generator, SEO & Analytics
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="#about" class="bg-book-amber text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-yellow-500 transition-colors glow">
@@ -223,6 +227,38 @@
                         development with transparent roadmap and regular updates.
                     </p>
                 </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="text-book-amber text-4xl mb-4">🎨</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Theme Generator</h3>
+                    <p class="text-gray-600">
+                        Generate a color palette from your book cover with contrast checks, gradients, surfaces, and presets.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="text-book-amber text-4xl mb-4">🛠️</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Admin Panel</h3>
+                    <p class="text-gray-600">
+                        Manage JSON-based configs for Book, Content, Marketing, Theme, SEO. Auth-protected with cookie-based login.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="text-book-amber text-4xl mb-4">✉️</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Email Templates</h3>
+                    <p class="text-gray-600">
+                        WYSIWYG with placeholders, link URL placeholders, preview/text modes, and code view for fine control.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="text-book-amber text-4xl mb-4">🔎</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">SEO Automation</h3>
+                    <p class="text-gray-600">
+                        Server-side metadata via generateMetadata and auto JSON-LD Book Schema generation from your book data.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
@@ -293,6 +329,58 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What's New Section -->
+    <section id="whatsnew" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">What's New (v2.0.0-alpha.2)</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Latest improvements to theming, admin UX, SEO, and email workflow
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-3">Theme & UI</h3>
+                    <ul class="space-y-2 text-gray-700 list-disc pl-5">
+                        <li>Theme generated from cover colors with saturation/lightness controls and per-color locks</li>
+                        <li>Optional background gradients and configurable surface colors with opacity</li>
+                        <li>Google Fonts picker with auto-loading and live preview</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-3">Admin & Content</h3>
+                    <ul class="space-y-2 text-gray-700 list-disc pl-5">
+                        <li>Unified Admin Topbar across all sections</li>
+                        <li>Tabbed editors for Book, Marketing, Content, Theme, and SEO</li>
+                        <li>Hot reload via polling with improved save behavior</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-3">SEO & Analytics</h3>
+                    <ul class="space-y-2 text-gray-700 list-disc pl-5">
+                        <li>Server-side <code>generateMetadata</code> adoption</li>
+                        <li>Auto-generate JSON-LD Book Schema from book data</li>
+                        <li>Analytics dashboard wired to API with safe read-only dev mode</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-3">Email System</h3>
+                    <ul class="space-y-2 text-gray-700 list-disc pl-5">
+                        <li>WYSIWYG editor with placeholders and URL placeholders</li>
+                        <li>HTML/Text preview and code view toggle</li>
+                        <li>Follow-up email with fresh download link</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="https://github.com/marcobrunet/booklandingstack#readme" class="inline-block bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors mr-3">Read README</a>
+                <a href="https://github.com/marcobrunet/booklandingstack/blob/develop/VERSION.md" class="inline-block border border-gray-900 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-900 hover:text-white transition-colors">View Changelog</a>
             </div>
         </div>
     </section>

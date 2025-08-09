@@ -79,7 +79,7 @@ export default function Home() {
               <div className="flex flex-col items-center mb-6 sm:mb-8">
               <div className="flex items-center space-x-2 mb-3 sm:mb-4">
                 <BookOpen className="h-8 w-8 sm:h-10 sm:w-10 text-[var(--color-accent)]" />
-                <span className="text-2xl sm:text-4xl md:text-5xl font-bold text-theme-primary font-serif leading-tight">{book?.title || 'Fish Cannot Carry Guns'}</span>
+                <span className="text-2xl sm:text-4xl md:text-5xl font-bold text-theme-primary leading-tight" style={{ fontFamily: 'var(--font-heading, inherit)' }}>{book?.title || 'Fish Cannot Carry Guns'}</span>
               </div>
               <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-theme-secondary">
                 <span>by {book?.author || 'Michael B. Morgan'}</span>

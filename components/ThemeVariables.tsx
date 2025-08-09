@@ -42,6 +42,12 @@ export default function ThemeVariables() {
       set('--surface-border', 'color-mix(in srgb, var(--color-background) 80%, white 20%)')
       set('--surface-border-alpha', '1')
     }
+
+    // Fonts
+    const f = theme.fonts
+    if (f?.heading) set('--font-heading', f.heading)
+    if (f?.body) set('--font-body', f.body)
+    if (f?.mono) set('--font-mono', f.mono)
   }, [theme])
 
   return null

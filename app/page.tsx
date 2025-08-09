@@ -17,6 +17,8 @@ export default function Home() {
   // Initialize analytics
   const { trackEmailSubmit, trackGoodreadsClick, trackSubstackClick, trackPublisherClick } = useAnalytics()
   const { book, content, marketing, theme } = useConfig()
+  const aboutBookHtml = (book?.description && book.description.trim()) ? book.description : (content?.aboutBook || '')
+  const authorBioHtml = (book?.authorBio && book.authorBio.trim()) ? book.authorBio : (content?.authorBio || '')
   
   // Get offer end date from environment
   const offerEndDate = useMemo(() => {
@@ -204,7 +206,7 @@ export default function Home() {
               {/* Description */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>
-                <div className="prose prose-invert max-w-none text-teal-100 mb-4 text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: content?.aboutBook || '' }} />
+                <div className="prose prose-invert max-w-none text-teal-100 mb-4 text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: aboutBookHtml }} />
                                   {/* Review e tag */}
                   <div className="flex flex-col items-center gap-3 text-sm text-gray-200 mb-4">
                     <span className="flex items-center gap-1 text-amber-300 font-semibold">
@@ -232,7 +234,7 @@ export default function Home() {
               {/* Author Bio */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Author</h3>
-                <div className="prose prose-invert max-w-none text-teal-100 text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: content?.authorBio || '' }} />
+                <div className="prose prose-invert max-w-none text-teal-100 text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: authorBioHtml }} />
               </div>
 
               {/* Goodreads Link */}

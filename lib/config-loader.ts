@@ -149,6 +149,13 @@ export interface ThemeConfig {
     gradientEnabled?: boolean
     gradientDirection?: string // e.g., 'to bottom right'
   }
+  surface?: {
+    mode: 'auto' | 'custom'
+    bgColor?: string
+    bgOpacity?: number // 0-100
+    borderColor?: string
+    borderOpacity?: number // 0-100
+  }
   fonts: {
     heading: string
     body: string

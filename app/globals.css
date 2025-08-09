@@ -17,6 +17,10 @@
     --color-error: #ef4444;
     --color-warning: #f59e0b;
     --bg-gradient: none;
+    --surface-bg: color-mix(in srgb, var(--color-background) 92%, var(--color-primary) 8%);
+    --surface-bg-alpha: 1;
+    --surface-border: color-mix(in srgb, var(--color-background) 80%, white 20%);
+    --surface-border-alpha: 1;
   }
   /* Optimize font loading */
   * {
@@ -85,4 +89,13 @@
   .border-theme-primary { border-color: var(--color-primary); }
   .border-theme-secondary { border-color: var(--color-secondary); }
   .border-theme-accent { border-color: var(--color-accent); }
+
+  .surface {
+    background: var(--surface-bg);
+    border-color: var(--surface-border);
+  }
+  .surface-alpha {
+    background: color-mix(in srgb, var(--surface-bg) calc(var(--surface-bg-alpha) * 100%), transparent);
+    border-color: color-mix(in srgb, var(--surface-border) calc(var(--surface-border-alpha) * 100%), transparent);
+  }
 } 

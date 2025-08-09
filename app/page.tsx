@@ -104,7 +104,7 @@ export default function Home() {
             {/* Book Cover Section */}
             <div className="space-y-4 sm:space-y-6">
               
-              <div className="backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border border-theme-secondary/50" style={{ backgroundColor: 'color-mix(in srgb, var(--color-background) 85%, black)' }}>
+              <div className="backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border surface-alpha">
                 <div className="w-64 sm:w-80 md:w-96 mx-auto bg-gradient-to-br from-teal-800 to-cyan-800 rounded-lg shadow-lg mb-4 sm:mb-6 flex items-center justify-center">
                   <img
                     src={book?.coverImage || '/ebook_cover_small.webp'}
@@ -207,7 +207,7 @@ export default function Home() {
             {/* Book Details Section */}
             <div className="space-y-6 sm:space-y-8">
               {/* Description */}
-              <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-theme-secondary/50" style={{ backgroundColor: 'color-mix(in srgb, var(--color-background) 85%, black)' }}>
+              <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>
                 <div className="prose prose-invert max-w-none text-theme-secondary mb-4 text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: aboutBookHtml }} />
                                   {/* Review e tag */}
@@ -221,7 +221,7 @@ export default function Home() {
                       ))}
                     </div>
                   </div>
-                                  <div className="rounded p-3 mt-4 border border-theme-secondary/50" style={{ backgroundColor: 'color-mix(in srgb, var(--color-accent) 20%, transparent)' }}>
+                                  <div className="rounded p-3 mt-4 border" style={{ backgroundColor: 'color-mix(in srgb, var(--color-accent) 20%, transparent)', borderColor: 'color-mix(in srgb, var(--color-background) 80%, white 20%)' }}>
                     <p className="text-sm text-theme-primary font-medium text-center flex items-center justify-center gap-2">
                       <Palette className="w-4 h-4 text-[var(--color-accent)]" />
                       All interior illustrations are original works by the author
@@ -235,13 +235,13 @@ export default function Home() {
               </div>
 
               {/* Author Bio */}
-              <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-theme-secondary/50" style={{ backgroundColor: 'color-mix(in srgb, var(--color-background) 85%, black)' }}>
+              <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Author</h3>
                 <div className="prose prose-invert max-w-none text-theme-secondary text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: authorBioHtml }} />
               </div>
 
               {/* Goodreads Link */}
-              <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 text-center border border-theme-secondary/50" style={{ backgroundColor: 'color-mix(in srgb, var(--color-background) 85%, black)' }}>
+              <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 text-center border surface-alpha">
                 <p className="text-teal-100 mb-3 text-sm">
                   Support independent authors by adding this book to your Goodreads reading list
                 </p>

@@ -4,6 +4,19 @@
 
 /* Critical CSS for above-the-fold content */
 @layer base {
+  :root {
+    /* Theme color variables with sensible defaults */
+    --color-primary: #0ea5e9;
+    --color-secondary: #22d3ee;
+    --color-accent: #14b8a6;
+    --color-background: #0b1220;
+    --color-text-primary: #e5e7eb;
+    --color-text-secondary: #cbd5e1;
+    --color-text-muted: #94a3b8;
+    --color-success: #10b981;
+    --color-error: #ef4444;
+    --color-warning: #f59e0b;
+  }
   /* Optimize font loading */
   * {
     box-sizing: border-box;
@@ -18,6 +31,8 @@
     text-rendering: optimizeSpeed;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
   }
   
   /* Reduce layout shift */
@@ -55,4 +70,18 @@
   .contain-layout {
     contain: layout;
   }
+
+  /* Theme helpers */
+  .bg-theme-primary { background-color: var(--color-primary); }
+  .bg-theme-secondary { background-color: var(--color-secondary); }
+  .bg-theme-accent { background-color: var(--color-accent); }
+  .bg-theme-background { background-color: var(--color-background); }
+
+  .text-theme-primary { color: var(--color-text-primary); }
+  .text-theme-secondary { color: var(--color-text-secondary); }
+  .text-theme-muted { color: var(--color-text-muted); }
+
+  .border-theme-primary { border-color: var(--color-primary); }
+  .border-theme-secondary { border-color: var(--color-secondary); }
+  .border-theme-accent { border-color: var(--color-accent); }
 } 

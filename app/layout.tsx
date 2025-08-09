@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import ConfigStatus from '@/components/ConfigStatus'
+import ThemeVariables from '@/components/ThemeVariables'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -48,6 +49,7 @@ export default function RootLayout({
         <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>" />
       </head>
       <body className={inter.className}>
+        <ThemeVariables />
         {children}
         <ConfigStatus />
       </body>

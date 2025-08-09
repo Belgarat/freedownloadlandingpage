@@ -252,6 +252,66 @@ export default function Home() {
                 <div className="prose prose-invert max-w-none text-theme-secondary text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: authorBioHtml }} />
               </div>
 
+              {/* Stories */}
+              {layout?.showStories !== false && (content?.stories?.length ?? 0) > 0 && (
+                <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
+                  <h3 className="text-lg font-semibold text-white mb-4">Stories</h3>
+                  <div className="space-y-6">
+                    {content!.stories.map((story, idx) => (
+                      <div key={idx} className="space-y-2">
+                        {story.title && <h4 className="text-theme-primary font-semibold">{story.title}</h4>}
+                        {story.description && <p className="text-theme-secondary text-sm">{story.description}</p>}
+                        {story.content && (
+                          <div className="prose prose-invert max-w-none text-theme-secondary text-sm" dangerouslySetInnerHTML={{ __html: story.content }} />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Testimonials */}
+              {layout?.showTestimonials !== false && (content?.testimonials?.length ?? 0) > 0 && (
+                <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
+                  <h3 className="text-lg font-semibold text-white mb-4">Testimonials</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {content!.testimonials.map((t, idx) => (
+                      <div key={idx} className="rounded border surface-alpha p-4">
+                        <p className="text-theme-secondary text-sm">“{t.text}”</p>
+                        <div className="mt-2 text-xs text-theme-muted">{t.author}{t.source ? ` — ${t.source}` : ''}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Awards */}
+              {layout?.showAwards !== false && (book?.awards?.length ?? 0) > 0 && (
+                <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
+                  <h3 className="text-lg font-semibold text-white mb-4">Awards</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {book!.awards.map((a, idx) => (
+                      <span key={idx} className="inline-flex items-center px-3 py-1 rounded-full border text-xs surface">
+                        {a.title}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Rankings */}
+              {layout?.showRankings !== false && book?.rankings && (
+                <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
+                  <h3 className="text-lg font-semibold text-white mb-4">Rankings</h3>
+                  <ul className="list-disc pl-5 text-theme-secondary text-sm space-y-1">
+                    {book.rankings.kindleStore && <li>Kindle Store: {book.rankings.kindleStore}</li>}
+                    {book.rankings.sciFiAnthologies && <li>Sci-Fi Anthologies: {book.rankings.sciFiAnthologies}</li>}
+                    {book.rankings.cyberpunkSciFi && <li>Cyberpunk Sci-Fi: {book.rankings.cyberpunkSciFi}</li>}
+                    {book.rankings.cyberpunkBooks && <li>Cyberpunk Books: {book.rankings.cyberpunkBooks}</li>}
+                  </ul>
+                </div>
+              )}
+
               {/* Goodreads Link */}
               {!isMinimal && (
               <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 text-center border surface-alpha">

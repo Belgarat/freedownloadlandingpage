@@ -12,6 +12,8 @@ test.describe('Cookie Consent', () => {
 
   test('should show cookie banner on first visit', async ({ page }) => {
     await page.goto('/')
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(500)
     
     // Check if cookie banner is visible
     const banner = page.locator('text=Cookie Policy')
@@ -19,15 +21,15 @@ test.describe('Cookie Consent', () => {
     
     // Check banner content
     await expect(page.getByText('We use technical cookies for site functionality and analytics cookies')).toBeVisible()
-    await expect(page.getByText('Accept All')).toBeVisible()
-    await expect(page.getByText('Necessary Only')).toBeVisible()
+    await expect(page.getByRole('button', { name: /Accept All/i })).toBeVisible()
+    await expect(page.getByRole('button', { name: /Necessary Only/i })).toBeVisible()
   })
 
   test('should hide banner after accepting all cookies', async ({ page }) => {
     await page.goto('/')
     
     // Accept all cookies
-    await page.getByRole('button', { name: 'Accept All' }).click()
+    await page.getByRole('button', { name: /Accept All/i }).click()
     
     // Banner should disappear
     await expect(page.locator('text=Cookie Policy')).not.toBeVisible()
@@ -47,7 +49,7 @@ test.describe('Cookie Consent', () => {
     await page.goto('/')
     
     // Accept necessary cookies only
-    await page.getByRole('button', { name: 'Necessary Only' }).click()
+    await page.getByRole('button', { name: /Necessary Only/i }).click()
     
     // Banner should disappear
     await expect(page.locator('text=Cookie Policy')).not.toBeVisible()
@@ -67,7 +69,7 @@ test.describe('Cookie Consent', () => {
     await page.goto('/')
     
     // Accept all cookies
-    await page.getByRole('button', { name: 'Accept All' }).click()
+    await page.getByRole('button', { name: /Accept All/i }).click()
     
     // Reload page
     await page.reload()
@@ -80,7 +82,7 @@ test.describe('Cookie Consent', () => {
     await page.goto('/')
     
     // Click customize button
-    await page.getByRole('button', { name: 'Customize' }).click()
+    await page.getByRole('button', { name: /Customize/i }).click()
     
     // Check details are shown
     await expect(page.getByText('Cookie Details')).toBeVisible()
@@ -92,7 +94,7 @@ test.describe('Cookie Consent', () => {
     await analyticsCheckbox.check()
     
     // Accept with custom preferences
-    await page.getByRole('button', { name: 'Accept All' }).click()
+    await page.getByRole('button', { name: /Accept All/i }).click()
     
     // Check localStorage reflects custom choice
     const consent = await page.evaluate(() => {
@@ -126,7 +128,7 @@ test.describe('Cookie Consent', () => {
     await expect(banner).toBeVisible()
     
     // Check buttons have proper roles
-    await expect(page.getByRole('button', { name: 'Accept All' })).toBeVisible()
+    await expect(page.getByRole('button', { name: /Accept All/i })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Necessary Only' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Customize' })).toBeVisible()
   })

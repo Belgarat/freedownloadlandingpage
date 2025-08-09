@@ -7,7 +7,7 @@ test.describe('Landing Page', () => {
 
   test('should display the main landing page correctly', async ({ page }) => {
     // Check main elements are present - use more specific selectors
-    await expect(page.locator('span').filter({ hasText: 'Fish Cannot Carry Guns' }).first()).toBeVisible()
+    await expect(page.locator('h1').filter({ hasText: 'Fish Cannot Carry Guns' }).first()).toBeVisible()
     await expect(page.getByText('by Michael B. Morgan')).toBeVisible()
     await expect(page.getByText('Download Your Free Copy')).toBeVisible()
     
@@ -76,11 +76,11 @@ test.describe('Landing Page', () => {
     await page.setViewportSize({ width: 375, height: 667 })
     
     // Check elements are still visible and properly laid out
-    await expect(page.locator('span').filter({ hasText: 'Fish Cannot Carry Guns' }).first()).toBeVisible()
+    await expect(page.locator('h1').filter({ hasText: 'Fish Cannot Carry Guns' }).first()).toBeVisible()
     await expect(page.getByText('Download Your Free Copy')).toBeVisible()
     
     // Check mobile-specific layout - use a simpler approach
-    const titleElement = page.locator('span').filter({ hasText: 'Fish Cannot Carry Guns' }).first()
+    const titleElement = page.locator('h1').filter({ hasText: 'Fish Cannot Carry Guns' }).first()
     await expect(titleElement).toBeVisible()
     
     // Check that the element is actually rendered (simpler than checking font size)
@@ -172,12 +172,12 @@ test.describe('Accessibility', () => {
     await page.goto('/')
     
     // Check main text is readable - use more specific selector
-    const mainText = page.locator('span').filter({ hasText: 'Fish Cannot Carry Guns' }).first()
+    const mainText = page.locator('h1').filter({ hasText: 'Fish Cannot Carry Guns' }).first()
     const computedStyle = await mainText.evaluate(el => window.getComputedStyle(el))
     
     // Basic contrast check - just verify the element exists and is visible
     expect(computedStyle).toBeDefined()
-    expect(mainText).toBeVisible()
+    await expect(mainText).toBeVisible()
   })
 
   // Note: Countdown timer test temporarily disabled due to visibility issues

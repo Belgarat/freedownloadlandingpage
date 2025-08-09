@@ -16,7 +16,7 @@ export default function PrivacyPage() {
               <h2 className="text-xl font-semibold text-white mb-4">General Information</h2>
               <p className="mb-4">
                 This Privacy Policy describes how we collect, use, and protect your personal information 
-                when you visit our website and request the download of the ebook "Fish Cannot Carry Guns".
+                when you visit our website and request the download of the ebook &quot;Fish Cannot Carry Guns&quot;.
               </p>
               <p>
                 <strong>Data Controller:</strong> Michael B. Morgan<br/>

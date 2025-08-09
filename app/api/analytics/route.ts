@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { AnalyticsEvent, AnalyticsResponse } from '@/types/analytics'
+import { AnalyticsEvent } from '@/types/analytics'
 
 export async function POST(request: NextRequest) {
   try {

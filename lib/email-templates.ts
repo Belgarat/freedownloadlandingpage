@@ -3,7 +3,6 @@ export interface EmailTemplateData {
   downloadUrl: string
   bookTitle: string
   authorName: string
-  amazonUrl: string
   publisherName: string
   publisherUrl: string
 }
@@ -14,7 +13,6 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
     downloadUrl,
     bookTitle = 'Fish Cannot Carry Guns',
     authorName = 'Michael B. Morgan',
-    amazonUrl = 'https://www.amazon.com/dp/B0DS55TQ8R',
     publisherName = '3/7 Indie Lab',
     publisherUrl = 'https://37indielab.com'
   } = data

@@ -42,6 +42,16 @@ test.describe('Admin Panel', () => {
   })
 
   test('should show loading state during login', async ({ page }) => {
+    // Slow down auth API to surface loading state
+    await page.route('/api/admin/auth', async route => {
+      await new Promise(res => setTimeout(res, 800))
+      await route.fulfill({
+        status: 401,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: 'Incorrect password' })
+      })
+    })
+
     const passwordInput = page.getByPlaceholder('Enter password')
     const loginButton = page.getByRole('button', { name: 'Sign In' })
 
@@ -49,7 +59,7 @@ test.describe('Admin Panel', () => {
     await passwordInput.fill('testpassword')
     await loginButton.click()
 
-    // Should show loading state (with longer timeout for API call)
+    // Should show loading state text while waiting
     await expect(page.getByText('Signing in...')).toBeVisible({ timeout: 10000 })
   })
 

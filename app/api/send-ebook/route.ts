@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { sendEbookEmail, verifyEmail } from '@/lib/resend'
 import { generateDownloadToken, createDownloadUrl } from '@/lib/download-tokens'
 import { supabaseAdmin } from '@/lib/supabase'
-import { EmailRequest, EmailResponse } from '@/types/email'
+import { EmailRequest } from '@/types/email'
 
 export async function POST(request: NextRequest) {
   try {

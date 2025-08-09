@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Download, AlertCircle, CheckCircle, BookOpen, ExternalLink } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface DownloadPageProps {
   params: Promise<{ token: string }>
@@ -38,7 +39,7 @@ export default function DownloadPage({ params }: DownloadPageProps) {
           setError(data.error || 'Invalid download link')
           setIsValid(false)
         }
-      } catch (err) {
+      } catch {
         setError('Failed to validate download link')
         setIsValid(false)
       } finally {
@@ -97,7 +98,7 @@ export default function DownloadPage({ params }: DownloadPageProps) {
         const data = await response.json()
         setError(data.error || 'Download failed')
       }
-    } catch (err) {
+      } catch {
       setError('Download failed. Please try again.')
     } finally {
       setIsLoading(false)
@@ -140,7 +141,7 @@ export default function DownloadPage({ params }: DownloadPageProps) {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">Your Download is Ready!</h1>
-            <p className="text-teal-100 text-lg">Click the button below to download your free copy of "Fish Cannot Carry Guns"</p>
+            <p className="text-teal-100 text-lg">Click the button below to download your free copy of &quot;Fish Cannot Carry Guns&quot;</p>
           </div>
 
           {/* Download Section */}
@@ -194,9 +195,9 @@ export default function DownloadPage({ params }: DownloadPageProps) {
           {/* Support Section */}
           <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 sm:p-8 border border-teal-700/50 mb-8">
             <h3 className="text-lg font-semibold text-white mb-4 text-center">Support Independent Authors</h3>
-            <p className="text-teal-100 text-center mb-6">
-              Since this book is completely free, we'd be grateful if you could support Michael B. Morgan in these ways:
-            </p>
+              <p className="text-teal-100 text-center mb-6">
+                Since this book is completely free, we&apos;d be grateful if you could support Michael B. Morgan in these ways:
+              </p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <a
@@ -225,9 +226,9 @@ export default function DownloadPage({ params }: DownloadPageProps) {
           <div className="text-center text-teal-200 text-sm">
             <p>© 2025 Michael B. Morgan. All rights reserved.</p>
             <div className="mt-4">
-              <a href="/" className="underline hover:text-white transition-colors">
+              <Link href="/" className="underline hover:text-white transition-colors">
                 Return to Homepage
-              </a>
+              </Link>
             </div>
           </div>
         </div>

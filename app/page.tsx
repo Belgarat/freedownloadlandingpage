@@ -1,7 +1,7 @@
-'use client'
+ 'use client'
 
 import { useState } from 'react'
-import { Mail, Download, AlertCircle, CheckCircle, X, BookOpen, ExternalLink, Star, Palette } from 'lucide-react'
+import { Mail, Download, AlertCircle, CheckCircle, X, BookOpen, ExternalLink, Palette } from 'lucide-react'
 import CookieConsent from '@/components/CookieConsent'
 import CountdownTimer from '@/components/CountdownTimer'
 import { useAnalytics } from '@/lib/useAnalytics'
@@ -18,6 +18,7 @@ export default function Home() {
   
   // Get offer end date from environment
   const offerEndDate = process.env.NEXT_PUBLIC_OFFER_END_DATE || '2025-03-15T23:59:59Z'
+  const isOfferActive = new Date(offerEndDate) > new Date()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -67,13 +68,10 @@ export default function Home() {
           <div className="flex flex-col items-center mb-6 sm:mb-8">
             <div className="flex items-center space-x-2 mb-3 sm:mb-4">
               <BookOpen className="h-8 w-8 sm:h-10 sm:w-10 text-amber-400" />
-              <span className="text-2xl sm:text-4xl md:text-5xl font-bold text-white font-serif leading-tight">Fish Cannot Carry Guns</span>
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white font-serif leading-tight">Fish Cannot Carry Guns</h1>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-gray-200">
               <span>by Michael B. Morgan</span>
-              <span className="flex items-center gap-1 text-amber-300 font-semibold">
-                <Star className="w-4 h-4" /> 5.0 <span className="text-gray-300 font-normal">(1 review)</span>
-              </span>
             </div>
             <div className="flex flex-wrap justify-center gap-1 sm:gap-2 text-xs text-amber-200 mt-2">
               <span>#SciFi</span>
@@ -87,9 +85,11 @@ export default function Home() {
           {/* Main Content - mobile optimized */}
           <main id="main-content" className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
             {/* Countdown Timer - Mobile Only (above book cover) */}
-            <div className="lg:hidden">
-              <CountdownTimer endDate={offerEndDate} className="mb-4" />
-            </div>
+            {isOfferActive && (
+              <div className="lg:hidden">
+                <CountdownTimer endDate={offerEndDate} className="mb-4" />
+              </div>
+            )}
             
             {/* Book Cover Section */}
             <div className="space-y-4 sm:space-y-6">
@@ -136,8 +136,11 @@ export default function Home() {
                           }}
                           placeholder="your@email.com"
                           required
+                          autoComplete="email"
+                          aria-describedby={error ? 'email-help email-error' : 'email-help'}
                           className="w-full pl-10 pr-4 py-3 bg-teal-800/50 border border-teal-600 rounded-lg text-white placeholder-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-base"
                         />
+                        <p id="email-help" className="mt-2 text-xs text-teal-200">No spam. Unsubscribe anytime.</p>
                       </div>
                     </div>
                     
@@ -145,7 +148,7 @@ export default function Home() {
                     {error && (
                       <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 flex items-center space-x-2" role="alert" aria-live="polite">
                         <AlertCircle className="w-5 h-5 text-red-300 flex-shrink-0" aria-hidden="true" />
-                        <p className="text-red-300 text-sm">{error}</p>
+                        <p id="email-error" className="text-red-300 text-sm">{error}</p>
                       </div>
                     )}
                     
@@ -166,6 +169,7 @@ export default function Home() {
                         </>
                       )}
                     </button>
+                    <div className="text-xs text-amber-200 text-center">Limited-time free download</div>
                   </form>
                 ) : (
                   <div className="space-y-4">
@@ -179,6 +183,7 @@ export default function Home() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 text-base"
+                      onClick={trackGoodreadsClick}
                     >
                       <BookOpen className="w-5 h-5" aria-hidden="true" />
                       <span>Add to Goodreads</span>
@@ -190,7 +195,7 @@ export default function Home() {
               {/* Substack Subscription Box */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-6 text-center border border-teal-700/50">
                 <p className="text-teal-100 text-sm mb-4">
-                  I write Around SciFi on Substack. If you'd like, drop by. It's a nice space where curious readers and talented authors share their love for speculative worlds.
+                  Drop by and visit me on Substack at Around SciFi. It&apos;s a space where curious readers and talented authors share their love for speculative worlds.
                 </p>
                 <a
                   href="https://aroundscifi.substack.com/"
@@ -203,6 +208,7 @@ export default function Home() {
                   <ExternalLink className="w-4 h-4" aria-hidden="true" />
                 </a>
               </div>
+              {/* Goodreads link removed pre-submit to focus on primary CTA */}
             </div>
 
             {/* Book Details Section */}
@@ -210,25 +216,19 @@ export default function Home() {
               {/* Description */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>
-                <ul className="list-disc pl-5 text-teal-100 mb-4 text-sm sm:text-base">
-                  <li><strong>Betrayal Circuit:</strong> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li>
-                  <li><strong>Devil's Advocate:</strong> What if you were trapped in a cell... with the person who killed you?</li>
-                  <li><strong>Fish Cannot Carry Guns:</strong> All his life, John had thought he was safe...</li>
+                <p className="text-teal-100 whitespace-pre-line text-sm sm:text-base">
+                  These stories in Fish Cannot Carry Guns aren&apos;t about technology itself, but about the people it leaves behind, changed. Sometimes fractured, sometimes closer to the truth, always somewhere they never expected to be.
+                </p>
+                <h4 className="text-lg font-semibold text-white mb-4 mt-4">A Glimpse Inside the Stories</h4>
+                 <ul className="text-teal-100 whitespace-pre-line text-sm sm:text-base mb-4">
+                  <li><strong>Betrayal Circuit:</strong> Captain Stalworth thought he could trust Private Jude Veil. He was wrong.</li>
+                   <li><strong>Devil&apos;s Advocate:</strong> What if you found yourself trapped in a cell… with the person who killed you?</li>
+                  <li><strong>The Old Man and the Fee:</strong> In Siberia, something extraordinary falls from the sky.</li>
+                  <li><strong>All of a Sudden:</strong> James has lived his whole life in fear, yet the heart of the forest keeps calling him.</li>
+                   <li><strong>Fish Cannot Carry Guns:</strong> John always thought he was safe. He was wrong.</li>
                 </ul>
-                                  {/* Review e tag */}
-                  <div className="flex flex-col items-center gap-3 text-sm text-gray-200 mb-4">
-                    <span className="flex items-center gap-1 text-amber-300 font-semibold">
-                      <Star className="w-4 h-4" /> 5.0 <span className="text-gray-300 font-normal">(1 review)</span>
-                    </span>
-                    <div className="flex items-center gap-1 text-xs text-amber-200">
-                      <span>#SciFi</span>
-                      <span>#Dystopian</span>
-                      <span>#Cyberpunk</span>
-                      <span>#Androids</span>
-                      <span>#DangerForHumanity</span>
-                    </div>
-                  </div>
-                                  <div className="bg-amber-900/20 border border-amber-700/50 rounded p-3 mt-4">
+                  {/* Removed rating and duplicated tags for cleaner layout */}
+                  <div className="bg-amber-900/20 border border-amber-700/50 rounded p-3 mt-4">
                     <p className="text-sm text-amber-200 font-medium text-center flex items-center justify-center gap-2">
                       <Palette className="w-4 h-4 text-amber-300" />
                       All interior illustrations are original works by the author
@@ -237,22 +237,27 @@ export default function Home() {
               </div>
 
               {/* Countdown Timer - Desktop Only */}
-              <div className="hidden lg:block">
-                <CountdownTimer endDate={offerEndDate} className="mb-4" />
-              </div>
+              {isOfferActive && (
+                <div className="hidden lg:block">
+                  <CountdownTimer endDate={offerEndDate} className="mb-4" />
+                </div>
+              )}
 
               {/* Author Bio */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Author</h3>
                 <p className="text-teal-100 whitespace-pre-line text-sm sm:text-base">
-                  Is the snowflake responsible for the avalanche? I'm a lifelong reader with a love for physics, psychology, and stories that ask hard questions, and don't always offer easy answers. Consultant by day, author by night. Proud father. Grateful husband. Based in the U.S., often on the move.
+                  Is the snowflake responsible for the avalanche? I&apos;m a lifelong reader with a love for physics, psychology, and stories that ask hard questions, and don&apos;t always offer easy answers. Consultant by day, author by night. Proud father. Grateful husband. Based in the U.S., often on the move.
                 </p>
               </div>
 
-              {/* Goodreads Link */}
+            </div>
+
+            {/* Goodreads full-width footer box */}
+            <div className="lg:col-span-2">
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 text-center border border-teal-700/50">
                 <p className="text-teal-100 mb-3 text-sm">
-                  Support independent authors by adding this book to your Goodreads reading list
+                  Prefer to check it first? View the book on Goodreads.
                 </p>
                 <a
                   href="https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns"
@@ -261,7 +266,7 @@ export default function Home() {
                   className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-base"
                   onClick={trackGoodreadsClick}
                 >
-                  Add to Goodreads
+                  View on Goodreads
                 </a>
               </div>
             </div>
@@ -287,7 +292,7 @@ export default function Home() {
               </a>
               <div className="text-xs text-teal-200 max-w-md px-4">
                 <strong className="text-white">3/7 Indie Lab</strong> — Be independent, be unique.<br/>
-                At 3/7 Indie Lab, we are fiercely independent. We will always support authors who want to push the boundaries of the publishing market with independent writing.<br/>
+                We support independent authors who push the boundaries of publishing. Learn more:<br/>
                                   <a
                     href="https://37indielab.com/"
                     target="_blank"
@@ -325,19 +330,19 @@ export default function Home() {
             
             <div className="space-y-4 text-sm">
               <p className="text-teal-100">
-                We've sent your free copy to <span className="font-semibold text-white">{email}</span>
+                We&apos;ve sent your free copy to <span className="font-semibold text-white">{email}</span>
               </p>
               
               <div className="bg-amber-900/30 border border-amber-700 rounded-lg p-3">
                 <p className="text-amber-200 text-xs">
-                  <strong>Important:</strong> Please check your spam/junk folder if you don't see the email in your inbox.
+                  <strong>Important:</strong> Please check your spam/junk folder if you don&apos;t see the email in your inbox.
                 </p>
               </div>
               
               <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-3">
-                <p className="text-blue-200 text-xs">
-                  <strong>Support Independent Authors:</strong> Since this book is completely free, we'd be grateful if you could add "Fish Cannot Carry Guns" to your Goodreads reading list once you've had a chance to read it. Your support helps independent authors like Michael B. Morgan continue writing.
-                </p>
+                 <p className="text-blue-200 text-xs">
+                   <strong>Support Independent Authors:</strong> Since this book is completely free, we&apos;d be grateful if you could add &quot;Fish Cannot Carry Guns&quot; to your Goodreads reading list once you&apos;ve had a chance to read it. Your support helps independent authors like Michael B. Morgan continue writing.
+                 </p>
               </div>
               
               <div className="flex space-x-2">
@@ -346,6 +351,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded text-xs transition-colors"
+                  onClick={trackGoodreadsClick}
                 >
                   Add to Goodreads
                 </a>

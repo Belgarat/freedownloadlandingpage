@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { AdminStats } from '@/types/admin'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get analytics data from Supabase
     const { data: analytics, error: analyticsError } = await supabaseAdmin

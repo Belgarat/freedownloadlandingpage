@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from 'crypto'
+import { randomBytes } from 'crypto'
 
 export interface DownloadToken {
   id: string

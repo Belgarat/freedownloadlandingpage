@@ -5,17 +5,11 @@ import { AdminStats } from '@/types/admin'
 
 export async function GET() {
   try {
-    // Get page views
-    const { count: pageViews } = await supabaseAdmin
+    // Get page views (kept for potential future metrics, but not used directly)
+    await supabaseAdmin
       .from('analytics')
       .select('*', { count: 'exact', head: true })
       .eq('action', 'page_view')
-
-    // Get scroll to bottom events
-    const { count: scrollToBottom } = await supabaseAdmin
-      .from('analytics')
-      .select('*', { count: 'exact', head: true })
-      .eq('action', 'scroll_to_bottom')
 
     // Get email submissions
     const { count: emailSubmissions } = await supabaseAdmin
@@ -35,20 +29,7 @@ export async function GET() {
       .select('*', { count: 'exact', head: true })
       .eq('action', 'download_completed')
 
-    // Get average time on page
-    const { data: timeData } = await supabaseAdmin
-      .from('analytics')
-      .select('time_on_page')
-      .not('time_on_page', 'is', null)
-
-    const avgTimeOnPage = timeData && timeData.length > 0
-      ? timeData.reduce((sum, item) => sum + (item.time_on_page || 0), 0) / timeData.length
-      : 0
-
-    // Calculate conversion rates
-    const emailConversionRate = pageViews && pageViews > 0
-      ? ((emailSubmissions || 0) / pageViews) * 100
-      : 0
+    // (Removed unused average time on page and conversion rate calculations)
 
     const downloadCompletionRate = downloadRequests && downloadRequests > 0
       ? ((completedDownloads || 0) / downloadRequests) * 100

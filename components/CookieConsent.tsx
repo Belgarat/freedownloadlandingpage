@@ -61,9 +61,7 @@ export default function CookieConsent() {
     saveConsent(false)
   }
 
-  const updatePreferences = () => {
-    saveConsent(preferences.analytics)
-  }
+  // Removed unused updatePreferences function
 
   if (!showBanner) return null
 

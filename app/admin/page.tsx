@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Lock, Eye, EyeOff, BarChart3, Users, Download, Mail } from 'lucide-react'
 import { AdminStats } from '@/types/admin'
 
@@ -25,7 +25,7 @@ export default function AdminPage() {
       anonymousSubstackClicks: 0,
       anonymousPublisherClicks: 0
   })
-  const router = useRouter()
+  
 
   useEffect(() => {
     // Check if already authenticated
@@ -57,7 +57,7 @@ export default function AdminPage() {
       } else {
         setError('Incorrect password')
       }
-    } catch (error) {
+    } catch {
       setError('Connection error')
     } finally {
       setIsLoading(false)
@@ -96,12 +96,12 @@ export default function AdminPage() {
           
           {/* Back to Homepage Link */}
           <div className="text-center mb-6">
-            <a
+            <Link
               href="/"
               className="text-teal-300 hover:text-white transition-colors duration-200 text-sm underline"
             >
               ← Back to Homepage
-            </a>
+            </Link>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">

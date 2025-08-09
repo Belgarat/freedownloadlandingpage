@@ -18,7 +18,6 @@ export const sendEbookEmail = async (data: EmailData) => {
       downloadUrl: data.downloadUrl || BOOK_CONFIG.amazonUrl,
       bookTitle: BOOK_CONFIG.title,
       authorName: BOOK_CONFIG.author,
-      amazonUrl: BOOK_CONFIG.amazonUrl,
       publisherName: BOOK_CONFIG.publisher,
       publisherUrl: BOOK_CONFIG.publisherUrl
     }

@@ -20,7 +20,12 @@ export default function Home() {
   const aboutBookHtml = (book?.description && book.description.trim()) ? book.description : (content?.aboutBook || '')
   const authorBioHtml = (book?.authorBio && book.authorBio.trim()) ? book.authorBio : (content?.authorBio || '')
   const layout = theme?.layout
-  const isMinimal = layout?.type === 'minimal'
+  const layoutType = layout?.type || 'default'
+  const isMinimal = layoutType === 'minimal'
+  const containerMax = layoutType === 'full-width' ? 'max-w-7xl' : 'max-w-4xl'
+  const gridCols = layoutType === 'sidebar' ? 'grid-cols-1 lg:[grid-template-columns:1fr_2fr]' : layoutType === 'full-width' ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'
+  const leftColClass = layoutType === 'sidebar' ? 'lg:sticky lg:top-6' : ''
+  const rightColClass = ''
   
   // Get offer end date from environment
   const offerEndDate = useMemo(() => {
@@ -76,7 +81,7 @@ export default function Home() {
         Skip to main content
       </a>
       <div className="container mx-auto px-4 py-4 sm:py-8">
-            <div className="max-w-4xl mx-auto text-theme-primary">
+            <div className={`${containerMax} mx-auto text-theme-primary`}>
           {/* Header - mobile optimized */}
               <div className="flex flex-col items-center mb-6 sm:mb-8">
               <div className="flex items-center space-x-2 mb-3 sm:mb-4">
@@ -101,7 +106,7 @@ export default function Home() {
           </div>
 
           {/* Main Content - mobile optimized */}
-          <main id="main-content" className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
+          <main id="main-content" className={`grid ${gridCols} gap-6 lg:gap-12 items-start`}>
             {/* Countdown Timer - Mobile Only (above book cover) */}
             {layout?.showCountdown !== false && (
               <div className="lg:hidden">
@@ -110,7 +115,7 @@ export default function Home() {
             )}
             
             {/* Book Cover Section */}
-            <div className="space-y-4 sm:space-y-6">
+            <div className={`space-y-4 sm:space-y-6 ${leftColClass}`}>
               
               <div className="backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border surface-alpha">
                 <div className="w-64 sm:w-80 md:w-96 mx-auto bg-gradient-to-br from-teal-800 to-cyan-800 rounded-lg shadow-lg mb-4 sm:mb-6 flex items-center justify-center">
@@ -215,7 +220,7 @@ export default function Home() {
             </div>
 
             {/* Book Details Section */}
-            <div className="space-y-6 sm:space-y-8">
+            <div className={`space-y-6 sm:space-y-8 ${rightColClass}`}>
               {/* Description */}
               <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>

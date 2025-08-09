@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server'
 import sharp from 'sharp'
+import configLoader from '@/lib/config-loader'
+
+export const runtime = 'nodejs'
 
 function rgbToHex(r: number, g: number, b: number): string {
   const toHex = (n: number) => n.toString(16).padStart(2, '0')
@@ -60,9 +63,23 @@ function bestTextColor(bgHex: string): { primary: string; secondary: string; mut
 
 export async function POST(req: Request) {
   try {
-    const { coverUrl } = await req.json()
-    if (!coverUrl || typeof coverUrl !== 'string') {
-      return NextResponse.json({ error: 'coverUrl required' }, { status: 400 })
+    let coverUrl: string | undefined
+    try {
+      const body = await req.json()
+      if (body && typeof body.coverUrl === 'string' && body.coverUrl.trim().length > 0) {
+        coverUrl = body.coverUrl.trim()
+      }
+    } catch {
+      // ignore empty body
+    }
+
+    if (!coverUrl) {
+      // fallback to current config cover image
+      const current = configLoader.getConfig() ?? (await configLoader.loadConfig())
+      coverUrl = current?.book?.coverImage
+    }
+    if (!coverUrl) {
+      return NextResponse.json({ error: 'No cover image found. Provide coverUrl or set book.coverImage in config.' }, { status: 400 })
     }
 
     // Build absolute URL if relative

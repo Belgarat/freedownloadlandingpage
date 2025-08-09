@@ -77,7 +77,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
             className="px-3 py-2 text-xs rounded border bg-white hover:bg-gray-50"
             onClick={async () => {
               try {
-                const res = await fetch('/api/theme/from-cover', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ coverUrl: (window as any).__currentCoverUrl || '' }) })
+                const res = await fetch('/api/theme/from-cover', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ coverUrl: (window as any).__currentCoverUrl || undefined }) })
                 if (!res.ok) return
                 const data = await res.json()
                 onChange({ ...config, colors: { ...config.colors, ...data.colors, text: { ...config.colors.text, ...data.colors.text } } })

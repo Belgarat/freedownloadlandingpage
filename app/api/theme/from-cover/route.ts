@@ -123,8 +123,9 @@ export async function POST(req: Request) {
         warning,
       },
     })
-  } catch (e: any) {
-    return NextResponse.json({ error: e?.message || 'Failed to generate theme' }, { status: 500 })
+  } catch (e) {
+    const message = e instanceof Error ? e.message : 'Failed to generate theme'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
 

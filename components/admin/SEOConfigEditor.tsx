@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useState } from 'react'
 import { SEOConfig } from '@/lib/config-loader'
 

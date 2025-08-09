@@ -580,7 +580,6 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
             <option value="default">Default</option>
             <option value="minimal">Minimal</option>
             <option value="full-width">Full Width</option>
-            <option value="sidebar">Sidebar</option>
           </select>
         </div>
 

@@ -23,8 +23,8 @@ export default function Home() {
   const layoutType = layout?.type || 'default'
   const isMinimal = layoutType === 'minimal'
   const containerMax = layoutType === 'full-width' ? 'max-w-7xl' : 'max-w-4xl'
-  const gridCols = layoutType === 'sidebar' ? 'grid-cols-1 lg:[grid-template-columns:1fr_2fr]' : layoutType === 'full-width' ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'
-  const leftColClass = layoutType === 'sidebar' ? 'lg:sticky lg:top-6' : ''
+  const gridCols = layoutType === 'full-width' ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'
+  const leftColClass = ''
   const rightColClass = ''
   
   // Get offer end date from environment

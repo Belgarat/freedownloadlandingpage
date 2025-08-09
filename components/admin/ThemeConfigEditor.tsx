@@ -534,35 +534,42 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Heading</label>
-            <input
-              type="text"
+            <select
               value={config.fonts.heading}
               onChange={(e) => onChange({...config, fonts: {...config.fonts, heading: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Inter, sans-serif"
-            />
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              {['Inter','Roboto','Open Sans','Lora','Merriweather','Montserrat','Nunito','Playfair Display','Source Serif Pro'].map(f => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Body</label>
-            <input
-              type="text"
+            <select
               value={config.fonts.body}
               onChange={(e) => onChange({...config, fonts: {...config.fonts, body: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Inter, sans-serif"
-            />
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              {['Inter','Roboto','Open Sans','Lora','Merriweather','Montserrat','Nunito','Source Serif Pro'].map(f => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Mono</label>
-            <input
-              type="text"
+            <select
               value={config.fonts.mono}
               onChange={(e) => onChange({...config, fonts: {...config.fonts, mono: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="JetBrains Mono, monospace"
-            />
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              {['JetBrains Mono','Fira Mono'].map(f => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+            </select>
           </div>
         </div>
+        <p className="text-xs text-gray-500 mt-2">I font selezionati vengono caricati automaticamente da Google Fonts quando disponibili.</p>
       </div>
       )}
 

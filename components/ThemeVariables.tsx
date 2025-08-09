@@ -48,6 +48,49 @@ export default function ThemeVariables() {
     if (f?.heading) set('--font-heading', f.heading)
     if (f?.body) set('--font-body', f.body)
     if (f?.mono) set('--font-mono', f.mono)
+
+    // Load Google Fonts when using known families
+    const GOOGLE_FONTS: Record<string, string> = {
+      Inter: 'Inter:wght@400;600;700',
+      Roboto: 'Roboto:wght@400;500;700',
+      'Open Sans': 'Open+Sans:wght@400;600;700',
+      Lora: 'Lora:wght@400;600;700',
+      Merriweather: 'Merriweather:wght@400;700;900',
+      Montserrat: 'Montserrat:wght@400;600;700',
+      Nunito: 'Nunito:wght@400;600;700',
+      'Source Serif Pro': 'Source+Serif+Pro:wght@400;600;700',
+      'Playfair Display': 'Playfair+Display:wght@400;600;700',
+      'JetBrains Mono': 'JetBrains+Mono:wght@400;600;700',
+      'Fira Mono': 'Fira+Mono:wght@400;500;700',
+    }
+
+    const desiredFamilies = new Set<string>()
+    ;[f?.heading, f?.body, f?.mono].forEach((fam) => {
+      if (fam && GOOGLE_FONTS[fam]) desiredFamilies.add(fam)
+    })
+
+    // Remove previously injected font links that are no longer needed
+    const existing = Array.from(document.querySelectorAll<HTMLLinkElement>('link[data-bls-font="1"]'))
+    existing.forEach((link) => {
+      const fam = link.getAttribute('data-family') || ''
+      if (!desiredFamilies.has(fam)) link.remove()
+    })
+
+    // Inject needed links
+    desiredFamilies.forEach((fam) => {
+      const id = `bls-font-${fam.replace(/\s+/g, '-').toLowerCase()}`
+      if (!document.getElementById(id)) {
+        const spec = GOOGLE_FONTS[fam]
+        const href = `https://fonts.googleapis.com/css2?family=${spec}&display=swap`
+        const link = document.createElement('link')
+        link.id = id
+        link.rel = 'stylesheet'
+        link.href = href
+        link.setAttribute('data-bls-font', '1')
+        link.setAttribute('data-family', fam)
+        document.head.appendChild(link)
+      }
+    })
   }, [theme])
 
   return null

@@ -1,61 +1,47 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Script from 'next/script'
-import dynamic from 'next/dynamic'
-const BookSchemaInjector = dynamic(() => import('@/components/BookSchemaInjector'), { ssr: false })
 import './globals.css'
 import ConfigStatus from '@/components/ConfigStatus'
-import { useConfig } from '@/lib/useConfig'
 import ThemeVariables from '@/components/ThemeVariables'
+import BookSchemaInjector from '@/components/BookSchemaInjector'
+import configLoader from '@/lib/config-loader'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'Fish Cannot Carry Guns - Free Ebook Download',
-  description: 'Download Fish Cannot Carry Guns by Michael B. Morgan - Free ebook with speculative short stories for fans of Black Mirror and cyberpunk. Complete collection available now.',
-  keywords: 'ebook, science fiction, speculative fiction, short stories, cyberpunk, free download, Michael B. Morgan, Fish Cannot Carry Guns',
-  authors: [{ name: 'Michael B. Morgan' }],
-  openGraph: {
-    title: 'Fish Cannot Carry Guns - Free Ebook',
-    description: 'Download your free copy of Fish Cannot Carry Guns by Michael B. Morgan. A collection of speculative short stories for fans of Black Mirror and cyberpunk noir.',
-    type: 'website',
-    url: 'https://fishcannotcarryguns.aroundscifi.us',
-    images: [
-      {
-        url: 'https://fishcannotcarryguns.aroundscifi.us/ebook_cover.webp',
-        width: 1200,
-        height: 630,
-        alt: 'Fish Cannot Carry Guns Book Cover',
-      },
-    ],
-    siteName: 'Fish Cannot Carry Guns',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Fish Cannot Carry Guns - Free Ebook',
-    description: 'Download your free copy of Fish Cannot Carry Guns by Michael B. Morgan',
-    images: ['https://fishcannotcarryguns.aroundscifi.us/ebook_cover.webp'],
-  },
-  robots: 'index, follow',
-  alternates: {
-    canonical: 'https://fishcannotcarryguns.aroundscifi.us',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo, book } = await configLoader.loadConfig()
+  const meta = seo?.meta
+  const og = seo?.openGraph
+  const tw = seo?.twitter
+  return {
+    title: meta?.title || book?.title || 'Book Landing',
+    description: meta?.description || undefined,
+    keywords: meta?.keywords || undefined,
+    authors: meta?.author ? [{ name: meta.author }] : undefined,
+    robots: (meta?.robots as any) || undefined,
+    alternates: meta?.canonical ? { canonical: meta.canonical } : undefined,
+    openGraph: og
+      ? {
+          title: og.title || meta?.title || book?.title,
+          description: og.description || meta?.description,
+          type: (og.type as any) || 'website',
+          url: og.url || undefined,
+          images: og.image ? [{ url: og.image }] : undefined,
+          siteName: og.siteName || undefined,
+        }
+      : undefined,
+    twitter: tw
+      ? {
+          card: (tw.card as any) || 'summary_large_image',
+          title: tw.title || meta?.title || book?.title,
+          description: tw.description || meta?.description,
+          images: tw.image ? [tw.image] : undefined,
+        }
+      : undefined,
+  }
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Expose config client-side for helpers (e.g., SEO generator)
-  // Using a small client component pattern here
-  const InjectConfig = () => {
-    const { config } = useConfig()
-    if (!config) return null
-    return (
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `window.__APP_CONFIG__ = ${JSON.stringify(config).replace(/</g, '\u003c')}`,
-        }}
-      />
-    )
-  }
 
   return (
     <html lang="en">
@@ -65,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={inter.className} style={{ fontFamily: 'var(--font-body, inherit)' }}>
         <ThemeVariables />
-        <InjectConfig />
+
         <BookSchemaInjector />
         {children}
         <ConfigStatus />

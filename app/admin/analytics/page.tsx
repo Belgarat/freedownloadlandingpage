@@ -2,6 +2,8 @@
 
 import { useAuth } from '@/lib/auth'
 import { useConfig } from '@/lib/useConfig'
+import AnalyticsDashboard from '@/components/AnalyticsDashboard'
+import AdminTopbar from '@/components/admin/AdminTopbar'
 import { useState } from 'react'
 
 export default function AnalyticsPage() {
@@ -52,6 +54,7 @@ export default function AnalyticsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <AdminTopbar />
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-6">
@@ -176,65 +179,10 @@ export default function AnalyticsPage() {
             </div>
 
             <div className="bg-white shadow rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Analytics Overview</h2>
-              <p className="text-gray-600 mb-6">
-                View analytics data and performance metrics.
-              </p>
-              
-              <div className="space-y-4">
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h3 className="font-medium text-blue-900">Page Views</h3>
-                  <p className="text-2xl font-bold text-blue-600">1,234</p>
-                  <p className="text-sm text-blue-700">+12% from last week</p>
-                </div>
-
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h3 className="font-medium text-green-900">Downloads</h3>
-                  <p className="text-2xl font-bold text-green-600">567</p>
-                  <p className="text-sm text-green-700">+8% from last week</p>
-                </div>
-
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <h3 className="font-medium text-purple-900">Conversion Rate</h3>
-                  <p className="text-2xl font-bold text-purple-600">45.9%</p>
-                  <p className="text-sm text-purple-700">+2.1% from last week</p>
-                </div>
-
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <h3 className="font-medium text-orange-900">Email Subscriptions</h3>
-                  <p className="text-2xl font-bold text-orange-600">89</p>
-                  <p className="text-sm text-orange-700">+15% from last week</p>
-                </div>
-              </div>
+              <AnalyticsDashboard />
             </div>
           </div>
 
-          <div className="mt-6 bg-white shadow rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between py-2 border-b">
-                <div>
-                  <p className="font-medium">New download</p>
-                  <p className="text-sm text-gray-600">user@example.com downloaded the ebook</p>
-                </div>
-                <span className="text-sm text-gray-500">2 minutes ago</span>
-              </div>
-              <div className="flex items-center justify-between py-2 border-b">
-                <div>
-                  <p className="font-medium">Email subscription</p>
-                  <p className="text-sm text-gray-600">newuser@example.com subscribed to updates</p>
-                </div>
-                <span className="text-sm text-gray-500">5 minutes ago</span>
-              </div>
-              <div className="flex items-center justify-between py-2 border-b">
-                <div>
-                  <p className="font-medium">Page view</p>
-                  <p className="text-sm text-gray-600">Visitor from Google search</p>
-                </div>
-                <span className="text-sm text-gray-500">10 minutes ago</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

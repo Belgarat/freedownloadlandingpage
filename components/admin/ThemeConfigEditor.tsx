@@ -1,6 +1,7 @@
-'use client'
+"use client"
 
 import { useEffect, useMemo, useState } from 'react'
+import { Wand2 } from 'lucide-react'
 import { ThemeConfig } from '@/lib/config-loader'
 
 interface ThemeConfigEditorProps {
@@ -207,7 +208,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
         <div className="mt-3 flex items-center gap-2">
           <button
             type="button"
-            className="px-3 py-2 text-xs rounded border bg-white hover:bg-gray-50"
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 shadow-sm"
             onClick={async () => {
               try {
                 const res = await fetch('/api/theme/from-cover', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ coverUrl: (window as any).__currentCoverUrl || undefined }) })
@@ -217,7 +218,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
               } catch {}
             }}
           >
-            Genera dai colori della copertina
+            <Wand2 className="w-4 h-4" /> Genera dai colori della copertina
           </button>
           <span className="text-xs text-gray-500">Usa i colori della copertina per una palette di base</span>
         </div>

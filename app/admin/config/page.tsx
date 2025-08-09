@@ -11,6 +11,7 @@ import ContentConfigEditor from '@/components/admin/ContentConfigEditor'
 import ThemeConfigEditor from '@/components/admin/ThemeConfigEditor'
 import SEOConfigEditor from '@/components/admin/SEOConfigEditor'
 import EmailConfigEditor from '@/components/admin/EmailConfigEditor'
+import AdminTopbar from '@/components/admin/AdminTopbar'
 
 export default function ConfigAdmin() {
   const { config, loading, error } = useConfig()
@@ -180,27 +181,18 @@ export default function ConfigAdmin() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      <AdminTopbar />
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => router.push('/admin')}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                <span>Back to Admin</span>
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Configuration</h1>
-                <p className="text-sm text-gray-600">Manage your landing page settings</p>
-              </div>
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold text-gray-900">Configuration</h1>
+              <span className="text-sm text-gray-600">Manage your landing page settings</span>
             </div>
             <div className="flex items-center space-x-3">
               <button
                 onClick={handleReload}
-                className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 flex items-center space-x-2"
+                className="px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 flex items-center space-x-2 text-sm"
               >
                 <RefreshCw className="h-4 w-4" />
                 <span>Reload</span>
@@ -208,10 +200,8 @@ export default function ConfigAdmin() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className={`px-4 py-2 text-white rounded-md flex items-center space-x-2 ${
-                  saving 
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-blue-600 hover:bg-blue-700'
+                className={`px-3 py-2 text-white rounded-md flex items-center space-x-2 text-sm ${
+                  saving ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
                 <Save className="h-4 w-4" />
@@ -219,19 +209,11 @@ export default function ConfigAdmin() {
               </button>
             </div>
           </div>
-
-          {/* Save Status */}
           {saveStatus !== 'idle' && (
-            <div className={`mb-4 p-3 rounded-md ${
-              saveStatus === 'success' 
-                ? 'bg-green-50 text-green-800 border border-green-200' 
-                : 'bg-red-50 text-red-800 border border-red-200'
-            }`}>
+            <div className={`mb-4 p-3 rounded-md ${saveStatus === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
               {saveStatus === 'success' ? '✅ Configuration saved successfully!' : '❌ Error saving configuration'}
             </div>
           )}
-
-          {/* Tabs */}
           <div className="flex space-x-1">
             {tabs.map((tab) => (
               <button

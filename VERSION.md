@@ -16,6 +16,19 @@
   - Comprehensive testing
 
 ### Development (develop branch)
+- **v2.0.0-alpha.2** (2025-08-09): Theming, SEO, Admin UX and Analytics improvements
+  - Theme: generate palette from cover (sharp), global CSS vars, full theming of landing
+  - Theme tools: saturation/lightness adjustments, per-color locks, contrast checker, custom presets
+  - Layout: types (default, minimal, full-width) + layout flags (countdown, stories, testimonials, awards, rankings)
+  - Theme Background: optional gradient (direction) + Surface (auto/custom) for boxes
+  - Fonts: curated selects with Google Fonts auto-load; live preview
+  - SEO: server-side `generateMetadata()` from `seo.json`; Book Schema generator from Book config; helper texts in UI
+  - Email editor: code view, URL placeholders, preview fixes, UI polish
+  - Storage: Vercel Blob adapter and `CoverUploader`
+  - Admin: unified topbar across sections; buttons for schema/theme generation made prominent
+  - Analytics: admin page uses real stats endpoint; dev read-only fallback (no writes, no 500)
+  - Misc: unified admin sections, small bug fixes and UX tweaks
+
 - **v2.0.0-alpha.1** (in development): Admin panel and JSON configuration
   - JSON-based content management
   - WYSIWYG editor for book content

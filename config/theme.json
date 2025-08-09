@@ -1,17 +1,17 @@
 {
   "colors": {
-    "primary": "#000000",
-    "secondary": "#ffffff",
-    "accent": "#ff0000",
-    "background": "linear-gradient(135deg, #000000 0%, #ffffff 50%, #ff0000 100%)",
+    "primary": "#454d3a",
+    "secondary": "#435e40",
+    "accent": "#424029",
+    "background": "#0b1220",
     "text": {
-      "primary": "#ffffff",
-      "secondary": "#cccccc",
-      "muted": "#999999"
+      "primary": "#e5e7eb",
+      "secondary": "#cbd5e1",
+      "muted": "#94a3b8"
     },
-    "success": "#00ff00",
-    "error": "#ff0000",
-    "warning": "#ffff00"
+    "success": "#10b981",
+    "error": "#ef4444",
+    "warning": "#f59e0b"
   },
   "fonts": {
     "heading": "serif",
@@ -19,12 +19,12 @@
     "mono": "ui-monospace"
   },
   "layout": {
-    "type": "hero-focus",
+    "type": "sidebar",
     "showCountdown": true,
-    "showStories": true,
-    "showTestimonials": true,
-    "showAwards": true,
-    "showRankings": true
+    "showStories": false,
+    "showTestimonials": false,
+    "showAwards": false,
+    "showRankings": false
   },
   "spacing": {
     "container": "max-w-7xl",
@@ -41,5 +41,8 @@
     "tracking": false,
     "debug": true,
     "hotReload": true
+  },
+  "surface": {
+    "mode": "auto"
   }
 }

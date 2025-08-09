@@ -23,8 +23,42 @@
   },
   "structuredData": {
     "book": {
+      "@context": "https://schema.org",
       "@type": "Book",
-      "name": "Test Book"
+      "name": "Fish Cannot Carry Guns",
+      "author": {
+        "@type": "Person",
+        "name": "Michael B. Morgan"
+      },
+      "image": "https://sxzgxlcmbmmneyvn.public.blob.vercel-storage.com/covers/1754740628198-ebook_cover-HL3vcluwmPK7V00kQ7Jp7UslgIj1Z6.webp",
+      "datePublished": "July 9, 2025",
+      "isbn": "979-1298569133",
+      "inLanguage": "English",
+      "numberOfPages": 167,
+      "genre": [
+        "SciFi",
+        "Dystopian",
+        "Cyberpunk",
+        "Androids",
+        "DangerForHumanity"
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "3/7 Indie Lab"
+      },
+      "bookFormat": "EBook",
+      "url": "https://test.com",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": 5,
+        "reviewCount": 1
+      },
+      "sameAs": [
+        "https://www.amazon.com/dp/B0DS55TQ8R",
+        "https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns",
+        "https://37indielab.com",
+        "https://aroundscifi.substack.com/"
+      ]
     }
   },
   "sitemap": {

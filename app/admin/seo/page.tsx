@@ -3,6 +3,7 @@
 import { useAuth } from '@/lib/auth'
 import { useConfig } from '@/lib/useConfig'
 import { useState } from 'react'
+import AdminTopbar from '@/components/admin/AdminTopbar'
 
 export default function SEOPage() {
   const { isAuthenticated, login, logout } = useAuth()
@@ -52,6 +53,7 @@ export default function SEOPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <AdminTopbar />
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-6">

@@ -262,23 +262,21 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
           <label className="block text-sm font-medium text-gray-700">Book Schema (JSON-LD)</label>
           <button
             type="button"
-            className="text-xs px-2 py-1 border rounded bg-white hover:bg-gray-50"
-            onClick={() => {
+            className="inline-flex items-center gap-2 text-sm px-3 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 shadow-sm"
+            onClick={async () => {
               try {
-                // @ts-ignore
-                const appConfig = window.__APP_CONFIG__ as any
-                if (!appConfig) return
-                const { book, seo } = appConfig
+                const res = await fetch('/api/config')
+                const result = await res.json()
+                if (!result?.success) return
+                const { book, seo } = result.data
                 const sameAs: string[] = []
                 if (book.amazonUrl) sameAs.push(book.amazonUrl)
                 if (book.goodreadsUrl) sameAs.push(book.goodreadsUrl)
                 if (book.publisherUrl) sameAs.push(book.publisherUrl)
                 if (book.substackUrl) sameAs.push(book.substackUrl)
-                const aggregate = book.rating ? {
-                  '@type': 'AggregateRating',
-                  ratingValue: book.rating,
-                  reviewCount: book.reviewCount || 1,
-                } : undefined
+                const aggregate = book.rating
+                  ? { '@type': 'AggregateRating', ratingValue: book.rating, reviewCount: book.reviewCount || 1 }
+                  : undefined
                 const schema: any = {
                   '@context': 'https://schema.org',
                   '@type': 'Book',
@@ -292,17 +290,22 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
                   genre: book.categories,
                   publisher: { '@type': 'Organization', name: book.publisherName || book.publisher },
                   bookFormat: 'EBook',
-                  url: (seo?.meta?.canonical) || '',
+                  url: seo?.meta?.canonical || '',
                 }
                 if (aggregate) schema.aggregateRating = aggregate
                 if (sameAs.length) schema.sameAs = sameAs
                 onChange({ ...config, structuredData: { ...config.structuredData, book: schema } })
-              } catch {}
+              } catch {
+                // ignore
+              }
             }}
           >
+            {/* icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M12 3a1 1 0 01.894.553l1.618 3.236 3.572.519a1 1 0 01.554 1.705l-2.586 2.522.61 3.56a1 1 0 01-1.451 1.054L12 14.347l-3.211 1.689a1 1 0 01-1.451-1.054l.61-3.56-2.586-2.522a1 1 0 01.554-1.705l3.572-.519L11.106 3.553A1 1 0 0112 3z"/></svg>
             Genera da Book
           </button>
         </div>
+        <div>
           <textarea
             value={JSON.stringify(config.structuredData.book, null, 2)}
             onChange={(e) => {

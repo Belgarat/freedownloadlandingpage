@@ -43,6 +43,16 @@ SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
 
 # Resend Configuration
 RESEND_API_KEY=your_resend_api_key_here
+
+# Site Configuration
+NEXT_PUBLIC_SITE_URL=https://yourdomain.com
+
+# Admin Authentication (HttpOnly cookie)
+ADMIN_PASSWORD=your_secure_admin_password_here
+ADMIN_SECRET=your_hmac_secret_for_cookie_token
+
+# Storage (Vercel Blob)
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_token
 ```
 
 ### 2. Resend Setup
@@ -50,7 +60,7 @@ RESEND_API_KEY=your_resend_api_key_here
 1. **Create Resend Account**: Sign up at [resend.com](https://resend.com)
 2. **Get API Key**: Go to your dashboard and copy your API key
 3. **Verify Domain**: Add and verify your sending domain in Resend
-4. **Update Sender Email**: In `lib/resend.ts`, change `noreply@yourdomain.com` to your verified domain
+4. **Set Sender in Config**: In `config/email.json`, set `sender.name` and `sender.email` to your verified domain address
 
 ### 3. Supabase Database Setup
 
@@ -184,7 +194,7 @@ The project includes a secure admin panel accessible at `/admin` with:
 - **Analytics Dashboard**: Real-time statistics from Supabase
 - **Download Tracking**: Monitor ebook downloads and email collection
 - **Responsive Design**: Works on all devices
-- **Session Management**: Persistent login with sessionStorage
+- **Authentication & Sessions**: Server-side auth via HttpOnly cookies and middleware
 
 ### Admin Features
 
@@ -308,7 +318,7 @@ ADMIN_PASSWORD=your_secure_admin_password_here
 
 ## Deployment
 
-The project is optimized for deployment on Vercel, Netlify, or any Next.js-compatible hosting platform.
+The project is optimized for deployment on Vercel (recommended) or any Next.js-compatible hosting platform.
 
 ### Build Commands
 
@@ -318,6 +328,51 @@ npm run build
 
 # Start production server
 npm start
+### Production Deployment Guide
+
+There are two recommended deployment modes based on the current stack:
+
+1) Vercel (Serverless) — Recommended for production hosting
+- Connect your GitHub repo to Vercel
+- Vercel will detect Next.js automatically
+- Ensure Node.js 20 via `engines.node` and `.nvmrc` (already present)
+- Configure Environment Variables for Production and Preview:
+  - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
+  - `RESEND_API_KEY`
+  - `NEXT_PUBLIC_SITE_URL` (e.g., https://yourdomain.com)
+  - `ADMIN_PASSWORD`, `ADMIN_SECRET`
+  - `BLOB_READ_WRITE_TOKEN` (for cover uploads)
+- Add your custom domain and set it as the production URL
+- Note on Admin editing: Serverless file systems are ephemeral. Editing JSON configs via the Admin Panel will not persist across deployments. Use one of these strategies:
+  - Edit JSON files locally, commit to Git, and deploy via CI (recommended)
+  - Or host on a persistent server/VM with a writable volume (see mode 2)
+
+2) Persistent Server/VM or Docker — For runtime edits via Admin Panel
+- Provision a Node 20 environment (Ubuntu/Debian, Docker, etc.)
+- Pull the repo and configure `.env`
+- Ensure the `config/` directory resides on a writable, persistent volume
+- Run `npm run build && npm start` behind a reverse proxy (Nginx/Caddy)
+- This mode allows saving JSON configs at runtime from the Admin Panel
+
+Storage for Cover Uploads (Vercel Blob)
+- Generate a Read/Write token in Vercel and set `BLOB_READ_WRITE_TOKEN`
+- Ensure `next.config.js` allows `*.blob.vercel-storage.com` (already configured)
+
+Security & Auth
+- Admin routes are protected by middleware checking an HttpOnly cookie
+- Configure `ADMIN_PASSWORD` and `ADMIN_SECRET` (HMAC key for token)
+- Cookies are `secure` in production automatically
+
+Email Sending (Resend)
+- Verify your sending domain in Resend
+- Set sender in `config/email.json` under `sender`
+- Customize templates (`download`, `followup`) with placeholders
+
+Post-Deploy Checklist
+- Visit `/admin` and log in
+- Set Book, Content, Marketing, Theme, SEO, and Email configs
+- Test cover upload; if it fails, verify `BLOB_READ_WRITE_TOKEN`
+- Trigger a test download to verify email delivery and token storage
 ```
 
 ## Performance Features

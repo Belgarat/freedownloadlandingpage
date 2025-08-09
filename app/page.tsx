@@ -19,6 +19,8 @@ export default function Home() {
   const { book, content, marketing, theme } = useConfig()
   const aboutBookHtml = (book?.description && book.description.trim()) ? book.description : (content?.aboutBook || '')
   const authorBioHtml = (book?.authorBio && book.authorBio.trim()) ? book.authorBio : (content?.authorBio || '')
+  const layout = theme?.layout
+  const isMinimal = layout?.type === 'minimal'
   
   // Get offer end date from environment
   const offerEndDate = useMemo(() => {
@@ -83,23 +85,29 @@ export default function Home() {
               </div>
               <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-theme-secondary">
                 <span>by {book?.author || 'Michael B. Morgan'}</span>
-                <span className="flex items-center gap-1 text-[var(--color-accent)] font-semibold">
-                  <Star className="w-4 h-4" /> {book?.rating ?? 5.0} <span className="text-gray-300 font-normal">({book?.reviewCount ?? 1} review{(book?.reviewCount ?? 1) === 1 ? '' : 's'})</span>
-              </span>
-            </div>
-              <div className="flex flex-wrap justify-center gap-1 sm:gap-2 text-xs text-theme-muted mt-2">
-                {(book?.categories || ['SciFi','Dystopian','Cyberpunk']).map((c) => (
-                  <span key={c}>#{c}</span>
-                ))}
-            </div>
+                {!isMinimal && (
+                  <span className="flex items-center gap-1 text-[var(--color-accent)] font-semibold">
+                    <Star className="w-4 h-4" /> {book?.rating ?? 5.0} <span className="text-gray-300 font-normal">({book?.reviewCount ?? 1} review{(book?.reviewCount ?? 1) === 1 ? '' : 's'})</span>
+                  </span>
+                )}
+              </div>
+              {!isMinimal && (
+                <div className="flex flex-wrap justify-center gap-1 sm:gap-2 text-xs text-theme-muted mt-2">
+                  {(book?.categories || ['SciFi','Dystopian','Cyberpunk']).map((c) => (
+                    <span key={c}>#{c}</span>
+                  ))}
+                </div>
+              )}
           </div>
 
           {/* Main Content - mobile optimized */}
           <main id="main-content" className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
             {/* Countdown Timer - Mobile Only (above book cover) */}
-            <div className="lg:hidden">
-              <CountdownTimer endDate={offerEndDate} className="mb-4" />
-            </div>
+            {layout?.showCountdown !== false && (
+              <div className="lg:hidden">
+                <CountdownTimer endDate={offerEndDate} className="mb-4" />
+              </div>
+            )}
             
             {/* Book Cover Section */}
             <div className="space-y-4 sm:space-y-6">
@@ -187,6 +195,7 @@ export default function Home() {
               </div>
 
               {/* Substack Subscription Box */}
+              {!isMinimal && (
               <div className="backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-6 text-center border border-theme-secondary/50" style={{ backgroundColor: 'color-mix(in srgb, var(--color-background) 85%, black)' }}>
                 <p className="text-theme-secondary text-sm mb-4">
                   I write {book?.substackName || 'Around SciFi'} on Substack. If you'd like, drop by. It's a nice space where curious readers and talented authors share their love for speculative worlds.
@@ -202,6 +211,7 @@ export default function Home() {
                   <ExternalLink className="w-4 h-4" aria-hidden="true" />
                 </a>
               </div>
+              )}
             </div>
 
             {/* Book Details Section */}
@@ -230,9 +240,11 @@ export default function Home() {
               </div>
 
               {/* Countdown Timer - Desktop Only */}
-              <div className="hidden lg:block">
-                <CountdownTimer endDate={offerEndDate} className="mb-4" />
-              </div>
+              {layout?.showCountdown !== false && (
+                <div className="hidden lg:block">
+                  <CountdownTimer endDate={offerEndDate} className="mb-4" />
+                </div>
+              )}
 
               {/* Author Bio */}
               <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
@@ -241,6 +253,7 @@ export default function Home() {
               </div>
 
               {/* Goodreads Link */}
+              {!isMinimal && (
               <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 text-center border surface-alpha">
                 <p className="text-teal-100 mb-3 text-sm">
                   Support independent authors by adding this book to your Goodreads reading list
@@ -255,6 +268,7 @@ export default function Home() {
                   Add to Goodreads
                 </a>
               </div>
+              )}
             </div>
           </main>
 

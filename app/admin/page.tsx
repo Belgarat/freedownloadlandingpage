@@ -11,19 +11,22 @@ export default function AdminPage() {
   const [error, setError] = useState('')
   const router = useRouter()
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    const success = login(password)
-    if (success) {
+    try {
+      const res = await fetch('/api/admin/auth', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ password }) })
+      if (!res.ok) throw new Error('Invalid password')
       setError('')
       setPassword('')
-    } else {
-      setError('Invalid password')
+      // Keep client state in sync
+      login(password)
+    } catch (err: any) {
+      setError(err?.message || 'Login failed')
     }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch('/api/admin/logout', { method: 'POST' })
     logout()
   }
 

@@ -570,6 +570,29 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
           </div>
         </div>
         <p className="text-xs text-gray-500 mt-2">I font selezionati vengono caricati automaticamente da Google Fonts quando disponibili.</p>
+
+        {/* Live preview */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="rounded border p-3">
+            <div className="text-xs text-gray-500 mb-1">Heading</div>
+            <div style={{ fontFamily: 'var(--font-heading, inherit)' }} className="text-lg">The quick brown fox</div>
+            <div style={{ fontFamily: 'var(--font-heading, inherit)' }} className="text-2xl font-semibold">Jumps over the lazy dog</div>
+          </div>
+          <div className="rounded border p-3">
+            <div className="text-xs text-gray-500 mb-1">Body</div>
+            <p style={{ fontFamily: 'var(--font-body, inherit)' }} className="text-sm leading-relaxed">
+              Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live blind texts.
+            </p>
+          </div>
+          <div className="rounded border p-3">
+            <div className="text-xs text-gray-500 mb-1">Mono</div>
+            <pre style={{ fontFamily: 'var(--font-mono, monospace)' }} className="text-xs bg-gray-50 p-2 rounded overflow-x-auto">
+{`function greet(name) {
+  return 'Hello, ' + name
+}`}
+            </pre>
+          </div>
+        </div>
       </div>
       )}
 

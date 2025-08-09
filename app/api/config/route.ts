@@ -74,9 +74,13 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ Configuration saved successfully')
     
+    // Reload the config to return the updated data
+    const updatedConfig = await configLoader.loadConfig()
+    
     return NextResponse.json({
       success: true,
-      message: 'Configuration saved successfully'
+      message: 'Configuration saved successfully',
+      data: updatedConfig
     })
   } catch (error) {
     console.error('❌ Error saving config in API:', error)

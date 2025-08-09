@@ -15,6 +15,7 @@ export interface BookConfig {
   publisher: string
   publisherUrl: string
   publisherTagline: string
+  substackName: string
   description: string
   coverImage: string
   rating: number
@@ -22,6 +23,9 @@ export interface BookConfig {
   publicationDate: string
   isbn: string
   asin: string
+  amazonUrl: string
+  goodreadsUrl: string
+  substackUrl: string
   fileSize: string
   pageCount: number
   language: string
@@ -212,14 +216,16 @@ export interface EmailConfig {
     replyTo: string
   }
   templates: {
-    welcome: {
+    download: {
       subject: string
       html: string
       text: string
-    }
-    download: {
-      subject: string
       message: string
+    }
+    followup: {
+      subject: string
+      html: string
+      text: string
     }
   }
   settings: {

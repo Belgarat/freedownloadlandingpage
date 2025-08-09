@@ -1,316 +1,215 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Lock, Eye, EyeOff, BarChart3, Users, Download, Mail } from 'lucide-react'
-import { AdminStats } from '@/types/admin'
+import { Lock, Settings, BookOpen, Megaphone, Palette, Search, LogOut, User } from 'lucide-react'
+import { useAuth } from '@/lib/auth'
 
 export default function AdminPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const { isAuthenticated, user, loading, login, logout } = useAuth()
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [stats, setStats] = useState<AdminStats>({
-    totalDownloads: 0,
-    totalEmails: 0,
-    recentDownloads: 0,
-    recentEmails: 0,
-    downloadRequests: 0,
-    downloadCompletionRate: 0,
-          anonymousVisits: 0,
-      anonymousDownloads: 0,
-      anonymousEmails: 0,
-      anonymousGoodreadsClicks: 0,
-      anonymousSubstackClicks: 0,
-      anonymousPublisherClicks: 0
-  })
   const router = useRouter()
 
-  useEffect(() => {
-    // Check if already authenticated
-    const auth = sessionStorage.getItem('admin_authenticated')
-    if (auth === 'true') {
-      setIsAuthenticated(true)
-      fetchStats()
-    }
-  }, [])
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    setError('')
-
-    try {
-      const response = await fetch('/api/admin/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password }),
-      })
-
-      if (response.ok) {
-        sessionStorage.setItem('admin_authenticated', 'true')
-        setIsAuthenticated(true)
-        fetchStats()
-      } else {
-        setError('Incorrect password')
-      }
-    } catch (error) {
-      setError('Connection error')
-    } finally {
-      setIsLoading(false)
+    
+    const success = login(password)
+    if (success) {
+      setError('')
+      setPassword('')
+    } else {
+      setError('Invalid password')
     }
   }
 
   const handleLogout = () => {
-    sessionStorage.removeItem('admin_authenticated')
-    setIsAuthenticated(false)
-    setPassword('')
+    logout()
   }
 
-  const fetchStats = async () => {
-    try {
-      const response = await fetch('/api/admin/stats')
-      if (response.ok) {
-        const data = await response.json()
-        setStats(data)
-      }
-    } catch (error) {
-      console.error('Error fetching stats:', error)
+  const adminSections = [
+    { 
+      id: 'config', 
+      name: 'Configuration', 
+      description: 'Manage all landing page settings',
+      icon: Settings,
+      href: '/admin/config',
+      permission: 'write'
+    },
+    { 
+      id: 'analytics', 
+      name: 'Analytics', 
+      description: 'View download and engagement metrics',
+      icon: BookOpen,
+      href: '/admin/analytics',
+      permission: 'read'
+    },
+
+
+    { 
+      id: 'seo', 
+      name: 'SEO Settings', 
+      description: 'Configure meta tags and SEO',
+      icon: Search,
+      href: '/admin/seo',
+      permission: 'write'
+    },
+    { 
+      id: 'marketing', 
+      name: 'Marketing Tools', 
+      description: 'Manage CTAs and marketing settings',
+      icon: Megaphone,
+      href: '/admin/marketing',
+      permission: 'write'
     }
+  ]
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
   }
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-900 via-cyan-900 to-blue-900 flex items-center justify-center p-4">
-        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-8 w-full max-w-md border border-teal-700/50">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Lock className="w-8 h-8 text-white" />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md w-full space-y-8">
+          <div className="text-center">
+            <div className="mx-auto h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center">
+              <Lock className="h-6 w-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-white mb-2">Admin Panel</h1>
-            <p className="text-teal-200">Sign in to view statistics</p>
-          </div>
-          
-          {/* Back to Homepage Link */}
-          <div className="text-center mb-6">
-            <a
-              href="/"
-              className="text-teal-300 hover:text-white transition-colors duration-200 text-sm underline"
-            >
-              ← Back to Homepage
-            </a>
+            <h2 className="mt-6 text-3xl font-bold text-gray-900">Admin Access</h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Enter your password to access the admin panel
+            </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form className="mt-8 space-y-6" onSubmit={handleLogin}>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-teal-100 mb-2">
+              <label htmlFor="password" className="sr-only">
                 Password
               </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-12 py-3 bg-teal-800/50 border border-teal-600 rounded-lg text-white placeholder-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  placeholder="Enter password"
-                  required
-                />
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-teal-300 w-5 h-5" />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-teal-300 hover:text-white"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                placeholder="Enter password"
+              />
             </div>
 
             {error && (
-              <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 flex items-center space-x-2">
-                <div className="w-5 h-5 bg-red-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">!</span>
-                </div>
-                <p className="text-red-300 text-sm">{error}</p>
+              <div className="text-red-600 text-sm text-center">
+                {error}
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-amber-600 hover:bg-amber-700 disabled:bg-amber-800 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
-            >
-              {isLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  <span>Signing in...</span>
-                </>
-              ) : (
-                <>
-                  <Lock className="w-5 h-5" />
-                  <span>Sign In</span>
-                </>
-              )}
-            </button>
+            <div>
+              <button
+                type="submit"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Sign in
+              </button>
+            </div>
           </form>
+
+          <div className="text-center">
+            <p className="text-xs text-gray-500">
+              Default password: admin123
+            </p>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-900 via-cyan-900 to-blue-900 p-4">
-      <div className="container mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-teal-700/50">
-          <div className="flex justify-between items-center">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
-              <p className="text-teal-200">Fish Cannot Carry Guns site statistics</p>
+              <h1 className="text-2xl font-bold text-gray-900">Book Landing Stack Admin</h1>
+              <p className="text-sm text-gray-600">Manage your landing page configuration</p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
-            >
-              Logout
-            </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <User className="h-4 w-4" />
+                <span>{user?.email}</span>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Anonymous Counters (Always Available) */}
-        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-teal-700/50">
-          <h2 className="text-xl font-bold text-white mb-4">Anonymous Counters (GDPR Compliant)</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {adminSections.map((section) => {
+            const Icon = section.icon
+            return (
+              <div
+                key={section.id}
+                onClick={() => router.push(section.href)}
+                className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0">
+                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Icon className="h-5 w-5 text-blue-600" />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg font-medium text-gray-900">
+                      {section.name}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {section.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Quick Stats */}
+        <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Stats</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="flex items-center justify-center mb-2">
-                <Users className="w-6 h-6 text-teal-400 mr-2" />
-                <span className="text-teal-200 text-sm">Total Visits</span>
-              </div>
-              <p className="text-3xl font-bold text-white">{stats.anonymousVisits}</p>
-              <p className="text-xs text-teal-300">All visitors</p>
+              <div className="text-2xl font-bold text-blue-600">0</div>
+              <div className="text-sm text-gray-500">Downloads Today</div>
             </div>
-            
             <div className="text-center">
-              <div className="flex items-center justify-center mb-2">
-                <Download className="w-6 h-6 text-teal-400 mr-2" />
-                <span className="text-teal-200 text-sm">Total Downloads</span>
-              </div>
-              <p className="text-3xl font-bold text-white">{stats.anonymousDownloads}</p>
-              <p className="text-xs text-teal-300">All downloads</p>
+              <div className="text-2xl font-bold text-green-600">0</div>
+              <div className="text-sm text-gray-500">Total Downloads</div>
             </div>
-            
             <div className="text-center">
-              <div className="flex items-center justify-center mb-2">
-                <Mail className="w-6 h-6 text-teal-400 mr-2" />
-                <span className="text-teal-200 text-sm">Total Emails</span>
-              </div>
-              <p className="text-3xl font-bold text-white">{stats.anonymousEmails}</p>
-              <p className="text-xs text-teal-300">All submissions</p>
+              <div className="text-2xl font-bold text-purple-600">0</div>
+              <div className="text-sm text-gray-500">Email Subscribers</div>
             </div>
-          </div>
-        </div>
-
-        {/* External Links Performance */}
-        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-teal-700/50">
-          <h2 className="text-xl font-bold text-white mb-4">External Links Performance</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center bg-[#073E44] backdrop-blur-sm rounded-lg p-4 border border-teal-700/50">
-              <div className="flex items-center justify-center mb-2">
-                <span className="text-blue-200 text-sm">Goodreads Clicks</span>
-              </div>
-              <p className="text-3xl font-bold text-blue-400">{stats.anonymousGoodreadsClicks}</p>
-              <p className="text-xs text-blue-300">Book reviews platform</p>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-600">0</div>
+              <div className="text-sm text-gray-500">Page Views</div>
             </div>
-            
-            <div className="text-center bg-[#073E44] backdrop-blur-sm rounded-lg p-4 border border-teal-700/50">
-              <div className="flex items-center justify-center mb-2">
-                <span className="text-orange-200 text-sm">Substack Clicks</span>
-              </div>
-              <p className="text-3xl font-bold text-orange-400">{stats.anonymousSubstackClicks}</p>
-              <p className="text-xs text-orange-300">Content platform</p>
-            </div>
-            
-            <div className="text-center bg-[#073E44] backdrop-blur-sm rounded-lg p-4 border border-teal-700/50">
-              <div className="flex items-center justify-center mb-2">
-                <span className="text-purple-200 text-sm">Publisher Clicks</span>
-              </div>
-              <p className="text-3xl font-bold text-purple-400">{stats.anonymousPublisherClicks}</p>
-              <p className="text-xs text-purple-300">Publisher website</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Consent Analytics (With User Consent) */}
-        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 mb-6 border border-teal-700/50">
-          <h2 className="text-xl font-bold text-white mb-4">Detailed Analytics (With Consent)</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 border border-teal-700/50">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-teal-200 text-sm">Completed Downloads</p>
-                  <p className="text-2xl font-bold text-white">{stats.totalDownloads}</p>
-                  <p className="text-xs text-teal-300">{stats.downloadCompletionRate}% completion</p>
-                </div>
-                <Download className="w-6 h-6 text-teal-400" />
-              </div>
-            </div>
-
-            <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 border border-teal-700/50">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-teal-200 text-sm">Download Requests</p>
-                  <p className="text-2xl font-bold text-white">{stats.downloadRequests}</p>
-                  <p className="text-xs text-teal-300">Total link clicks</p>
-                </div>
-                <BarChart3 className="w-6 h-6 text-teal-400" />
-              </div>
-            </div>
-
-            <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 border border-teal-700/50">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-teal-200 text-sm">Emails Collected</p>
-                  <p className="text-2xl font-bold text-white">{stats.totalEmails}</p>
-                </div>
-                <Mail className="w-6 h-6 text-teal-400" />
-              </div>
-            </div>
-
-            <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 border border-teal-700/50">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-teal-200 text-sm">Recent Activity</p>
-                  <p className="text-2xl font-bold text-white">{stats.recentDownloads + stats.recentEmails}</p>
-                  <p className="text-xs text-teal-300">Last 7 days</p>
-                </div>
-                <Users className="w-6 h-6 text-teal-400" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 border border-teal-700/50">
-          <h2 className="text-xl font-bold text-white mb-4">Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button
-              onClick={fetchStats}
-              className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
-            >
-              <BarChart3 className="w-5 h-5" />
-              <span>Refresh Statistics</span>
-            </button>
-            <button
-              onClick={() => window.open('/', '_blank')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
-            >
-              <Eye className="w-5 h-5" />
-              <span>View Site</span>
-            </button>
           </div>
         </div>
       </div>

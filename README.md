@@ -17,6 +17,13 @@ A beautiful Next.js 15 landing page for free ebook downloads with email collecti
 - 🔍 SEO optimized (meta tags, structured data)
 - 📈 Performance optimized (image compression, lazy loading)
 - 🔐 Secure admin panel with password protection
+- ⚙️ Dynamic configuration system with JSON files
+- 🎛️ User-friendly admin interface for content management
+- 📝 WYSIWYG editor for rich content editing
+- 🔄 Hot reload for instant configuration updates
+- 📧 Advanced email template system with placeholders
+- 🎯 Follow-up email automation
+- 🎨 Theme customization and development flags
 
 ## Book Information
 
@@ -98,6 +105,60 @@ npm install
 npm run dev
 ```
 
+## Dynamic Configuration System
+
+Book Landing Stack includes a powerful dynamic configuration system that allows you to manage all content and settings through JSON files and an intuitive admin interface.
+
+### Configuration Files
+
+All dynamic content is stored in JSON files in the `config/` directory:
+
+- **`config/book.json`** - Book information, URLs, metadata
+- **`config/content.json`** - WYSIWYG content areas (about book, author bio, stories)
+- **`config/marketing.json`** - CTA buttons, social links, offer settings
+- **`config/theme.json`** - Visual settings, colors, development flags
+- **`config/seo.json`** - Meta tags, Open Graph, structured data
+- **`config/email.json`** - Email templates and sender configuration
+
+### Admin Panel
+
+Access the admin panel at `/admin` to manage all configurations:
+
+1. **Authentication**: Password-protected admin area
+2. **Tabbed Interface**: Organized sections for different configuration types
+3. **WYSIWYG Editor**: Rich text editing for content areas
+4. **Real-time Updates**: Hot reload for instant configuration changes
+5. **Email Templates**: Advanced template system with placeholders
+
+### Email Template System
+
+The email system supports dynamic placeholders that are automatically replaced:
+
+| Placeholder | Description | Example |
+|-------------|-------------|---------|
+| `{{downloadUrl}}` | Download link | `https://example.com/download/abc123` |
+| `{{name}}` | User name | `Marco` |
+| `{{bookTitle}}` | Book title | `Fish Cannot Carry Guns` |
+| `{{authorName}}` | Author name | `Michael B. Morgan` |
+| `{{goodreadsUrl}}` | Goodreads URL | `https://goodreads.com/book/show/123` |
+| `{{amazonUrl}}` | Amazon URL | `https://amazon.com/dp/B0DS55TQ8R` |
+| `{{substackUrl}}` | Substack URL | `https://aroundscifi.substack.com/` |
+| `{{substackName}}` | Substack Name | `Around Sci-Fi` |
+| `{{publisherUrl}}` | Publisher URL | `https://37indielab.com` |
+| `{{publisherName}}` | Publisher Name | `3/7 Indie Lab` |
+
+### Email Types
+
+1. **Download Email**: Sent immediately when user requests download
+2. **Follow-up Email**: Sent 24-48 hours later if user hasn't downloaded
+
+### Development Features
+
+- **Hot Reload**: Automatic configuration updates in development
+- **Development Flags**: Toggle analytics, tracking, and debug modes
+- **Template Preview**: Real-time preview of email templates
+- **Placeholder Insertion**: Easy placeholder insertion in WYSIWYG editor
+
 ### 6. Run Tests
 
 ```bash
@@ -116,6 +177,10 @@ npm run test:headed
 The project includes a secure admin panel accessible at `/admin` with:
 
 - **Password Protection**: Secure authentication with environment variable
+- **Configuration Management**: Dynamic content editing through JSON files
+- **WYSIWYG Editor**: Rich text editing for content areas
+- **Email Template System**: Advanced template management with placeholders
+- **Real-time Updates**: Hot reload for instant configuration changes
 - **Analytics Dashboard**: Real-time statistics from Supabase
 - **Download Tracking**: Monitor ebook downloads and email collection
 - **Responsive Design**: Works on all devices
@@ -123,6 +188,22 @@ The project includes a secure admin panel accessible at `/admin` with:
 
 ### Admin Features
 
+#### Configuration Management
+- **Book Information**: Title, author, metadata, URLs
+- **Content Areas**: About book, author bio, stories with WYSIWYG editor
+- **Marketing Settings**: CTA buttons, social links, offer configuration
+- **Theme Customization**: Colors, fonts, layout options
+- **SEO Settings**: Meta tags, Open Graph, structured data
+- **Email Templates**: Download and follow-up email configuration
+
+#### Email System
+- **Template Editor**: WYSIWYG editor with placeholder insertion
+- **Placeholder System**: Dynamic content replacement
+- **Preview Function**: Real-time template preview
+- **Sender Configuration**: Name, email, reply-to settings
+- **Advanced Settings**: Link expiry, retry attempts, tracking
+
+#### Analytics & Monitoring
 - **Total Downloads**: Count of all ebook downloads
 - **Total Emails**: Count of all collected email addresses
 - **Recent Activity**: Last 7 days statistics
@@ -156,23 +237,45 @@ The project includes a comprehensive Playwright test suite with 13 tests coverin
 ```
 booklandingstack/
 ├── app/                    # Next.js App Router
+│   ├── admin/             # Admin panel pages
+│   │   ├── config/        # Configuration management
+│   │   └── page.tsx       # Admin dashboard
 │   ├── api/               # API routes
+│   │   ├── admin/         # Admin API endpoints
 │   │   ├── analytics/     # Analytics tracking
+│   │   ├── config/        # Configuration API
 │   │   ├── download/      # Download token validation
-│   │   └── send-ebook/    # Email sending
+│   │   ├── send-ebook/    # Email sending
+│   │   └── send-followup/ # Follow-up email
 │   ├── download/          # Download page
 │   ├── globals.css        # Global styles
 │   ├── layout.tsx         # Root layout
 │   └── page.tsx           # Landing page
 ├── components/            # React components
-│   └── AnalyticsDashboard.tsx
+│   ├── admin/             # Admin panel components
+│   │   ├── BookConfigEditor.tsx
+│   │   ├── EmailConfigEditor.tsx
+│   │   ├── MarketingConfigEditor.tsx
+│   │   └── PlaceholderLegend.tsx
+│   ├── AnalyticsDashboard.tsx
+│   ├── EmailTemplateEditor.tsx
+│   └── WYSIWYGEditor.tsx
+├── config/                # Dynamic configuration files
+│   ├── book.json          # Book information and URLs
+│   ├── content.json       # WYSIWYG content areas
+│   ├── email.json         # Email templates and settings
+│   ├── marketing.json     # CTA and social configuration
+│   ├── seo.json          # SEO and meta tags
+│   └── theme.json        # Visual settings and flags
 ├── lib/                   # Utility libraries
+│   ├── config-loader.ts   # Configuration management
 │   ├── book-config.ts     # Book metadata
 │   ├── download-tokens.ts # Token management
 │   ├── email-templates.ts # Email templates
 │   ├── resend.ts          # Email service
 │   ├── supabase.ts        # Database client
-│   └── useAnalytics.ts    # Analytics hooks
+│   ├── useAnalytics.ts    # Analytics hooks
+│   └── useConfig.ts       # Configuration hooks
 ├── public/                # Static assets
 │   ├── ebooks/           # PDF files
 │   ├── favicon.ico       # Favicon

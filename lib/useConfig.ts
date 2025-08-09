@@ -37,7 +37,7 @@ export function useConfig() {
             } catch (err) {
               console.error('Error polling config:', err)
             }
-          }, 2000) // Poll every 2 seconds
+          }, 5000) // Poll every 5 seconds for faster updates
           
           return () => clearInterval(pollInterval)
         }

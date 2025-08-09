@@ -62,7 +62,13 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: `linear-gradient(to bottom right, var(--color-primary), var(--color-secondary))` }}>
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: 'var(--color-background)',
+        backgroundImage: 'var(--bg-gradient)'
+      }}
+    >
       {/* Skip to main content link for accessibility */}
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded z-50">
         Skip to main content

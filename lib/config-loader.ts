@@ -145,6 +145,10 @@ export interface ThemeConfig {
     error: string
     warning: string
   }
+  background?: {
+    gradientEnabled?: boolean
+    gradientDirection?: string // e.g., 'to bottom right'
+  }
   fonts: {
     heading: string
     body: string

@@ -21,6 +21,11 @@ export default function ThemeVariables() {
     set('--color-success', c.success)
     set('--color-error', c.error)
     set('--color-warning', c.warning)
+    if (theme.background?.gradientEnabled) {
+      set('--bg-gradient', `linear-gradient(${theme.background.gradientDirection || 'to bottom right'}, ${c.primary}, ${c.secondary})`)
+    } else {
+      set('--bg-gradient', 'none')
+    }
   }, [theme])
 
   return null

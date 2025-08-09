@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import ConfigStatus from '@/components/ConfigStatus'
+import { useConfig } from '@/lib/useConfig'
 import ThemeVariables from '@/components/ThemeVariables'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -38,21 +40,36 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Expose config client-side for helpers (e.g., SEO generator)
+  // Using a small client component pattern here
+  const InjectConfig = () => {
+    const { config } = useConfig()
+    if (!config) return null
+    return (
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.__APP_CONFIG__ = ${JSON.stringify(config).replace(/</g, '\u003c')}`,
+        }}
+      />
+    )
+  }
+
   return (
     <html lang="en">
       <head>
         <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>" />
+        {/* Inject Book Schema if present */}
+        <Script id="book-schema" type="application/ld+json" strategy="afterInteractive">
+          {JSON.stringify((typeof window !== 'undefined' && (window as any).__APP_CONFIG__?.seo?.structuredData?.book) || null)}
+        </Script>
       </head>
       <body className={inter.className} style={{ fontFamily: 'var(--font-body, inherit)' }}>
         <ThemeVariables />
+        <InjectConfig />
         {children}
         <ConfigStatus />
       </body>
     </html>
   )
-} 
+}

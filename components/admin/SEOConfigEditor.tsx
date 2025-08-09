@@ -47,6 +47,9 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
       {activeTab === 'meta' && (
       <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Meta Tags</h3>
+        <div className="mb-4 text-xs text-gray-600 bg-gray-50 border rounded p-3">
+          Questi campi definiscono il titolo e la descrizione che appaiono nei risultati di ricerca. Imposta anche keywords, autore, robots e l’URL canonico.
+        </div>
         
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
@@ -119,6 +122,9 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
       {activeTab === 'og' && (
       <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Open Graph</h3>
+        <div className="mb-4 text-xs text-gray-600 bg-gray-50 border rounded p-3">
+          Open Graph controlla l’anteprima quando condividi il link su social (titolo, descrizione, immagine, sito). Compila per un’anteprima più accattivante.
+        </div>
         
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
@@ -191,6 +197,9 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
       {activeTab === 'twitter' && (
       <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Twitter Cards</h3>
+        <div className="mb-4 text-xs text-gray-600 bg-gray-50 border rounded p-3">
+          Twitter Cards (X) definiscono il formato dell’anteprima. Scegli “summary_large_image” per un’immagine grande, poi imposta titolo, descrizione e immagine.
+        </div>
         
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Card Type</label>
@@ -244,9 +253,55 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
       {activeTab === 'schema' && (
       <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Structured Data</h3>
+        <div className="mb-4 text-xs text-gray-600 bg-gray-50 border rounded p-3">
+          I dati strutturati (JSON‑LD) aiutano i motori a capire che questa pagina parla di un libro, abilitando rich results. Puoi generarli automaticamente e poi rifinire manualmente.
+        </div>
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Book Schema (JSON-LD)</label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-medium text-gray-700">Book Schema (JSON-LD)</label>
+          <button
+            type="button"
+            className="text-xs px-2 py-1 border rounded bg-white hover:bg-gray-50"
+            onClick={() => {
+              try {
+                // @ts-ignore
+                const appConfig = window.__APP_CONFIG__ as any
+                if (!appConfig) return
+                const { book, seo } = appConfig
+                const sameAs: string[] = []
+                if (book.amazonUrl) sameAs.push(book.amazonUrl)
+                if (book.goodreadsUrl) sameAs.push(book.goodreadsUrl)
+                if (book.publisherUrl) sameAs.push(book.publisherUrl)
+                if (book.substackUrl) sameAs.push(book.substackUrl)
+                const aggregate = book.rating ? {
+                  '@type': 'AggregateRating',
+                  ratingValue: book.rating,
+                  reviewCount: book.reviewCount || 1,
+                } : undefined
+                const schema: any = {
+                  '@context': 'https://schema.org',
+                  '@type': 'Book',
+                  name: book.title,
+                  author: { '@type': 'Person', name: book.author },
+                  image: book.coverImage,
+                  datePublished: book.publicationDate,
+                  isbn: book.isbn,
+                  inLanguage: book.language,
+                  numberOfPages: book.pageCount,
+                  genre: book.categories,
+                  publisher: { '@type': 'Organization', name: book.publisherName || book.publisher },
+                  bookFormat: 'EBook',
+                  url: (seo?.meta?.canonical) || '',
+                }
+                if (aggregate) schema.aggregateRating = aggregate
+                if (sameAs.length) schema.sameAs = sameAs
+                onChange({ ...config, structuredData: { ...config.structuredData, book: schema } })
+              } catch {}
+            }}
+          >
+            Genera da Book
+          </button>
+        </div>
           <textarea
             value={JSON.stringify(config.structuredData.book, null, 2)}
             onChange={(e) => {
@@ -268,6 +323,9 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
       {activeTab === 'sitemap' && (
       <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Sitemap Settings</h3>
+        <div className="mb-4 text-xs text-gray-600 bg-gray-50 border rounded p-3">
+          La sitemap aiuta i motori a scansionare il sito. Abilitala se vuoi esporre una sitemap.xml con priorità e frequenza di aggiornamento.
+        </div>
         
         <div className="flex items-center space-x-2 mb-4">
           <input

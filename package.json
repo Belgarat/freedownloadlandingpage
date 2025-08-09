@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",
-    "@tailwindcss/typography": "^0.5.16",
     "@tiptap/extension-link": "^3.0.9",
     "@tiptap/extension-placeholder": "^3.0.9",
     "@tiptap/extension-text-align": "^3.0.9",
@@ -37,7 +36,11 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
+    "@tailwindcss/typography": "^0.5.16",
     "eslint": "^8",
     "eslint-config-next": "15.0.0"
+  },
+  "engines": {
+    "node": ">=20 <21"
   }
 }

@@ -18,7 +18,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
     { id: 'twitter', label: 'Twitter' },
     { id: 'schema', label: 'Schema' },
     { id: 'sitemap', label: 'Sitemap' }
-  ] as const
+  ] as const;
 
   return (
     <div className="space-y-8">

@@ -89,7 +89,11 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
               <label className="block text-sm font-medium text-gray-700 mb-1">Immagine di copertina</label>
               <CoverUploader
                 value={config.coverImage}
-                onUploaded={(url) => onChange({ ...config, coverImage: url })}
+                onUploaded={(url) => {
+                  // Expose globally for theme generation button
+                  if (typeof window !== 'undefined') { (window as any).__currentCoverUrl = url }
+                  onChange({ ...config, coverImage: url })
+                }}
               />
             </div>
           </div>

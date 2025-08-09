@@ -20,11 +20,74 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
     { id: 'development', label: 'Development' },
   ] as const
 
+  // Simple palette presets to speed up theming
+  const presets: Array<{ name: string; colors: Partial<ThemeConfig['colors']> }> = [
+    {
+      name: 'Ocean',
+      colors: {
+        primary: '#0ea5e9',
+        secondary: '#22d3ee',
+        accent: '#14b8a6',
+        background: '#f0f9ff',
+        text: { primary: '#0f172a', secondary: '#334155', muted: '#64748b' },
+      },
+    },
+    {
+      name: 'Sunset',
+      colors: {
+        primary: '#f97316',
+        secondary: '#f59e0b',
+        accent: '#ef4444',
+        background: '#fff7ed',
+        text: { primary: '#1f2937', secondary: '#4b5563', muted: '#6b7280' },
+      },
+    },
+    {
+      name: 'Midnight',
+      colors: {
+        primary: '#60a5fa',
+        secondary: '#a78bfa',
+        accent: '#34d399',
+        background: '#0b1220',
+        text: { primary: '#e5e7eb', secondary: '#cbd5e1', muted: '#94a3b8' },
+      },
+    },
+  ]
+
+  const applyPreset = (idx: number) => {
+    const p = presets[idx]
+    onChange({
+      ...config,
+      colors: {
+        ...config.colors,
+        ...p.colors,
+        text: { ...config.colors.text, ...(p.colors.text as any) },
+      },
+    })
+  }
+
   return (
     <div className="space-y-8">
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <h3 className="text-sm font-medium text-blue-900">Tema</h3>
         <p className="text-sm text-blue-700 mt-1">Configura colori, font, layout e opzioni di sviluppo.</p>
+        <div className="mt-3 flex items-center gap-2">
+          <button
+            type="button"
+            className="px-3 py-2 text-xs rounded border bg-white hover:bg-gray-50"
+            onClick={async () => {
+              try {
+                const res = await fetch('/api/theme/from-cover', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ coverUrl: (window as any).__currentCoverUrl || '' }) })
+                if (!res.ok) return
+                const data = await res.json()
+                onChange({ ...config, colors: { ...config.colors, ...data.colors, text: { ...config.colors.text, ...data.colors.text } } })
+              } catch {}
+            }}
+          >
+            Genera dai colori della copertina
+          </button>
+          <span className="text-xs text-gray-500">Usa i colori della copertina per una palette di base</span>
+        </div>
       </div>
 
       <div className="border-b border-gray-200">
@@ -46,7 +109,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
       </div>
 
       {activeTab === 'colors' && (
-      <div className="pb-2">
+      <div className="pb-2 space-y-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Colors</h3>
         
         <div className="grid grid-cols-2 gap-4">
@@ -151,6 +214,36 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
                 className="w-full h-10 border border-gray-300 rounded-md"
               />
             </div>
+          </div>
+        </div>
+
+        {/* Live Preview + Presets */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="rounded-lg border overflow-hidden" style={{ background: config.colors.background }}>
+            <div className="p-4" style={{ background: `linear-gradient(135deg, ${config.colors.primary}, ${config.colors.secondary})` }}>
+              <h4 className="text-white font-semibold">Theme Preview</h4>
+            </div>
+            <div className="p-4 space-y-2">
+              <h3 className="text-xl font-bold" style={{ color: config.colors.text.primary }}>Fish Cannot Carry Guns</h3>
+              <p className="text-sm" style={{ color: config.colors.text.secondary }}>A Collection of Speculative Sci-Fi Tales</p>
+              <button className="px-3 py-2 rounded font-medium" style={{ background: config.colors.primary, color: config.colors.background }}>Primary CTA</button>
+            </div>
+          </div>
+          <div className="rounded-lg border p-4">
+            <h4 className="text-sm font-medium text-gray-900 mb-2">Palette Presets</h4>
+            <div className="flex flex-wrap gap-2">
+              {presets.map((p, i) => (
+                <button
+                  key={p.name}
+                  type="button"
+                  onClick={() => applyPreset(i)}
+                  className="px-2 py-1 text-xs rounded border hover:bg-gray-50"
+                >
+                  {p.name}
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-gray-500">Scegli una palette e poi affina i colori.</p>
           </div>
         </div>
       </div>

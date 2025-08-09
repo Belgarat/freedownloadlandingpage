@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { Shield, Mail, Clock, User, Lock } from 'lucide-react'
+import { useConfig } from '@/lib/useConfig'
 
 export default function PrivacyPage() {
+  const { book, content } = useConfig()
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-900 via-cyan-900 to-blue-900">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -19,8 +21,8 @@ export default function PrivacyPage() {
                 when you visit our website and request the download of the ebook "Fish Cannot Carry Guns".
               </p>
               <p>
-                <strong>Data Controller:</strong> Michael B. Morgan<br/>
-                <strong>Email:</strong> info@37indielab.com<br/>
+                <strong>Data Controller:</strong> {book?.author || 'Michael B. Morgan'}<br/>
+                <strong>Email:</strong> {process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'info@37indielab.com'}<br/>
                 <strong>Last updated:</strong> {new Date().toLocaleDateString('en-US')}
               </p>
             </section>
@@ -136,8 +138,8 @@ export default function PrivacyPage() {
               <div className="bg-teal-800/30 rounded-lg p-4">
                 <p className="mb-3">To exercise your GDPR rights or for any privacy questions:</p>
                 <div className="space-y-2 text-sm">
-                  <p><strong>Email:</strong> info@37indielab.com</p>
-                  <p><strong>Data Controller:</strong> Michael B. Morgan</p>
+                  <p><strong>Email:</strong> {process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'info@37indielab.com'}</p>
+                  <p><strong>Data Controller:</strong> {book?.author || 'Michael B. Morgan'}</p>
                   <p><strong>Response time:</strong> Within 30 days of request</p>
                 </div>
               </div>

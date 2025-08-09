@@ -187,7 +187,9 @@ export default function Home() {
 
               {/* Substack Subscription Box */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-6 text-center border border-teal-700/50">
-                <p className="text-teal-100 text-sm mb-4" dangerouslySetInnerHTML={{ __html: content?.footer?.supportText || "I write Around SciFi on Substack. If you'd like, drop by. It's a nice space where curious readers and talented authors share their love for speculative worlds." }} />
+                <p className="text-teal-100 text-sm mb-4">
+                  I write {book?.substackName || 'Around SciFi'} on Substack. If you'd like, drop by. It's a nice space where curious readers and talented authors share their love for speculative worlds.
+                </p>
                 <a
                   href={book?.substackUrl || 'https://substack.com/'}
                   target="_blank"
@@ -257,7 +259,10 @@ export default function Home() {
 
           {/* Footer with imprint logo and info - mobile optimized */}
           <div className="mt-12 sm:mt-16 text-center text-teal-200 text-sm flex flex-col items-center gap-4">
-            <p>© 2025 {book?.author || 'Michael B. Morgan'}. All rights reserved.</p>
+            <p>{content?.footer?.copyright || `© ${new Date().getFullYear()} ${book?.author || 'Michael B. Morgan'}. All rights reserved.`}</p>
+            {content?.footer?.supportText && (
+              <p className="text-xs text-teal-300" dangerouslySetInnerHTML={{ __html: content.footer.supportText }} />
+            )}
             <div className="flex flex-wrap justify-center gap-4 text-xs">
               <a href="/privacy" className="underline hover:text-white transition-colors">
                 Privacy Policy

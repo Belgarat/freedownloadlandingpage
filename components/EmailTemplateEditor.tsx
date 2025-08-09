@@ -20,7 +20,8 @@ import {
   Unlink,
   Plus,
   Eye,
-  EyeOff
+  EyeOff,
+  Code as CodeIcon
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -72,6 +73,15 @@ const emailPlaceholders = [
   { placeholder: '{{publisherName}}', label: 'Publisher Name', example: '3/7 Indie Lab' }
 ]
 
+// Subset of placeholders valid for URL hrefs
+const urlPlaceholders = [
+  { placeholder: '{{downloadUrl}}', label: 'Download URL' },
+  { placeholder: '{{goodreadsUrl}}', label: 'Goodreads URL' },
+  { placeholder: '{{amazonUrl}}', label: 'Amazon URL' },
+  { placeholder: '{{substackUrl}}', label: 'Substack URL' },
+  { placeholder: '{{publisherUrl}}', label: 'Publisher URL' },
+]
+
 export default function EmailTemplateEditor({ 
   value, 
   onChange, 
@@ -79,9 +89,12 @@ export default function EmailTemplateEditor({
   className = ""
 }: EmailTemplateEditorProps) {
   const [isMounted, setIsMounted] = useState(false)
-  const [showPlaceholders, setShowPlaceholders] = useState(false)
+  const [showContentPlaceholders, setShowContentPlaceholders] = useState(false)
+  const [showUrlPlaceholders, setShowUrlPlaceholders] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
   const [previewMode, setPreviewMode] = useState<'html' | 'text'>('html')
+  const [showCodeView, setShowCodeView] = useState(false)
+  const [codeHtml, setCodeHtml] = useState('')
 
   useEffect(() => {
     setIsMounted(true)
@@ -99,6 +112,10 @@ export default function EmailTemplateEditor({
       Underline,
       Link.configure({
         openOnClick: false,
+        autolink: false,
+        linkOnPaste: false,
+        // Allow placeholder href like {{downloadUrl}}
+        validate: (href) => typeof href === 'string' && href.length > 0,
         HTMLAttributes: {
           class: 'text-blue-600 underline hover:text-blue-800',
         },
@@ -164,7 +181,35 @@ export default function EmailTemplateEditor({
 
   const insertPlaceholder = (placeholder: string) => {
     editor.chain().focus().insertContent(placeholder).run()
-    setShowPlaceholders(false)
+    setShowContentPlaceholders(false)
+  }
+
+  const setLinkPlaceholder = (placeholder: string) => {
+    // If no selection, create a link with default label
+    const hasSelection = editor.state.selection && !editor.state.selection.empty
+    if (!hasSelection) {
+      editor.chain().focus().insertContent({ type: 'text', text: 'Link' }).setTextSelection(editor.state.selection.from - 4).setTextSelection(editor.state.selection.from + 4).run()
+    }
+    editor.chain().focus().setLink({ href: placeholder }).run()
+  }
+
+  const enterCodeView = () => {
+    setShowContentPlaceholders(false)
+    setShowUrlPlaceholders(false)
+    setShowPreview(false)
+    setCodeHtml(editor.getHTML())
+    setShowCodeView(true)
+  }
+
+  const applyCodeAndExit = () => {
+    setShowCodeView(false)
+    const html = codeHtml || ''
+    editor.commands.setContent(html, false)
+    onChange(editor.getHTML())
+  }
+
+  const closeCodeWithoutApply = () => {
+    setShowCodeView(false)
   }
 
   // Function to replace placeholders with example values for preview
@@ -286,6 +331,13 @@ export default function EmailTemplateEditor({
 
         <div className="flex items-center gap-1">
           <button
+            onClick={enterCodeView}
+            className={`p-2 rounded hover:bg-gray-200 ${showCodeView ? 'bg-gray-200' : ''}`}
+            title="Visualizza/Modifica HTML"
+          >
+            <CodeIcon className="w-4 h-4" />
+          </button>
+          <button
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-gray-200' : ''}`}
           >
@@ -337,6 +389,31 @@ export default function EmailTemplateEditor({
           >
             <Unlink className="w-4 h-4" />
           </button>
+          <div className="relative">
+            <button
+              onClick={() => { setShowUrlPlaceholders(!showUrlPlaceholders); setShowContentPlaceholders(false) }}
+              className="px-2 py-1 text-xs rounded border text-gray-600 bg-gray-50 border-gray-200 hover:bg-gray-100"
+            >
+              URL Placeholder
+            </button>
+            {showUrlPlaceholders && (
+              <div className="absolute z-50 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-2">
+                <div className="text-xs font-medium text-gray-700 mb-2">Imposta href del link:</div>
+                <div className="space-y-1 max-h-48 overflow-y-auto">
+                  {urlPlaceholders.map((item) => (
+                    <button
+                      key={item.placeholder}
+                      onClick={() => { setLinkPlaceholder(item.placeholder); setShowUrlPlaceholders(false) }}
+                      className="w-full text-left p-2 text-xs hover:bg-gray-50 rounded flex items-center justify-between"
+                    >
+                      <span className="font-mono text-blue-600">{item.placeholder}</span>
+                      <span className="text-gray-500">{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="w-px h-6 bg-gray-300 mx-2" />
@@ -344,14 +421,14 @@ export default function EmailTemplateEditor({
         <div className="flex items-center gap-1">
           <div className="relative">
             <button
-              onClick={() => setShowPlaceholders(!showPlaceholders)}
+              onClick={() => { setShowContentPlaceholders(!showContentPlaceholders); setShowUrlPlaceholders(false) }}
               className="flex items-center gap-1 px-2 py-1 text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100"
             >
               <Plus className="w-3 h-3" />
               Placeholders
             </button>
 
-            {showPlaceholders && (
+            {showContentPlaceholders && (
               <div className="absolute z-50 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-2">
                 <div className="text-xs font-medium text-gray-700 mb-2">Inserisci Placeholder:</div>
                 <div className="space-y-1 max-h-48 overflow-y-auto">
@@ -384,7 +461,33 @@ export default function EmailTemplateEditor({
         </div>
       </div>
 
-      {showPreview ? (
+      {showCodeView ? (
+        <div className="p-4 bg-gray-50 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="text-xs text-gray-500">Modifica HTML del template</div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={applyCodeAndExit}
+                className="px-2 py-1 text-xs rounded border text-green-700 bg-green-50 border-green-200 hover:bg-green-100"
+              >
+                Applica e chiudi
+              </button>
+              <button
+                onClick={closeCodeWithoutApply}
+                className="px-2 py-1 text-xs rounded border text-gray-700 bg-white border-gray-200 hover:bg-gray-100"
+              >
+                Chiudi senza salvare
+              </button>
+            </div>
+          </div>
+          <textarea
+            value={codeHtml}
+            onChange={(e) => setCodeHtml(e.target.value)}
+            className="w-full h-80 font-mono text-sm p-3 border rounded-md bg-white"
+            spellCheck={false}
+          />
+        </div>
+      ) : showPreview ? (
         <div className="p-4 min-h-[200px] bg-gray-50">
           <div className="flex items-center gap-2 mb-2">
             <button

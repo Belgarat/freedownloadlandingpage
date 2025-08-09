@@ -15,6 +15,10 @@ const nextConfig = {
   images: {
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
+    remotePatterns: [
+      // Vercel Blob public URLs
+      { protocol: 'https', hostname: '**.blob.vercel-storage.com' },
+    ],
   },
   
   // Headers for better caching

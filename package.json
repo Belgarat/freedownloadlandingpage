@@ -23,6 +23,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@vercel/blob": "^1.1.1",
     "autoprefixer": "^10.4.16",
     "chokidar": "^4.0.3",
     "lucide-react": "^0.294.0",

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { SEOConfig } from '@/lib/config-loader'
 
 interface SEOConfigEditorProps {
@@ -8,9 +9,43 @@ interface SEOConfigEditorProps {
 }
 
 export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorProps) {
+  const [activeTab, setActiveTab] = useState<'meta' | 'og' | 'twitter' | 'schema' | 'sitemap'>('meta')
+
+  const tabs = [
+    { id: 'meta', label: 'Meta' },
+    { id: 'og', label: 'Open Graph' },
+    { id: 'twitter', label: 'Twitter' },
+    { id: 'schema', label: 'Schema' },
+    { id: 'sitemap', label: 'Sitemap' }
+  ] as const
+
   return (
-    <div className="space-y-6">
-      <div className="border-b pb-4">
+    <div className="space-y-8">
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <h3 className="text-sm font-medium text-blue-900">SEO</h3>
+        <p className="text-sm text-blue-700 mt-1">Configura meta tag, Open Graph, Twitter Cards e dati strutturati.</p>
+      </div>
+
+      <div className="border-b border-gray-200">
+        <nav className="-mb-px flex space-x-6 overflow-x-auto">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`py-2 px-1 border-b-2 text-sm whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {activeTab === 'meta' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Meta Tags</h3>
         
         <div>
@@ -79,8 +114,10 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
           />
         </div>
       </div>
+      )}
 
-      <div className="border-b pb-4">
+      {activeTab === 'og' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Open Graph</h3>
         
         <div>
@@ -149,8 +186,10 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
           />
         </div>
       </div>
+      )}
 
-      <div className="border-b pb-4">
+      {activeTab === 'twitter' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Twitter Cards</h3>
         
         <div>
@@ -200,8 +239,10 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
           />
         </div>
       </div>
+      )}
 
-      <div className="border-b pb-4">
+      {activeTab === 'schema' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Structured Data</h3>
         
         <div>
@@ -222,8 +263,10 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
           />
         </div>
       </div>
+      )}
 
-      <div>
+      {activeTab === 'sitemap' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Sitemap Settings</h3>
         
         <div className="flex items-center space-x-2 mb-4">
@@ -268,6 +311,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
           </div>
         </div>
       </div>
+      )}
     </div>
   )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { ThemeConfig } from '@/lib/config-loader'
 
 interface ThemeConfigEditorProps {
@@ -8,9 +9,44 @@ interface ThemeConfigEditorProps {
 }
 
 export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEditorProps) {
+  const [activeTab, setActiveTab] = useState<'colors' | 'fonts' | 'layout' | 'spacing' | 'animations' | 'development'>('colors')
+
+  const tabs = [
+    { id: 'colors', label: 'Colors' },
+    { id: 'fonts', label: 'Fonts' },
+    { id: 'layout', label: 'Layout' },
+    { id: 'spacing', label: 'Spacing' },
+    { id: 'animations', label: 'Animations' },
+    { id: 'development', label: 'Development' },
+  ] as const
+
   return (
-    <div className="space-y-6">
-      <div className="border-b pb-4">
+    <div className="space-y-8">
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <h3 className="text-sm font-medium text-blue-900">Tema</h3>
+        <p className="text-sm text-blue-700 mt-1">Configura colori, font, layout e opzioni di sviluppo.</p>
+      </div>
+
+      <div className="border-b border-gray-200">
+        <nav className="-mb-px flex space-x-6 overflow-x-auto">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`py-2 px-1 border-b-2 text-sm whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {activeTab === 'colors' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Colors</h3>
         
         <div className="grid grid-cols-2 gap-4">
@@ -118,8 +154,10 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
           </div>
         </div>
       </div>
+      )}
 
-      <div className="border-b pb-4">
+      {activeTab === 'fonts' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Fonts</h3>
         
         <div className="grid grid-cols-3 gap-4">
@@ -155,8 +193,10 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
           </div>
         </div>
       </div>
+      )}
 
-      <div className="border-b pb-4">
+      {activeTab === 'layout' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Layout</h3>
         
         <div>
@@ -230,8 +270,10 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
           </div>
         </div>
       </div>
+      )}
 
-      <div className="border-b pb-4">
+      {activeTab === 'spacing' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Spacing</h3>
         
         <div className="grid grid-cols-3 gap-4">
@@ -267,8 +309,10 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
           </div>
         </div>
       </div>
+      )}
 
-      <div className="border-b pb-4">
+      {activeTab === 'animations' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Animations</h3>
         
         <div className="flex items-center space-x-2 mb-4">
@@ -305,8 +349,10 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
           </div>
         </div>
       </div>
+      )}
 
-      <div>
+      {activeTab === 'development' && (
+      <div className="pb-2">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Development</h3>
         
         <div className="space-y-2">
@@ -355,6 +401,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
           </div>
         </div>
       </div>
+      )}
     </div>
   )
 }

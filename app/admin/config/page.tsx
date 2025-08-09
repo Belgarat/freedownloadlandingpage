@@ -19,13 +19,15 @@ export default function ConfigAdmin() {
   const [saving, setSaving] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [lastSavedConfig, setLastSavedConfig] = useState<any>(null)
+  const [isDirty, setIsDirty] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
-    if (config) {
+    // Evita sovrascritture durante modifica o salvataggio
+    if (config && (!localConfig || (!isDirty && !saving))) {
       setLocalConfig(config)
     }
-  }, [config])
+  }, [config, isDirty, saving])
 
   const handleSave = async () => {
     if (!localConfig) return
@@ -51,6 +53,7 @@ export default function ConfigAdmin() {
           setLocalConfig(result.data)
           setLastSavedConfig(result.data)
         }
+        setIsDirty(false)
         setTimeout(() => setSaveStatus('idle'), 3000)
       } else {
         setSaveStatus('error')
@@ -127,42 +130,42 @@ export default function ConfigAdmin() {
         return (
           <BookConfigEditor
             config={localConfig.book}
-            onChange={(newBookConfig) => setLocalConfig({...localConfig, book: newBookConfig})}
+            onChange={(newBookConfig) => { setLocalConfig({...localConfig, book: newBookConfig}); setIsDirty(true) }}
           />
         )
       case 'marketing':
         return (
           <MarketingConfigEditor
             config={localConfig.marketing}
-            onChange={(newMarketingConfig) => setLocalConfig({...localConfig, marketing: newMarketingConfig})}
+            onChange={(newMarketingConfig) => { setLocalConfig({...localConfig, marketing: newMarketingConfig}); setIsDirty(true) }}
           />
         )
       case 'content':
         return (
           <ContentConfigEditor
             config={localConfig.content}
-            onChange={(newContentConfig) => setLocalConfig({...localConfig, content: newContentConfig})}
+            onChange={(newContentConfig) => { setLocalConfig({...localConfig, content: newContentConfig}); setIsDirty(true) }}
           />
         )
       case 'theme':
         return (
           <ThemeConfigEditor
             config={localConfig.theme}
-            onChange={(newThemeConfig) => setLocalConfig({...localConfig, theme: newThemeConfig})}
+            onChange={(newThemeConfig) => { setLocalConfig({...localConfig, theme: newThemeConfig}); setIsDirty(true) }}
           />
         )
       case 'seo':
         return (
           <SEOConfigEditor
             config={localConfig.seo}
-            onChange={(newSEOConfig) => setLocalConfig({...localConfig, seo: newSEOConfig})}
+            onChange={(newSEOConfig) => { setLocalConfig({...localConfig, seo: newSEOConfig}); setIsDirty(true) }}
           />
         )
       case 'email':
         return (
           <EmailConfigEditor
             config={localConfig.email}
-            onChange={(newEmailConfig) => setLocalConfig({...localConfig, email: newEmailConfig})}
+            onChange={(newEmailConfig) => { setLocalConfig({...localConfig, email: newEmailConfig}); setIsDirty(true) }}
           />
         )
       default:

@@ -80,7 +80,7 @@ export default function PrivacyPage() {
                 <li><strong>Email:</strong> Retained for 2 years or until deletion request</li>
                 <li><strong>Analytics:</strong> Retained for 2 years</li>
                 <li><strong>Security logs:</strong> Retained for 1 year</li>
-                <li><strong>Download tokens:</strong> Automatically expire after 24 hours</li>
+                <li><strong>Download tokens:</strong> Automatically expire after 3 days</li>
               </ul>
             </section>
             

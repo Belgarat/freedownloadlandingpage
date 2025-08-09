@@ -57,7 +57,7 @@ export const getEbookEmailTemplate = (data: EmailTemplateData) => {
               Download Your Free Copy (PDF)
             </a>
             <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">
-              ⏰ This link expires in 24 hours
+              ⏰ This link expires in 3 days
             </p>
           </div>
           
@@ -114,7 +114,7 @@ What's included in your free copy:
 - Fish Cannot Carry Guns: All his life, John had thought he was safe...
 
 Download your free copy: ${downloadUrl}
-⚠️ This link expires in 24 hours
+⚠️ This link expires in 3 days
 
 Support Independent Authors:
 Since this book is completely free, we'd be grateful if you could support ${authorName} by:

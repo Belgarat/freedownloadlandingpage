@@ -12,7 +12,7 @@ export interface DownloadToken {
 export const generateDownloadToken = (email: string): DownloadToken => {
   const id = randomBytes(16).toString('hex')
   const token = randomBytes(32).toString('hex')
-  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+  const expiresAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) // 3 days
   
   return {
     id,

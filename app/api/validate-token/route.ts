@@ -38,13 +38,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if token has already been used (only after 24 hours)
+    // Check if token has already been used (only after 3 days)
     const tokenCreatedAt = new Date(tokenData.created_at)
     const hoursSinceCreation = (now.getTime() - tokenCreatedAt.getTime()) / (1000 * 60 * 60)
     
-    if (hoursSinceCreation > 24) {
+    if (hoursSinceCreation > 72) {
       return NextResponse.json(
-        { error: 'Download link has expired (24 hours)' },
+        { error: 'Download link has expired (3 days)' },
         { status: 410 }
       )
     }

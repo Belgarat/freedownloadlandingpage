@@ -315,7 +315,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             }}
             rows={10}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
-            placeholder='{"@type": "Book", "name": "Book Title", "author": {"@type": "Person", "name": "Author Name"}}'
+            placeholder={`{"@type":"Book","name":"Book Title","author":{"@type":"Person","name":"Author Name"}}`}
           />
         </div>
       </div>

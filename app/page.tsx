@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Mail, Download, AlertCircle, CheckCircle, X, BookOpen, ExternalLink, Star, Palette } from 'lucide-react'
 import CookieConsent from '@/components/CookieConsent'
 import CountdownTimer from '@/components/CountdownTimer'
 import { useAnalytics } from '@/lib/useAnalytics'
+import { useConfig } from '@/lib/useConfig'
 
 export default function Home() {
   const [email, setEmail] = useState('')
@@ -15,9 +16,12 @@ export default function Home() {
   
   // Initialize analytics
   const { trackEmailSubmit, trackGoodreadsClick, trackSubstackClick, trackPublisherClick } = useAnalytics()
+  const { book, content, marketing, theme } = useConfig()
   
   // Get offer end date from environment
-  const offerEndDate = process.env.NEXT_PUBLIC_OFFER_END_DATE || '2025-03-15T23:59:59Z'
+  const offerEndDate = useMemo(() => {
+    return marketing?.offer?.endDate || process.env.NEXT_PUBLIC_OFFER_END_DATE || '2025-03-15T23:59:59Z'
+  }, [marketing])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,7 +60,12 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-900 via-cyan-900 to-blue-900">
+    <div
+      className="min-h-screen"
+      style={{
+        background: `linear-gradient(to bottom right, ${theme?.colors?.primary || '#0f766e'}, ${theme?.colors?.secondary || '#0891b2'})`,
+      }}
+    >
       {/* Skip to main content link for accessibility */}
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded z-50">
         Skip to main content
@@ -65,22 +74,20 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           {/* Header - mobile optimized */}
           <div className="flex flex-col items-center mb-6 sm:mb-8">
-            <div className="flex items-center space-x-2 mb-3 sm:mb-4">
-              <BookOpen className="h-8 w-8 sm:h-10 sm:w-10 text-amber-400" />
-              <span className="text-2xl sm:text-4xl md:text-5xl font-bold text-white font-serif leading-tight">Fish Cannot Carry Guns</span>
-            </div>
+              <div className="flex items-center space-x-2 mb-3 sm:mb-4">
+                <BookOpen className="h-8 w-8 sm:h-10 sm:w-10 text-amber-400" />
+                <span className="text-2xl sm:text-4xl md:text-5xl font-bold text-white font-serif leading-tight">{book?.title || 'Fish Cannot Carry Guns'}</span>
+              </div>
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-gray-200">
-              <span>by Michael B. Morgan</span>
+                <span>by {book?.author || 'Michael B. Morgan'}</span>
               <span className="flex items-center gap-1 text-amber-300 font-semibold">
-                <Star className="w-4 h-4" /> 5.0 <span className="text-gray-300 font-normal">(1 review)</span>
+                  <Star className="w-4 h-4" /> {book?.rating ?? 5.0} <span className="text-gray-300 font-normal">({book?.reviewCount ?? 1} review{(book?.reviewCount ?? 1) === 1 ? '' : 's'})</span>
               </span>
             </div>
             <div className="flex flex-wrap justify-center gap-1 sm:gap-2 text-xs text-amber-200 mt-2">
-              <span>#SciFi</span>
-              <span>#Dystopian</span>
-              <span>#Cyberpunk</span>
-              <span>#Androids</span>
-              <span>#DangerForHumanity</span>
+                {(book?.categories || ['SciFi','Dystopian','Cyberpunk']).map((c) => (
+                  <span key={c}>#{c}</span>
+                ))}
             </div>
           </div>
 
@@ -96,26 +103,15 @@ export default function Home() {
               
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-8 text-center border border-teal-700/50">
                 <div className="w-64 sm:w-80 md:w-96 mx-auto bg-gradient-to-br from-teal-800 to-cyan-800 rounded-lg shadow-lg mb-4 sm:mb-6 flex items-center justify-center">
-                  <picture>
-                    <source 
-                      media="(min-width: 768px)" 
-                      srcSet="/ebook_cover.webp"
-                    />
-                    <source 
-                      media="(min-width: 640px)" 
-                      srcSet="/ebook_cover_medium.webp"
-                    />
-                    <img 
-                      src="/ebook_cover_small.webp" 
-                      alt="Fish Cannot Carry Guns - Book Cover" 
-                      className="w-full h-full object-cover rounded-lg"
-                      loading="lazy"
-                      decoding="async"
-                      fetchPriority="high"
-                      width="384"
-                      height="512"
-                    />
-                  </picture>
+                  <img
+                    src={book?.coverImage || '/ebook_cover_small.webp'}
+                    alt={`${book?.title || 'Book'} - Cover`}
+                    className="w-full h-full object-cover rounded-lg"
+                    loading="lazy"
+                    decoding="async"
+                    width="384"
+                    height="512"
+                  />
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">Download Your Free Copy</h2>
                 {!isSubmitted ? (
@@ -175,7 +171,7 @@ export default function Home() {
                       </p>
                     </div>
                     <a
-                      href="https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns"
+                      href={book?.goodreadsUrl || 'https://www.goodreads.com/'}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 text-base"
@@ -189,11 +185,9 @@ export default function Home() {
 
               {/* Substack Subscription Box */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-4 sm:p-6 text-center border border-teal-700/50">
-                <p className="text-teal-100 text-sm mb-4">
-                  I write Around SciFi on Substack. If you'd like, drop by. It's a nice space where curious readers and talented authors share their love for speculative worlds.
-                </p>
+                <p className="text-teal-100 text-sm mb-4" dangerouslySetInnerHTML={{ __html: content?.footer?.supportText || "I write Around SciFi on Substack. If you'd like, drop by. It's a nice space where curious readers and talented authors share their love for speculative worlds." }} />
                 <a
-                  href="https://aroundscifi.substack.com/"
+                  href={book?.substackUrl || 'https://substack.com/'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-base"
@@ -210,22 +204,16 @@ export default function Home() {
               {/* Description */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Book</h3>
-                <ul className="list-disc pl-5 text-teal-100 mb-4 text-sm sm:text-base">
-                  <li><strong>Betrayal Circuit:</strong> Captain Stalworth believes he can trust Private Jude Veil. He is wrong.</li>
-                  <li><strong>Devil's Advocate:</strong> What if you were trapped in a cell... with the person who killed you?</li>
-                  <li><strong>Fish Cannot Carry Guns:</strong> All his life, John had thought he was safe...</li>
-                </ul>
+                <div className="prose prose-invert max-w-none text-teal-100 mb-4 text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: content?.aboutBook || '' }} />
                                   {/* Review e tag */}
                   <div className="flex flex-col items-center gap-3 text-sm text-gray-200 mb-4">
                     <span className="flex items-center gap-1 text-amber-300 font-semibold">
-                      <Star className="w-4 h-4" /> 5.0 <span className="text-gray-300 font-normal">(1 review)</span>
+                      <Star className="w-4 h-4" /> {book?.rating ?? 5.0} <span className="text-gray-300 font-normal">({book?.reviewCount ?? 1} review{(book?.reviewCount ?? 1) === 1 ? '' : 's'})</span>
                     </span>
                     <div className="flex items-center gap-1 text-xs text-amber-200">
-                      <span>#SciFi</span>
-                      <span>#Dystopian</span>
-                      <span>#Cyberpunk</span>
-                      <span>#Androids</span>
-                      <span>#DangerForHumanity</span>
+                      {(book?.categories || ['SciFi','Dystopian','Cyberpunk']).map((c) => (
+                        <span key={c}>#{c}</span>
+                      ))}
                     </div>
                   </div>
                                   <div className="bg-amber-900/20 border border-amber-700/50 rounded p-3 mt-4">
@@ -244,9 +232,7 @@ export default function Home() {
               {/* Author Bio */}
               <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border border-teal-700/50">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Author</h3>
-                <p className="text-teal-100 whitespace-pre-line text-sm sm:text-base">
-                  Is the snowflake responsible for the avalanche? I'm a lifelong reader with a love for physics, psychology, and stories that ask hard questions, and don't always offer easy answers. Consultant by day, author by night. Proud father. Grateful husband. Based in the U.S., often on the move.
-                </p>
+                <div className="prose prose-invert max-w-none text-teal-100 text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: content?.authorBio || '' }} />
               </div>
 
               {/* Goodreads Link */}
@@ -255,7 +241,7 @@ export default function Home() {
                   Support independent authors by adding this book to your Goodreads reading list
                 </p>
                 <a
-                  href="https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns"
+                  href={book?.goodreadsUrl || 'https://www.goodreads.com/'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 text-base"
@@ -269,15 +255,15 @@ export default function Home() {
 
           {/* Footer with imprint logo and info - mobile optimized */}
           <div className="mt-12 sm:mt-16 text-center text-teal-200 text-sm flex flex-col items-center gap-4">
-            <p>© 2025 Michael B. Morgan. All rights reserved.</p>
+            <p>© 2025 {book?.author || 'Michael B. Morgan'}. All rights reserved.</p>
             <div className="flex flex-wrap justify-center gap-4 text-xs">
               <a href="/privacy" className="underline hover:text-white transition-colors">
                 Privacy Policy
               </a>
             </div>
             <div className="flex flex-col items-center gap-2">
-                              <a 
-                  href="https://37indielab.com/" 
+              <a 
+                  href={book?.publisherUrl || 'https://37indielab.com/'} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="inline-block"
@@ -286,16 +272,16 @@ export default function Home() {
                 <img src="/logo_transparent.png" alt="3/7 Indie Lab Logo" className="h-10 sm:h-12 mb-2" style={{maxWidth:'80px'}} />
               </a>
               <div className="text-xs text-teal-200 max-w-md px-4">
-                <strong className="text-white">3/7 Indie Lab</strong> — Be independent, be unique.<br/>
-                At 3/7 Indie Lab, we are fiercely independent. We will always support authors who want to push the boundaries of the publishing market with independent writing.<br/>
+                <strong className="text-white">{book?.publisherName || '3/7 Indie Lab'}</strong> — {book?.publisherTagline || 'Be independent, be unique.'}<br/>
+                {content?.footer?.copyright || 'At 3/7 Indie Lab, we are fiercely independent. We will always support authors who want to push the boundaries of the publishing market with independent writing.'}<br/>
                                   <a
-                    href="https://37indielab.com/"
+                    href={book?.publisherUrl || 'https://37indielab.com/'}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="underline text-teal-300"
                     onClick={trackPublisherClick}
                   >
-                  www.37indielab.com
+                  {book?.publisherUrl?.replace('https://','') || 'www.37indielab.com'}
                 </a>
                 <br/>
                 <span className="italic">3/7 Indie Lab is an author-centric imprint. Our mission is to help independent authors publish their books. All rights, responsibilities, and liabilities associated with the content and distribution of the books remain solely with the respective authors or other entities involved.</span>

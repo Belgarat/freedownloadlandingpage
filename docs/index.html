@@ -88,7 +88,7 @@
                     Book Landing Stack
                 </h1>
                 <div class="inline-flex items-center justify-center gap-2 mb-6">
-                    <span class="text-sm font-semibold bg-white/10 text-white px-3 py-1 rounded-full border border-white/20">v2.0.0-alpha.2</span>
+                    <span class="text-sm font-semibold bg-white/10 text-white px-3 py-1 rounded-full border border-white/20">v2.0.0-beta.1</span>
                 </div>
                 <p class="text-xl md:text-2xl mb-8 text-gray-100">
                     Open source stack for high-converting book landing pages — JSON configs, Admin Panel, Theme Generator, SEO & Analytics
@@ -241,7 +241,7 @@
                     <div class="text-book-amber text-4xl mb-4">🛠️</div>
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Admin Panel</h3>
                     <p class="text-gray-600">
-                        Manage JSON-based configs for Book, Content, Marketing, Theme, SEO. Auth-protected with cookie-based login.
+                        Enhanced admin panel with centralized authentication, real-time analytics dashboard, and secure session management. Manage JSON-based configs for Book, Content, Marketing, Theme, SEO.
                     </p>
                 </div>
 
@@ -338,50 +338,54 @@
     <section id="whatsnew" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">What's New (v2.0.0-alpha.2)</h2>
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">What's New (v2.0.0-beta.1)</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Latest improvements to theming, admin UX, SEO, and email workflow
+                    Enhanced authentication system, real-time analytics, and security improvements
                 </p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold mb-3">Theme & UI</h3>
+                    <h3 class="text-lg font-semibold mb-3">🔐 Enhanced Authentication</h3>
                     <ul class="space-y-2 text-gray-700 list-disc pl-5">
-                        <li>Theme generated from cover colors with saturation/lightness controls and per-color locks</li>
-                        <li>Optional background gradients and configurable surface colors with opacity</li>
-                        <li>Google Fonts picker with auto-loading and live preview</li>
+                        <li>Centralized authentication system with secure session management</li>
+                        <li>HttpOnly cookies with HMAC signatures for XSS protection</li>
+                        <li>Middleware-based route protection and CSRF prevention</li>
+                        <li>Event-driven UI synchronization across all admin components</li>
                     </ul>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold mb-3">Admin & Content</h3>
+                    <h3 class="text-lg font-semibold mb-3">📊 Real-time Analytics</h3>
                     <ul class="space-y-2 text-gray-700 list-disc pl-5">
-                        <li>Unified Admin Topbar across all sections</li>
-                        <li>Tabbed editors for Book, Marketing, Content, Theme, and SEO</li>
-                        <li>Hot reload via polling with improved save behavior</li>
+                        <li>Live dashboard with download, email, and page view statistics</li>
+                        <li>Centralized logout functionality across all admin pages</li>
+                        <li>Comprehensive Playwright test suite for authentication flows</li>
+                        <li>Performance optimized with minimal re-renders</li>
                     </ul>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold mb-3">SEO & Analytics</h3>
+                    <h3 class="text-lg font-semibold mb-3">🛡️ Security Improvements</h3>
                     <ul class="space-y-2 text-gray-700 list-disc pl-5">
-                        <li>Server-side <code>generateMetadata</code> adoption</li>
-                        <li>Auto-generate JSON-LD Book Schema from book data</li>
-                        <li>Analytics dashboard wired to API with safe read-only dev mode</li>
+                        <li>Automatic session expiration and secure token validation</li>
+                        <li>Proper security headers via Next.js middleware</li>
+                        <li>Tamper-proof authentication with HMAC signatures</li>
+                        <li>Centralized error handling and logging</li>
                     </ul>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold mb-3">Email System</h3>
+                    <h3 class="text-lg font-semibold mb-3">🧪 Testing & Quality</h3>
                     <ul class="space-y-2 text-gray-700 list-disc pl-5">
-                        <li>WYSIWYG editor with placeholders and URL placeholders</li>
-                        <li>HTML/Text preview and code view toggle</li>
-                        <li>Follow-up email with fresh download link</li>
+                        <li>Full authentication flow testing with Playwright</li>
+                        <li>Code cleanup and removal of debug statements</li>
+                        <li>Consolidated versioning strategy with package.json as source of truth</li>
+                        <li>Production-ready authentication system</li>
                     </ul>
                 </div>
             </div>
 
             <div class="text-center mt-12">
                 <a href="https://github.com/marcobrunet/booklandingstack#readme" class="inline-block bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors mr-3">Read README</a>
-                <a href="https://github.com/marcobrunet/booklandingstack/blob/develop/VERSION.md" class="inline-block border border-gray-900 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-900 hover:text-white transition-colors">View Changelog</a>
+                <a href="https://github.com/marcobrunet/booklandingstack#changelog" class="inline-block border border-gray-900 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-900 hover:text-white transition-colors">View Changelog</a>
             </div>
         </div>
     </section>

@@ -10,6 +10,9 @@ interface AdminProtectedProps {
 export default function AdminProtected({ children }: AdminProtectedProps) {
   const { isAuthenticated, isLoading } = useAuth()
 
+  // Debug: log the current state
+  console.log('AdminProtected - isAuthenticated:', isAuthenticated, 'isLoading:', isLoading)
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">

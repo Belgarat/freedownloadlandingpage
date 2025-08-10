@@ -53,10 +53,12 @@ export function useAuth() {
 
   const logout = async () => {
     try {
+      console.log('Logout: starting...')
       await fetch('/api/admin/logout', {
         method: 'POST',
         credentials: 'include',
       })
+      console.log('Logout: API call successful, setting isAuthenticated to false')
       setIsAuthenticated(false)
       // Let the component handle the re-render automatically
     } catch (error) {

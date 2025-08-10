@@ -204,7 +204,7 @@ export default function EmailTemplateEditor({
   const applyCodeAndExit = () => {
     setShowCodeView(false)
     const html = codeHtml || ''
-    editor.commands.setContent(html, false)
+    editor.commands.setContent(html)
     onChange(editor.getHTML())
   }
 
@@ -212,18 +212,7 @@ export default function EmailTemplateEditor({
     setShowCodeView(false)
   }
 
-  // Function to replace placeholders with example values for preview
-  const getPreviewContent = (content: string) => {
-    let previewContent = content
-    
-    // Replace placeholders with highlighted examples, but preserve HTML structure
-    emailPlaceholders.forEach(({ placeholder, example }) => {
-      const regex = new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')
-      previewContent = previewContent.replace(regex, `<span class="bg-yellow-100 text-yellow-800 px-1 rounded text-sm font-mono">${example}</span>`)
-    })
-    
-    return previewContent
-  }
+
 
   // Function to create a more realistic email preview
   const getEmailPreview = (content: string) => {

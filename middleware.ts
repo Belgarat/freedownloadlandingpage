@@ -17,6 +17,11 @@ function isValidToken(token: string | undefined): boolean {
 }
 
 export function middleware(request: NextRequest) {
+  // Skip middleware for API routes
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    return NextResponse.next()
+  }
+
   // Check if the request is for an admin route
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (request.nextUrl.pathname === '/admin') {

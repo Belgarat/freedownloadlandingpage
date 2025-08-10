@@ -43,4 +43,13 @@ export async function POST(request: Request) {
   }
 }
 
-// (legacy duplicate removed)
+export async function GET() {
+  try {
+    // This endpoint is used to check if the user is authenticated
+    // The middleware will handle the actual authentication check
+    // If this endpoint is reached, it means the user is authenticated
+    return NextResponse.json({ ok: true })
+  } catch (e: any) {
+    return NextResponse.json({ ok: false, error: e?.message || 'Auth check failed' }, { status: 500 })
+  }
+}

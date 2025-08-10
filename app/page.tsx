@@ -65,7 +65,7 @@ export default function Home() {
           {/* Main Content - mobile optimized */}
           <main id="main-content" className={`grid ${gridCols} gap-6 lg:gap-12 items-start`}>
             {/* Countdown Timer - Mobile Only (above book cover) */}
-            {layout?.showCountdown !== false && (
+            {layout?.showCountdown === true && (
               <div className="lg:hidden">
                 <CountdownTimer endDate={offerEndDate} className="mb-4" />
               </div>

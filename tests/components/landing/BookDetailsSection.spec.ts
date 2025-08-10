@@ -45,13 +45,13 @@ test.describe('BookDetailsSection Component', () => {
     await expect(page.getByText('About the Book')).toBeVisible()
   })
 
-  test('should display countdown timer on desktop', async ({ page }) => {
+  test('should display countdown timer on desktop when enabled', async ({ page }) => {
     // Set desktop viewport
     await page.setViewportSize({ width: 1920, height: 1080 })
     
-    // Countdown timer should be visible on desktop
+    // Countdown timer should not be visible by default (layout.showCountdown is not true)
     const countdownElement = page.locator('.hidden.lg\\:block')
-    await expect(countdownElement).toBeVisible()
+    await expect(countdownElement).not.toBeVisible()
   })
 
   test('should have proper section styling', async ({ page }) => {
@@ -63,5 +63,13 @@ test.describe('BookDetailsSection Component', () => {
     // Check if any content is rendered
     const contentElements = page.locator('.prose')
     await expect(contentElements.first()).toBeVisible()
+  })
+
+  test('should not display conditional sections when flags are disabled', async ({ page }) => {
+    // These sections should not be visible when layout flags are not explicitly set to true
+    await expect(page.getByText('Stories')).not.toBeVisible()
+    await expect(page.getByText('Testimonials')).not.toBeVisible()
+    await expect(page.getByText('Awards')).not.toBeVisible()
+    await expect(page.getByText('Rankings')).not.toBeVisible()
   })
 })

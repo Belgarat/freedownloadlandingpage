@@ -52,9 +52,9 @@
     "limitedText": "Limited time offer"
   },
   "socialProof": {
-    "showRating": true,
-    "showReviewCount": true,
-    "showRankings": true,
-    "showAwards": true
+    "showRating": false,
+    "showReviewCount": false,
+    "showRankings": false,
+    "showAwards": false
   }
 }

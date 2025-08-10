@@ -30,7 +30,7 @@ export default function BookDetailsSection({ className = '', offerEndDate }: Boo
       </div>
 
       {/* Countdown Timer - Desktop Only */}
-      {layout?.showCountdown !== false && offerEndDate && (
+      {layout?.showCountdown === true && offerEndDate && (
         <div className="hidden lg:block">
           <CountdownTimer endDate={offerEndDate} className="mb-4" />
         </div>
@@ -43,7 +43,7 @@ export default function BookDetailsSection({ className = '', offerEndDate }: Boo
       </div>
 
       {/* Stories */}
-      {layout?.showStories !== false && (content?.stories?.length ?? 0) > 0 && (
+      {layout?.showStories === true && (content?.stories?.length ?? 0) > 0 && (
         <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
           <h3 className="text-lg font-semibold text-white mb-4">Stories</h3>
           <div className="space-y-6">
@@ -61,7 +61,7 @@ export default function BookDetailsSection({ className = '', offerEndDate }: Boo
       )}
 
       {/* Testimonials */}
-      {layout?.showTestimonials !== false && (content?.testimonials?.length ?? 0) > 0 && (
+      {layout?.showTestimonials === true && (content?.testimonials?.length ?? 0) > 0 && (
         <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
           <h3 className="text-lg font-semibold text-white mb-4">Testimonials</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -76,7 +76,7 @@ export default function BookDetailsSection({ className = '', offerEndDate }: Boo
       )}
 
       {/* Awards */}
-      {layout?.showAwards !== false && (book?.awards?.length ?? 0) > 0 && (
+      {layout?.showAwards === true && (book?.awards?.length ?? 0) > 0 && (
         <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
           <h3 className="text-lg font-semibold text-white mb-4">Awards</h3>
           <div className="flex flex-wrap gap-2">
@@ -90,7 +90,7 @@ export default function BookDetailsSection({ className = '', offerEndDate }: Boo
       )}
 
       {/* Rankings */}
-      {layout?.showRankings !== false && book?.rankings && (
+      {layout?.showRankings === true && book?.rankings && (
         <div className="backdrop-blur-sm rounded-lg shadow-lg p-4 sm:p-6 border surface-alpha">
           <h3 className="text-lg font-semibold text-white mb-4">Rankings</h3>
           <ul className="list-disc pl-5 text-theme-secondary text-sm space-y-1">

@@ -6,7 +6,10 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  timeout: 30000, // 30 secondi timeout per test
+  expect: {
+    timeout: 10000, // 10 secondi timeout per expect
+  },
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
@@ -38,5 +41,8 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    timeout: 120000, // 2 minuti timeout per il server
   },
+  // Non mostrare il report HTML automaticamente
+  reporter: [['html', { open: 'never' }]],
 }) 

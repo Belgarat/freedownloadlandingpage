@@ -8,8 +8,20 @@
     "start": "next start",
     "lint": "next lint",
     "test": "playwright test",
-    "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed"
+    "test:headless": "playwright test --headed=false",
+    "test:auto": "timeout 300s npx playwright test --project=chromium || exit 1",
+    "test:component": "timeout 60s npx playwright test tests/components/ --project=chromium || exit 1",
+    "test:landing": "timeout 30s npx playwright test tests/landing-page.spec.ts --project=chromium || exit 1",
+    "test:ab-testing": "timeout 60s npx playwright test tests/ab-testing*.spec.ts --project=chromium || exit 1",
+    "test:api": "timeout 30s npx playwright test tests/api-*.spec.ts --project=chromium || exit 1",
+    "test:admin": "timeout 30s npx playwright test tests/admin.spec.ts --project=chromium || exit 1",
+    "test:auth": "timeout 30s npx playwright test tests/auth.spec.ts --project=chromium || exit 1",
+    "test:analytics": "timeout 30s npx playwright test tests/analytics-*.spec.ts --project=chromium || exit 1",
+    "test:cookie": "timeout 30s npx playwright test tests/cookie-*.spec.ts --project=chromium || exit 1",
+    "test:download": "timeout 30s npx playwright test tests/landing-page.spec.ts --grep='Download Page' --project=chromium || exit 1",
+    "test:all": "timeout 600s npx playwright test --project=chromium || exit 1",
+    "test:report": "playwright show-report",
+    "test:install": "playwright install"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",

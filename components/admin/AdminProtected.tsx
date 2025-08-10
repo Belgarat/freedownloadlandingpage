@@ -9,19 +9,13 @@ interface AdminProtectedProps {
 }
 
 export default function AdminProtected({ children }: AdminProtectedProps) {
-  console.log('[AdminProtected] Component rendered')
   const { isAuthenticated, isLoading } = useAuth()
-  const [forceUpdate, setForceUpdate] = useState(0)
   const [localAuthState, setLocalAuthState] = useState<boolean | null>(null)
-
-  console.log('[AdminProtected] State - isAuthenticated:', isAuthenticated, 'isLoading:', isLoading, 'localAuthState:', localAuthState)
 
   // Listen for auth-changed events
   useEffect(() => {
     const handleAuthChanged = (event: CustomEvent) => {
-      console.log('[AdminProtected] Auth-changed event received:', event.detail)
       setLocalAuthState(event.detail.isAuthenticated)
-      setForceUpdate(prev => prev + 1)
     }
 
     window.addEventListener('auth-changed', handleAuthChanged as EventListener)

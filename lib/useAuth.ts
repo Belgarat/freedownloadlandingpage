@@ -8,10 +8,7 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
 
-  // Debug: log state changes
-  useEffect(() => {
-    console.log('[useAuth] State changed - isAuthenticated:', isAuthenticated)
-  }, [isAuthenticated])
+
 
   useEffect(() => {
     checkAuth()
@@ -19,15 +16,12 @@ export function useAuth() {
 
   const checkAuth = async () => {
     try {
-      console.log('[useAuth] checkAuth called')
       const response = await fetch('/api/admin/auth', {
         method: 'GET',
         credentials: 'include',
       })
-      console.log('[useAuth] checkAuth response:', response.ok)
       setIsAuthenticated(response.ok)
     } catch {
-      console.log('[useAuth] checkAuth error')
       setIsAuthenticated(false)
     } finally {
       setIsLoading(false)
@@ -36,7 +30,6 @@ export function useAuth() {
 
   const login = async (password: string) => {
     try {
-      console.log('[useAuth] Login attempt starting...')
       const response = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: {
@@ -46,16 +39,10 @@ export function useAuth() {
         credentials: 'include',
       })
       
-      console.log('[useAuth] Login response status:', response.status)
-      
       if (response.ok) {
-        console.log('[useAuth] Login successful, setting isAuthenticated to true')
         setIsAuthenticated(true)
-        console.log('[useAuth] State set to true, no redirect - let component handle it')
-        // Don't redirect - let the component re-render naturally
         return true
       } else {
-        console.log('[useAuth] Login failed, setting isAuthenticated to false')
         setIsAuthenticated(false)
         return false
       }
@@ -68,22 +55,15 @@ export function useAuth() {
 
   const logout = async () => {
     try {
-      console.log('[useAuth] Logout attempt starting...')
       const response = await fetch('/api/admin/logout', {
         method: 'POST',
         credentials: 'include',
       })
       
-      console.log('[useAuth] Logout response status:', response.status)
-      
       if (response.ok) {
-        console.log('[useAuth] Logout successful, setting isAuthenticated to false')
         setIsAuthenticated(false)
-        console.log('[useAuth] State set to false, no redirect - let component handle it')
-        // Don't redirect - let the component re-render naturally
         return true
       } else {
-        console.log('[useAuth] Logout failed, but setting isAuthenticated to false')
         setIsAuthenticated(false)
         return false
       }

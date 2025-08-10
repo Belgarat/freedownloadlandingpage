@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/lib/useAuth'
 import AdminLogin from './AdminLogin'
+import { useEffect, useState } from 'react'
 
 interface AdminProtectedProps {
   children: React.ReactNode
@@ -10,8 +11,22 @@ interface AdminProtectedProps {
 export default function AdminProtected({ children }: AdminProtectedProps) {
   console.log('[AdminProtected] Component rendered')
   const { isAuthenticated, isLoading } = useAuth()
+  const [forceUpdate, setForceUpdate] = useState(0)
 
   console.log('[AdminProtected] State - isAuthenticated:', isAuthenticated, 'isLoading:', isLoading)
+
+  // Listen for auth-changed events
+  useEffect(() => {
+    const handleAuthChanged = (event: CustomEvent) => {
+      console.log('[AdminProtected] Auth-changed event received:', event.detail)
+      setForceUpdate(prev => prev + 1)
+    }
+
+    window.addEventListener('auth-changed', handleAuthChanged as EventListener)
+    return () => {
+      window.removeEventListener('auth-changed', handleAuthChanged as EventListener)
+    }
+  }, [])
 
   if (isLoading) {
     return (

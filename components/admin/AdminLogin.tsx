@@ -9,7 +9,7 @@ export default function AdminLogin() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
-  const { login } = useAuth()
+  const { login, checkAuth } = useAuth()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,6 +24,9 @@ export default function AdminLogin() {
         console.log('[AdminLogin] Login successful, clearing password')
         // Clear password field on success
         setPassword('')
+        // Force a re-render by calling checkAuth
+        console.log('[AdminLogin] Forcing re-check of authentication')
+        await checkAuth()
         // AdminProtected will automatically re-render and show the admin dashboard
       } else {
         console.log('[AdminLogin] Login failed, showing error')

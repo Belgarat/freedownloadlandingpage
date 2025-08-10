@@ -1,36 +1,30 @@
 'use client'
 
-import { useAuth } from '@/lib/auth'
+import { useAuth } from '@/lib/useAuth'
 import { useConfig } from '@/lib/useConfig'
 import { useState } from 'react'
 import AdminTopbar from '@/components/admin/AdminTopbar'
+import AdminLogin from '@/components/admin/AdminLogin'
 
 export default function SEOPage() {
-  const { isAuthenticated, login, logout } = useAuth()
-  const { seoConfig, saveConfig } = useConfig()
+  const { isAuthenticated, isLoading, logout } = useAuth()
+  const { seo, saveConfig } = useConfig()
   const [isSaving, setIsSaving] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
-  if (!isAuthenticated) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Admin Login
-          </h2>
-        </div>
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <button
-              onClick={login}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Login
-            </button>
-          </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading...</p>
         </div>
       </div>
     )
+  }
+
+  if (!isAuthenticated) {
+    return <AdminLogin />
   }
 
   const handleSave = async () => {

@@ -538,7 +538,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
             <select
               value={config.fonts.heading}
               onChange={(e) => onChange({...config, fonts: {...config.fonts, heading: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white admin-input"
             >
               {['Inter','Roboto','Open Sans','Lora','Merriweather','Montserrat','Nunito','Playfair Display','Source Serif Pro'].map(f => (
                 <option key={f} value={f}>{f}</option>
@@ -550,7 +550,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
             <select
               value={config.fonts.body}
               onChange={(e) => onChange({...config, fonts: {...config.fonts, body: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white admin-input"
             >
               {['Inter','Roboto','Open Sans','Lora','Merriweather','Montserrat','Nunito','Source Serif Pro'].map(f => (
                 <option key={f} value={f}>{f}</option>
@@ -562,7 +562,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
             <select
               value={config.fonts.mono}
               onChange={(e) => onChange({...config, fonts: {...config.fonts, mono: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white admin-input"
             >
               {['JetBrains Mono','Fira Mono'].map(f => (
                 <option key={f} value={f}>{f}</option>

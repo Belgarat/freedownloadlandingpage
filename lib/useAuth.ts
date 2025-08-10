@@ -48,9 +48,12 @@ export function useAuth() {
       if (response.ok) {
         console.log('[useAuth] Login successful, setting isAuthenticated to true')
         setIsAuthenticated(true)
-        console.log('[useAuth] State set to true, no redirect for now')
-        // Temporarily remove redirect to test state update
-        // router.push('/admin')
+        console.log('[useAuth] State set to true, will redirect after state update')
+        // Use setTimeout to ensure state update happens before redirect
+        setTimeout(() => {
+          console.log('[useAuth] Now redirecting to /admin')
+          router.push('/admin')
+        }, 100)
         return true
       } else {
         console.log('[useAuth] Login failed, setting isAuthenticated to false')

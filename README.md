@@ -2,7 +2,7 @@
 
 A beautiful Next.js 15 landing page for free ebook downloads with email collection, Resend integration, Supabase analytics tracking, and comprehensive Playwright testing. This is an example implementation of the Book Landing Stack framework.
 
-**Version 0.2.0** - Enhanced Authentication System & Real-time Analytics
+**Version 2.0.0-beta.1** - Enhanced Authentication System & Real-time Analytics
 
 ## Features
 
@@ -450,7 +450,7 @@ Book Landing Stack follows semantic versioning (SemVer):
 
 ## Changelog
 
-### v0.2.0 - Enhanced Authentication System & Real-time Analytics
+### v2.0.0-beta.1 - Enhanced Authentication System & Real-time Analytics
 - **🔐 Centralized Authentication**: Implemented robust `useAuth` hook with secure session management
 - **🔒 Enhanced Security**: HttpOnly cookies with HMAC signatures, middleware protection
 - **📊 Real-time Analytics**: Live dashboard with download, email, and page view statistics

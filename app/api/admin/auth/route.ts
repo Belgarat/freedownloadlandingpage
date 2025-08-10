@@ -43,12 +43,42 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    // This endpoint is used to check if the user is authenticated
-    // The middleware will handle the actual authentication check
-    // If this endpoint is reached, it means the user is authenticated
-    return NextResponse.json({ ok: true })
+    // Get the auth cookie from the request
+    const cookieHeader = request.headers.get('cookie')
+    const cookies = cookieHeader?.split(';').reduce((acc, cookie) => {
+      const [key, value] = cookie.trim().split('=')
+      acc[key] = value
+      return acc
+    }, {} as Record<string, string>)
+    
+    const token = cookies?.['admin_auth']
+    
+    if (!token) {
+      return NextResponse.json({ ok: false }, { status: 401 })
+    }
+    
+    // Verify the token
+    const [payloadB64, signatureB64] = token.split('.')
+    if (!payloadB64 || !signatureB64) {
+      return NextResponse.json({ ok: false }, { status: 401 })
+    }
+    
+    try {
+      const payload = JSON.parse(Buffer.from(payloadB64.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8'))
+      if (!payload.exp || typeof payload.exp !== 'number') {
+        return NextResponse.json({ ok: false }, { status: 401 })
+      }
+      if (payload.exp < Date.now()) {
+        return NextResponse.json({ ok: false }, { status: 401 })
+      }
+      
+      // Token is valid
+      return NextResponse.json({ ok: true })
+    } catch {
+      return NextResponse.json({ ok: false }, { status: 401 })
+    }
   } catch (e: any) {
     return NextResponse.json({ ok: false, error: e?.message || 'Auth check failed' }, { status: 500 })
   }

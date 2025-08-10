@@ -2,6 +2,8 @@
 
 A beautiful Next.js 15 landing page for free ebook downloads with email collection, Resend integration, Supabase analytics tracking, and comprehensive Playwright testing. This is an example implementation of the Book Landing Stack framework.
 
+**Version 0.2.0** - Enhanced Authentication System & Real-time Analytics
+
 ## Features
 
 - 🎨 Modern, responsive design with teal/cyan theme
@@ -16,7 +18,9 @@ A beautiful Next.js 15 landing page for free ebook downloads with email collecti
 - ♿ Accessibility optimized (ARIA, semantic HTML)
 - 🔍 SEO optimized (meta tags, structured data)
 - 📈 Performance optimized (image compression, lazy loading)
-- 🔐 Secure admin panel with password protection
+- 🔐 Enhanced admin panel with centralized authentication system
+- 🔒 Secure login/logout with HttpOnly cookies and middleware protection
+- 📊 Real-time analytics dashboard with live statistics
 - ⚙️ Dynamic configuration system with JSON files
 - 🎛️ User-friendly admin interface for content management
 - 📝 WYSIWYG editor for rich content editing
@@ -24,6 +28,7 @@ A beautiful Next.js 15 landing page for free ebook downloads with email collecti
 - 📧 Advanced email template system with placeholders
 - 🎯 Follow-up email automation
 - 🎨 Theme customization and development flags
+- 🧪 Comprehensive authentication testing with Playwright
 
 ## Book Information
 
@@ -182,19 +187,48 @@ npm run test:ui
 npm run test:headed
 ```
 
+## Enhanced Authentication System (v0.2.0)
+
+Book Landing Stack v0.2.0 introduces a robust, centralized authentication system with enhanced security and user experience:
+
+### Key Improvements
+
+- **Centralized Authentication**: Single `useAuth` hook manages all authentication state
+- **Secure Cookie Management**: HttpOnly cookies with HMAC signatures prevent XSS attacks
+- **Middleware Protection**: Server-side route protection with Next.js middleware
+- **Event-Driven Updates**: Custom events ensure real-time UI synchronization
+- **Comprehensive Testing**: Full Playwright test suite for authentication flows
+- **Centralized Logout**: `useLogout` hook provides consistent logout across all admin pages
+
+### Authentication Flow
+
+1. **Login**: Password-based authentication with secure token generation
+2. **Session Management**: Automatic session validation on each request
+3. **Route Protection**: Middleware prevents unauthorized access to admin routes
+4. **Logout**: Secure session termination with cookie cleanup
+5. **State Synchronization**: Real-time UI updates across all admin components
+
+### Security Features
+
+- **HttpOnly Cookies**: Prevents client-side access to authentication tokens
+- **HMAC Signatures**: Tamper-proof token validation
+- **Automatic Expiration**: Configurable session timeouts
+- **CSRF Protection**: Built-in protection against cross-site request forgery
+- **Secure Headers**: Proper security headers via Next.js middleware
+
 ## Admin Panel
 
 The project includes a secure admin panel accessible at `/admin` with:
 
-- **Password Protection**: Secure authentication with environment variable
+- **Enhanced Authentication**: Centralized login/logout system with secure sessions
+- **Real-time Analytics**: Live dashboard with download, email, and page view statistics
 - **Configuration Management**: Dynamic content editing through JSON files
 - **WYSIWYG Editor**: Rich text editing for content areas
 - **Email Template System**: Advanced template management with placeholders
 - **Real-time Updates**: Hot reload for instant configuration changes
-- **Analytics Dashboard**: Real-time statistics from Supabase
 - **Download Tracking**: Monitor ebook downloads and email collection
 - **Responsive Design**: Works on all devices
-- **Authentication & Sessions**: Server-side auth via HttpOnly cookies and middleware
+- **Multi-page Admin**: Separate sections for analytics, SEO, marketing, and configuration
 
 ### Admin Features
 
@@ -398,6 +432,29 @@ Post-Deploy Checklist
 - **Open Graph**: Social media sharing optimization
 - **Twitter Cards**: Twitter-specific meta tags
 - **Sitemap**: Automatic sitemap generation
+
+## Changelog
+
+### v0.2.0 - Enhanced Authentication System & Real-time Analytics
+- **🔐 Centralized Authentication**: Implemented robust `useAuth` hook with secure session management
+- **🔒 Enhanced Security**: HttpOnly cookies with HMAC signatures, middleware protection
+- **📊 Real-time Analytics**: Live dashboard with download, email, and page view statistics
+- **🔄 Event-Driven Updates**: Custom events ensure real-time UI synchronization across components
+- **🧪 Comprehensive Testing**: Full Playwright test suite for authentication flows
+- **🎯 Centralized Logout**: `useLogout` hook provides consistent logout across all admin pages
+- **📱 Multi-page Admin**: Separate sections for analytics, SEO, marketing, and configuration
+- **⚡ Performance**: Optimized authentication flow with minimal re-renders
+- **🛡️ Security**: CSRF protection, secure headers, automatic session expiration
+
+### v0.1.0 - Initial Release
+- **🎨 Modern Design**: Responsive landing page with teal/cyan theme
+- **📧 Email Collection**: Resend integration with email verification
+- **📊 Analytics**: Supabase tracking with conversion monitoring
+- **🔐 Admin Panel**: Password-protected configuration management
+- **⚙️ Dynamic Config**: JSON-based content management system
+- **📝 WYSIWYG Editor**: Rich text editing for content areas
+- **📧 Email Templates**: Advanced template system with placeholders
+- **🧪 Testing**: Comprehensive Playwright test suite
 
 ## About Book Landing Stack
 

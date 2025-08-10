@@ -8,6 +8,7 @@ interface AdminProtectedProps {
 }
 
 export default function AdminProtected({ children }: AdminProtectedProps) {
+  console.log('[AdminProtected] Component rendered')
   const { isAuthenticated, isLoading } = useAuth()
 
   console.log('[AdminProtected] State - isAuthenticated:', isAuthenticated, 'isLoading:', isLoading)

@@ -1,6 +1,5 @@
 import { Resend } from 'resend'
 import { getEbookEmailTemplate, getFollowUpEmailTemplate, EmailTemplateData } from './email-templates'
-import { BOOK_CONFIG, EMAIL_CONFIG } from './book-config'
 import configLoader from './config-loader'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -16,36 +15,32 @@ export const sendEbookEmail = async (data: EmailData) => {
     // Get config
     const config = await configLoader.loadConfig()
     const emailConfig = config.email
+    const bookConfig = config.book
 
-    // Replace placeholders in template
-    const htmlContent = emailConfig.templates.download.html
-      .replace(/{{downloadUrl}}/g, data.downloadUrl || BOOK_CONFIG.amazonUrl)
-      .replace(/{{name}}/g, data.name || 'there')
-      .replace(/{{bookTitle}}/g, BOOK_CONFIG.title)
-      .replace(/{{authorName}}/g, BOOK_CONFIG.author)
-      .replace(/{{goodreadsUrl}}/g, BOOK_CONFIG.goodreadsUrl || 'https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns')
-      .replace(/{{amazonUrl}}/g, BOOK_CONFIG.amazonUrl)
-      .replace(/{{substackUrl}}/g, BOOK_CONFIG.substackUrl || 'https://aroundscifi.substack.com/')
-      .replace(/{{substackName}}/g, BOOK_CONFIG.substackName || 'Around Sci-Fi')
-      .replace(/{{publisherUrl}}/g, BOOK_CONFIG.publisherUrl)
-      .replace(/{{publisherName}}/g, BOOK_CONFIG.publisher)
+    // Helper function to replace placeholders
+    const replacePlaceholders = (content: string) => {
+      return content
+        .replace(/{{downloadUrl}}/g, data.downloadUrl || bookConfig.amazonUrl)
+        .replace(/{{name}}/g, data.name || 'there')
+        .replace(/{{bookTitle}}/g, bookConfig.title)
+        .replace(/{{authorName}}/g, bookConfig.author)
+        .replace(/{{goodreadsUrl}}/g, bookConfig.goodreadsUrl || '')
+        .replace(/{{amazonUrl}}/g, bookConfig.amazonUrl)
+        .replace(/{{substackUrl}}/g, bookConfig.substackUrl || '')
+        .replace(/{{substackName}}/g, bookConfig.substackName || '')
+        .replace(/{{publisherUrl}}/g, bookConfig.publisherUrl)
+        .replace(/{{publisherName}}/g, bookConfig.publisher)
+    }
 
-    const textContent = emailConfig.templates.download.text
-      .replace(/{{downloadUrl}}/g, data.downloadUrl || BOOK_CONFIG.amazonUrl)
-      .replace(/{{name}}/g, data.name || 'there')
-      .replace(/{{bookTitle}}/g, BOOK_CONFIG.title)
-      .replace(/{{authorName}}/g, BOOK_CONFIG.author)
-      .replace(/{{goodreadsUrl}}/g, BOOK_CONFIG.goodreadsUrl || 'https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns')
-      .replace(/{{amazonUrl}}/g, BOOK_CONFIG.amazonUrl)
-      .replace(/{{substackUrl}}/g, BOOK_CONFIG.substackUrl || 'https://aroundscifi.substack.com/')
-      .replace(/{{substackName}}/g, BOOK_CONFIG.substackName || 'Around Sci-Fi')
-      .replace(/{{publisherUrl}}/g, BOOK_CONFIG.publisherUrl)
-      .replace(/{{publisherName}}/g, BOOK_CONFIG.publisher)
+    // Replace placeholders in all content
+    const htmlContent = replacePlaceholders(emailConfig.templates.download.html)
+    const textContent = replacePlaceholders(emailConfig.templates.download.text)
+    const subject = replacePlaceholders(emailConfig.templates.download.subject)
 
     const { data: emailData, error } = await resend.emails.send({
       from: `${emailConfig.sender.name} <${emailConfig.sender.email}>`,
       to: [data.email],
-      subject: emailConfig.templates.download.subject,
+      subject: subject,
       html: htmlContent,
       text: textContent
     })
@@ -71,36 +66,32 @@ export const sendFollowUpEmail = async (data: EmailData) => {
     // Get config
     const config = await configLoader.loadConfig()
     const emailConfig = config.email
+    const bookConfig = config.book
 
-    // Replace placeholders in template
-    const htmlContent = emailConfig.templates.followup.html
-      .replace(/{{downloadUrl}}/g, data.downloadUrl || BOOK_CONFIG.amazonUrl)
-      .replace(/{{name}}/g, data.name || 'there')
-      .replace(/{{bookTitle}}/g, BOOK_CONFIG.title)
-      .replace(/{{authorName}}/g, BOOK_CONFIG.author)
-      .replace(/{{goodreadsUrl}}/g, BOOK_CONFIG.goodreadsUrl || 'https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns')
-      .replace(/{{amazonUrl}}/g, BOOK_CONFIG.amazonUrl)
-      .replace(/{{substackUrl}}/g, BOOK_CONFIG.substackUrl || 'https://aroundscifi.substack.com/')
-      .replace(/{{substackName}}/g, BOOK_CONFIG.substackName || 'Around Sci-Fi')
-      .replace(/{{publisherUrl}}/g, BOOK_CONFIG.publisherUrl)
-      .replace(/{{publisherName}}/g, BOOK_CONFIG.publisher)
+    // Helper function to replace placeholders
+    const replacePlaceholders = (content: string) => {
+      return content
+        .replace(/{{downloadUrl}}/g, data.downloadUrl || bookConfig.amazonUrl)
+        .replace(/{{name}}/g, data.name || 'there')
+        .replace(/{{bookTitle}}/g, bookConfig.title)
+        .replace(/{{authorName}}/g, bookConfig.author)
+        .replace(/{{goodreadsUrl}}/g, bookConfig.goodreadsUrl || '')
+        .replace(/{{amazonUrl}}/g, bookConfig.amazonUrl)
+        .replace(/{{substackUrl}}/g, bookConfig.substackUrl || '')
+        .replace(/{{substackName}}/g, bookConfig.substackName || '')
+        .replace(/{{publisherUrl}}/g, bookConfig.publisherUrl)
+        .replace(/{{publisherName}}/g, bookConfig.publisher)
+    }
 
-    const textContent = emailConfig.templates.followup.text
-      .replace(/{{downloadUrl}}/g, data.downloadUrl || BOOK_CONFIG.amazonUrl)
-      .replace(/{{name}}/g, data.name || 'there')
-      .replace(/{{bookTitle}}/g, BOOK_CONFIG.title)
-      .replace(/{{authorName}}/g, BOOK_CONFIG.author)
-      .replace(/{{goodreadsUrl}}/g, BOOK_CONFIG.goodreadsUrl || 'https://www.goodreads.com/book/show/237833382-fish-cannot-carry-guns')
-      .replace(/{{amazonUrl}}/g, BOOK_CONFIG.amazonUrl)
-      .replace(/{{substackUrl}}/g, BOOK_CONFIG.substackUrl || 'https://aroundscifi.substack.com/')
-      .replace(/{{substackName}}/g, BOOK_CONFIG.substackName || 'Around Sci-Fi')
-      .replace(/{{publisherUrl}}/g, BOOK_CONFIG.publisherUrl)
-      .replace(/{{publisherName}}/g, BOOK_CONFIG.publisher)
+    // Replace placeholders in all content
+    const htmlContent = replacePlaceholders(emailConfig.templates.followup.html)
+    const textContent = replacePlaceholders(emailConfig.templates.followup.text)
+    const subject = replacePlaceholders(emailConfig.templates.followup.subject)
 
     const { data: emailData, error } = await resend.emails.send({
       from: `${emailConfig.sender.name} <${emailConfig.sender.email}>`,
       to: [data.email],
-      subject: emailConfig.templates.followup.subject,
+      subject: subject,
       html: htmlContent,
       text: textContent
     })

@@ -49,6 +49,12 @@
     "cyberpunkBooks": "#1"
   },
   "ebook": {
-    "defaultFormat": "pdf"
+    "defaultFormat": "pdf",
+    "pdf": {
+      "url": "https://sxzgxlcmbmmneyvn.public.blob.vercel-storage.com/ebooks/1754809067905-FishCanNotCarryGuns_v4_with_cover-QqHEMTzeWWruRbiOz5nCcLDtmwzewM.pdf",
+      "filename": "FishCanNotCarryGuns_v4_with_cover.pdf",
+      "size": "2.63 MB",
+      "uploadedAt": "2025-08-10T06:57:51.083Z"
+    }
   }
 }

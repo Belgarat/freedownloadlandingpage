@@ -1,8 +1,8 @@
 {
   "sender": {
-    "name": "Test Sender",
-    "email": "test@test.com",
-    "replyTo": "reply@test.com"
+    "name": "Michael B. Morgan",
+    "email": "onboarding@resend.dev",
+    "replyTo": "viacart@gmail.com"
   },
   "templates": {
     "download": {

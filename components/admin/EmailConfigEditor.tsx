@@ -123,7 +123,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                 type="text"
                 value={config.templates.download.subject}
                 onChange={(e) => onChange({...config, templates: {...config.templates, download: {...config.templates.download, subject: e.target.value}}})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Il tuo libro è pronto!"
               />
             </div>
@@ -144,7 +144,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                 value={config.templates.download.text || config.templates.download.message}
                 onChange={(e) => onChange({...config, templates: {...config.templates, download: {...config.templates.download, text: e.target.value}}})}
                 rows={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Scrivi il contenuto testuale dell'email..."
               />
               <p className="text-xs text-gray-500 mt-1">
@@ -172,7 +172,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                 type="text"
                 value={config.templates.followup.subject}
                 onChange={(e) => onChange({...config, templates: {...config.templates, followup: {...config.templates.followup, subject: e.target.value}}})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Hai dimenticato di scaricare il libro?"
               />
             </div>
@@ -193,7 +193,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                 value={config.templates.followup.text}
                 onChange={(e) => onChange({...config, templates: {...config.templates, followup: {...config.templates.followup, text: e.target.value}}})}
                 rows={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Scrivi il contenuto testuale dell'email di follow-up..."
               />
               <p className="text-xs text-gray-500 mt-1">

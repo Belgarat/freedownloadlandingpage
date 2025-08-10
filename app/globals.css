@@ -98,4 +98,21 @@
     background: color-mix(in srgb, var(--surface-bg) calc(var(--surface-bg-alpha) * 100%), transparent);
     border-color: color-mix(in srgb, var(--surface-border) calc(var(--surface-border-alpha) * 100%), transparent);
   }
+
+  /* Admin Panel Input Improvements */
+  .admin-input {
+    @apply text-gray-900 placeholder-gray-500 bg-white;
+  }
+  
+  .admin-input:focus {
+    @apply text-gray-900 placeholder-gray-400;
+  }
+  
+  .admin-textarea {
+    @apply text-gray-900 placeholder-gray-500 bg-white;
+  }
+  
+  .admin-textarea:focus {
+    @apply text-gray-900 placeholder-gray-400;
+  }
 } 

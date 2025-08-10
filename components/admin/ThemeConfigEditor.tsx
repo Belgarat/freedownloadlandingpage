@@ -319,7 +319,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
               <select
                 value={config.background?.gradientDirection || 'to bottom right'}
                 onChange={(e) => onChange({ ...config, background: { ...(config.background || {}), gradientDirection: e.target.value } })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               >
                 <option value="to bottom">to bottom</option>
                 <option value="to right">to right</option>
@@ -339,7 +339,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
               <select
                 value={config.surface?.mode || 'auto'}
                 onChange={(e) => onChange({ ...config, surface: { ...(config.surface || {}), mode: e.target.value as 'auto' | 'custom' } })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               >
                 <option value="auto">Auto (recommended)</option>
                 <option value="custom">Custom</option>
@@ -606,7 +606,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
           <select
             value={config.layout.type}
             onChange={(e) => onChange({...config, layout: {...config.layout, type: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
           >
             <option value="default">Default</option>
             <option value="minimal">Minimal</option>
@@ -684,7 +684,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
               type="text"
               value={config.spacing.container}
               onChange={(e) => onChange({...config, spacing: {...config.spacing, container: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               placeholder="max-w-7xl mx-auto px-4"
             />
           </div>
@@ -694,7 +694,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
               type="text"
               value={config.spacing.section}
               onChange={(e) => onChange({...config, spacing: {...config.spacing, section: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               placeholder="py-16"
             />
           </div>
@@ -704,7 +704,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
               type="text"
               value={config.spacing.element}
               onChange={(e) => onChange({...config, spacing: {...config.spacing, element: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               placeholder="p-6"
             />
           </div>
@@ -734,7 +734,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
               type="text"
               value={config.animations.duration}
               onChange={(e) => onChange({...config, animations: {...config.animations, duration: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               placeholder="300ms"
             />
           </div>
@@ -744,7 +744,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
               type="text"
               value={config.animations.easing}
               onChange={(e) => onChange({...config, animations: {...config.animations, easing: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               placeholder="ease-in-out"
             />
           </div>

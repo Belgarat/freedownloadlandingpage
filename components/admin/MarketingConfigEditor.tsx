@@ -77,7 +77,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
                 type="datetime-local"
                 value={config.offer.endDate}
                 onChange={(e) => onChange({ ...config, offer: { ...config.offer, endDate: e.target.value } })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               />
               <button type="button" onClick={setEndDatePlus30} className="px-2 py-2 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">+30 giorni</button>
             </div>
@@ -89,7 +89,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
               type="text"
               value={config.offer.limitedText}
               onChange={(e) => onChange({ ...config, offer: { ...config.offer, limitedText: e.target.value } })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               placeholder="Limited time offer"
             />
             <div className="flex items-center gap-2 mt-2">
@@ -111,7 +111,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
             type="text"
             value={config.cta.primary.text}
             onChange={(e) => onChange({...config, cta: {...config.cta, primary: {...config.cta.primary, text: e.target.value}}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Download Free Ebook"
           />
         </div>
@@ -122,7 +122,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
             type="text"
             value={config.cta.primary.subtext}
             onChange={(e) => onChange({...config, cta: {...config.cta, primary: {...config.cta.primary, subtext: e.target.value}}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Get your free copy now"
           />
         </div>
@@ -133,7 +133,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
             type="text"
             value={config.cta.primary.loadingText}
             onChange={(e) => onChange({...config, cta: {...config.cta, primary: {...config.cta.primary, loadingText: e.target.value}}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Preparing download..."
           />
         </div>
@@ -144,7 +144,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
             type="text"
             value={config.cta.primary.successText}
             onChange={(e) => onChange({...config, cta: {...config.cta, primary: {...config.cta.primary, successText: e.target.value}}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Download started!"
           />
         </div>
@@ -155,7 +155,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
             type="text"
             value={config.cta.primary.errorText}
             onChange={(e) => onChange({...config, cta: {...config.cta, primary: {...config.cta.primary, errorText: e.target.value}}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Something went wrong"
           />
         </div>
@@ -265,7 +265,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
             type="text"
             value={config.cta.newsletter.text}
             onChange={(e) => onChange({...config, cta: {...config.cta, newsletter: {...config.cta.newsletter, text: e.target.value}}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Subscribe to Updates"
           />
         </div>
@@ -276,7 +276,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
             type="text"
             value={config.cta.newsletter.placeholder}
             onChange={(e) => onChange({...config, cta: {...config.cta, newsletter: {...config.cta.newsletter, placeholder: e.target.value}}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Enter your email"
           />
         </div>
@@ -287,7 +287,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
             type="url"
             value={config.cta.newsletter.url}
             onChange={(e) => onChange({...config, cta: {...config.cta, newsletter: {...config.cta.newsletter, url: e.target.value}}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="https://substack.com"
           />
         </div>
@@ -307,21 +307,21 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
                 type="text"
                 value={config.modal.success.title}
                 onChange={(e) => onChange({...config, modal: {...config.modal, success: {...config.modal.success, title: e.target.value}}})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Download Started!"
               />
               <textarea
                 value={config.modal.success.message}
                 onChange={(e) => onChange({...config, modal: {...config.modal, success: {...config.modal.success, message: e.target.value}}})}
                 rows={2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Check your email for the download link"
               />
               <input
                 type="text"
                 value={config.modal.success.buttonText}
                 onChange={(e) => onChange({...config, modal: {...config.modal, success: {...config.modal.success, buttonText: e.target.value}}})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Close"
               />
             </div>
@@ -334,21 +334,21 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
                 type="text"
                 value={config.modal.error.title}
                 onChange={(e) => onChange({...config, modal: {...config.modal, error: {...config.modal.error, title: e.target.value}}})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Oops!"
               />
               <textarea
                 value={config.modal.error.message}
                 onChange={(e) => onChange({...config, modal: {...config.modal, error: {...config.modal.error, message: e.target.value}}})}
                 rows={2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Something went wrong. Please try again."
               />
               <input
                 type="text"
                 value={config.modal.error.buttonText}
                 onChange={(e) => onChange({...config, modal: {...config.modal, error: {...config.modal.error, buttonText: e.target.value}}})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Try Again"
               />
             </div>

@@ -93,7 +93,7 @@ export default function ContentConfigEditor({ config, onChange }: ContentConfigE
                     newStories[index] = { ...story, title: e.target.value }
                     onChange({ ...config, stories: newStories })
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                   placeholder="Story title"
                 />
                 <textarea
@@ -104,7 +104,7 @@ export default function ContentConfigEditor({ config, onChange }: ContentConfigE
                     onChange({ ...config, stories: newStories })
                   }}
                   rows={2}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                   placeholder="Story description"
                 />
                 <WYSIWYGEditor
@@ -157,7 +157,7 @@ export default function ContentConfigEditor({ config, onChange }: ContentConfigE
                     onChange({ ...config, testimonials: newTestimonials })
                   }}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                   placeholder="Testimonial text"
                 />
                 <div className="grid grid-cols-3 gap-2">
@@ -222,7 +222,7 @@ export default function ContentConfigEditor({ config, onChange }: ContentConfigE
               type="text"
               value={config.footer.copyright}
               onChange={(e) => onChange({ ...config, footer: { ...config.footer, copyright: e.target.value } })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               placeholder="© 2025 All rights reserved"
             />
           </div>
@@ -232,7 +232,7 @@ export default function ContentConfigEditor({ config, onChange }: ContentConfigE
               type="text"
               value={config.footer.supportText}
               onChange={(e) => onChange({ ...config, footer: { ...config.footer, supportText: e.target.value } })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               placeholder="Need help? Contact us"
             />
           </div>

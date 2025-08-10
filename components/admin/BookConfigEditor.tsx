@@ -60,7 +60,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.title}
                 onChange={(e) => onChange({ ...config, title: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Titolo del libro"
               />
             </div>
@@ -70,7 +70,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.subtitle}
                 onChange={(e) => onChange({ ...config, subtitle: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Sottotitolo"
               />
             </div>
@@ -83,7 +83,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.author}
                 onChange={(e) => onChange({ ...config, author: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Nome autore"
               />
             </div>
@@ -132,7 +132,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.publisher}
                 onChange={(e) => onChange({ ...config, publisher: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Nome editore"
               />
             </div>
@@ -142,7 +142,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="url"
                 value={config.publisherUrl}
                 onChange={(e) => onChange({ ...config, publisherUrl: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="https://example.com"
               />
             </div>
@@ -154,7 +154,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.publisherTagline}
                 onChange={(e) => onChange({ ...config, publisherTagline: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Es. Be independent, be unique"
               />
             </div>
@@ -164,7 +164,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.substackName}
                 onChange={(e) => onChange({ ...config, substackName: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Around Sci-Fi"
               />
             </div>
@@ -181,7 +181,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="url"
                 value={config.amazonUrl}
                 onChange={(e) => onChange({ ...config, amazonUrl: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="https://amazon.com/dp/..."
               />
             </div>
@@ -191,7 +191,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="url"
                 value={config.goodreadsUrl}
                 onChange={(e) => onChange({ ...config, goodreadsUrl: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="https://goodreads.com/book/show/..."
               />
             </div>
@@ -202,7 +202,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
               type="url"
               value={config.substackUrl}
               onChange={(e) => onChange({ ...config, substackUrl: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               placeholder="https://your-substack.substack.com/"
             />
           </div>
@@ -218,7 +218,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.publicationDate}
                 onChange={(e) => onChange({ ...config, publicationDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="9 July 2025"
               />
             </div>
@@ -228,7 +228,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.isbn}
                 onChange={(e) => onChange({ ...config, isbn: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="979-..."
               />
             </div>
@@ -241,7 +241,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.asin}
                 onChange={(e) => onChange({ ...config, asin: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="B0..."
               />
             </div>
@@ -251,7 +251,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.fileSize}
                 onChange={(e) => onChange({ ...config, fileSize: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="2.1 MB"
               />
             </div>
@@ -265,7 +265,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 min={0}
                 value={config.pageCount}
                 onChange={(e) => onChange({ ...config, pageCount: parseInt(e.target.value || '0', 10) })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               />
             </div>
             <div>
@@ -274,7 +274,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.language}
                 onChange={(e) => onChange({ ...config, language: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="English"
               />
             </div>
@@ -287,7 +287,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 type="text"
                 value={config.format}
                 onChange={(e) => onChange({ ...config, format: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="Kindle Edition"
               />
             </div>
@@ -300,7 +300,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 max={5}
                 value={config.rating}
                 onChange={(e) => onChange({ ...config, rating: parseFloat(e.target.value || '0') })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
               />
             </div>
           </div>
@@ -312,7 +312,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
               min={0}
               value={config.reviewCount}
               onChange={(e) => onChange({ ...config, reviewCount: parseInt(e.target.value || '0', 10) })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             />
           </div>
         </div>
@@ -339,7 +339,7 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
                 min={0}
                 value={config.price ?? ''}
                 onChange={(e) => onChange({ ...config, price: e.target.value === '' ? null : parseFloat(e.target.value) })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
                 placeholder="9.99"
               />
             </div>

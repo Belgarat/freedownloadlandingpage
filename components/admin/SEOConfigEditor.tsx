@@ -58,7 +58,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="text"
             value={config.meta.title}
             onChange={(e) => onChange({...config, meta: {...config.meta, title: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Book Title - Author Name"
           />
         </div>
@@ -69,7 +69,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             value={config.meta.description}
             onChange={(e) => onChange({...config, meta: {...config.meta, description: e.target.value}})}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="A compelling description of the book..."
           />
         </div>
@@ -80,7 +80,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="text"
             value={config.meta.keywords}
             onChange={(e) => onChange({...config, meta: {...config.meta, keywords: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="sci-fi, dystopian, cyberpunk, free ebook"
           />
         </div>
@@ -91,7 +91,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="text"
             value={config.meta.author}
             onChange={(e) => onChange({...config, meta: {...config.meta, author: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Author Name"
           />
         </div>
@@ -102,7 +102,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="text"
             value={config.meta.robots}
             onChange={(e) => onChange({...config, meta: {...config.meta, robots: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="index, follow"
           />
         </div>
@@ -113,7 +113,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="url"
             value={config.meta.canonical}
             onChange={(e) => onChange({...config, meta: {...config.meta, canonical: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="https://example.com/book"
           />
         </div>
@@ -133,7 +133,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="text"
             value={config.openGraph.title}
             onChange={(e) => onChange({...config, openGraph: {...config.openGraph, title: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Book Title - Author Name"
           />
         </div>
@@ -144,7 +144,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             value={config.openGraph.description}
             onChange={(e) => onChange({...config, openGraph: {...config.openGraph, description: e.target.value}})}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="A compelling description for social media..."
           />
         </div>
@@ -155,7 +155,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="text"
             value={config.openGraph.type}
             onChange={(e) => onChange({...config, openGraph: {...config.openGraph, type: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="website"
           />
         </div>
@@ -166,7 +166,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="url"
             value={config.openGraph.url}
             onChange={(e) => onChange({...config, openGraph: {...config.openGraph, url: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="https://example.com/book"
           />
         </div>
@@ -177,7 +177,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="url"
             value={config.openGraph.image}
             onChange={(e) => onChange({...config, openGraph: {...config.openGraph, image: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="https://example.com/book-cover.jpg"
           />
         </div>
@@ -188,7 +188,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="text"
             value={config.openGraph.siteName}
             onChange={(e) => onChange({...config, openGraph: {...config.openGraph, siteName: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Book Landing Stack"
           />
         </div>
@@ -207,7 +207,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
           <select
             value={config.twitter.card}
             onChange={(e) => onChange({...config, twitter: {...config.twitter, card: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
           >
             <option value="summary">Summary</option>
             <option value="summary_large_image">Summary Large Image</option>
@@ -222,7 +222,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="text"
             value={config.twitter.title}
             onChange={(e) => onChange({...config, twitter: {...config.twitter, title: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="Book Title - Author Name"
           />
         </div>
@@ -233,7 +233,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             value={config.twitter.description}
             onChange={(e) => onChange({...config, twitter: {...config.twitter, description: e.target.value}})}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="A compelling description for Twitter..."
           />
         </div>
@@ -244,7 +244,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             type="url"
             value={config.twitter.image}
             onChange={(e) => onChange({...config, twitter: {...config.twitter, image: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             placeholder="https://example.com/book-cover.jpg"
           />
         </div>
@@ -352,7 +352,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
               step="0.1"
               value={config.sitemap.priority}
               onChange={(e) => onChange({...config, sitemap: {...config.sitemap, priority: parseFloat(e.target.value)}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             />
           </div>
           <div>
@@ -360,7 +360,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
             <select
               value={config.sitemap.changefreq}
               onChange={(e) => onChange({...config, sitemap: {...config.sitemap, changefreq: e.target.value}})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
             >
               <option value="always">Always</option>
               <option value="hourly">Hourly</option>

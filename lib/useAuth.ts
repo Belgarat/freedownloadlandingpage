@@ -68,18 +68,30 @@ export function useAuth() {
 
   const logout = async () => {
     try {
-      await fetch('/api/admin/logout', {
+      console.log('[useAuth] Logout attempt starting...')
+      const response = await fetch('/api/admin/logout', {
         method: 'POST',
         credentials: 'include',
       })
-      setIsAuthenticated(false)
-      // Redirect to admin login page after logout
-      router.push('/admin')
+      
+      console.log('[useAuth] Logout response status:', response.status)
+      
+      if (response.ok) {
+        console.log('[useAuth] Logout successful, setting isAuthenticated to false')
+        setIsAuthenticated(false)
+        console.log('[useAuth] State set to false, no redirect - let component handle it')
+        // Don't redirect - let the component re-render naturally
+        return true
+      } else {
+        console.log('[useAuth] Logout failed, but setting isAuthenticated to false')
+        setIsAuthenticated(false)
+        return false
+      }
     } catch (error) {
-      console.error('Logout error:', error)
+      console.error('[useAuth] Logout error:', error)
       // Even if logout fails, set as not authenticated
       setIsAuthenticated(false)
-      router.push('/admin')
+      return false
     }
   }
 

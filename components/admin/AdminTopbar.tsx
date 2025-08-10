@@ -12,7 +12,20 @@ const nav = [
 
 export default function AdminTopbar() {
   const pathname = usePathname()
-  const { logout } = useAuth()
+  const { logout, checkAuth } = useAuth()
+
+  const handleLogout = async () => {
+    console.log('[AdminTopbar] Calling logout function...')
+    const success = await logout()
+    console.log('[AdminTopbar] Logout result:', success)
+    if (success) {
+      console.log('[AdminTopbar] Logout successful, forcing re-check of authentication')
+      await checkAuth()
+      // Dispatch custom event to force re-render
+      console.log('[AdminTopbar] Dispatching auth-changed event')
+      window.dispatchEvent(new CustomEvent('auth-changed', { detail: { isAuthenticated: false } }))
+    }
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/60">
@@ -44,7 +57,7 @@ export default function AdminTopbar() {
             View site
           </Link>
           <button
-            onClick={logout}
+            onClick={handleLogout}
             className="inline-flex items-center rounded-md bg-gray-900 px-3 py-1.5 text-sm text-white hover:bg-gray-800"
           >
             Logout

@@ -5,6 +5,7 @@ import { BookConfig } from '@/lib/config-loader'
 import WYSIWYGEditor from '@/components/WYSIWYGEditor'
 import CoverUploader from '@/components/admin/CoverUploader'
 import TagInput from '@/components/admin/TagInput'
+import EbookUploader from '@/components/admin/EbookUploader'
 
 interface BookConfigEditorProps {
   config: BookConfig
@@ -12,7 +13,7 @@ interface BookConfigEditorProps {
 }
 
 export default function BookConfigEditor({ config, onChange }: BookConfigEditorProps) {
-  const [activeTab, setActiveTab] = useState<'base' | 'content' | 'publisher' | 'links' | 'metadata' | 'pricing' | 'categories'>('base')
+  const [activeTab, setActiveTab] = useState<'base' | 'content' | 'publisher' | 'links' | 'metadata' | 'pricing' | 'categories' | 'ebook'>('base')
 
   const tabs = [
     { id: 'base', label: 'Base' },
@@ -21,7 +22,8 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
     { id: 'links', label: 'Link' },
     { id: 'metadata', label: 'Metadata' },
     { id: 'pricing', label: 'Prezzo' },
-    { id: 'categories', label: 'Categorie' }
+    { id: 'categories', label: 'Categorie' },
+    { id: 'ebook', label: 'Ebook Files' }
   ] as const
 
   return (
@@ -354,6 +356,15 @@ export default function BookConfigEditor({ config, onChange }: BookConfigEditorP
             placeholder="Aggiungi categoria e premi Invio"
           />
           <p className="text-xs text-gray-500">Suggerimento: puoi incollare un elenco separato da virgole o righe.</p>
+        </div>
+      )}
+
+      {activeTab === 'ebook' && (
+        <div>
+          <EbookUploader
+            value={config.ebook || { defaultFormat: 'pdf' }}
+            onChange={(ebookConfig) => onChange({ ...config, ebook: ebookConfig })}
+          />
         </div>
       )}
     </div>

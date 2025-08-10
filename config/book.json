@@ -47,5 +47,8 @@
     "sciFiAnthologies": "#1",
     "cyberpunkSciFi": "#1",
     "cyberpunkBooks": "#1"
+  },
+  "ebook": {
+    "defaultFormat": "pdf"
   }
 }

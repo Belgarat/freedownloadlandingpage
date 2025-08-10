@@ -47,6 +47,21 @@ export interface BookConfig {
     cyberpunkSciFi: string
     cyberpunkBooks: string
   }
+  ebook?: {
+    pdf?: {
+      url: string
+      filename: string
+      size: string
+      uploadedAt: string
+    }
+    epub?: {
+      url: string
+      filename: string
+      size: string
+      uploadedAt: string
+    }
+    defaultFormat: 'pdf' | 'epub'
+  }
 }
 
 export interface MarketingConfig {

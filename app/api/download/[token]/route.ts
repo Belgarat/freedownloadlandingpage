@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { readFileSync } from 'fs'
-import { join } from 'path'
+import configLoader from '@/lib/config-loader'
 
 export async function GET(
   request: NextRequest,
@@ -10,58 +9,59 @@ export async function GET(
   try {
     const { token } = await params
 
-    if (!token) {
-      return NextResponse.json(
-        { error: 'Download token is required' },
-        { status: 400 }
-      )
-    }
-
-    // Validate token in database
+    // Validate token
     const { data: tokenData, error: tokenError } = await supabaseAdmin
       .from('download_tokens')
       .select('*')
       .eq('token', token)
+      .eq('used', false)
+      .gte('expires_at', new Date().toISOString())
       .single()
 
     if (tokenError || !tokenData) {
       return NextResponse.json(
         { error: 'Invalid or expired download link' },
+        { status: 400 }
+      )
+    }
+
+    // Load book configuration
+    const config = await configLoader.loadConfig()
+    const ebookConfig = config.book.ebook
+
+    if (!ebookConfig) {
+      return NextResponse.json(
+        { error: 'No ebook files configured' },
+        { status: 500 }
+      )
+    }
+
+    // Get the requested format from query params, or use default
+    const url = new URL(request.url)
+    const requestedFormat = url.searchParams.get('format') as 'pdf' | 'epub' | null
+    const format = requestedFormat && ebookConfig[requestedFormat] ? requestedFormat : ebookConfig.defaultFormat
+
+    const ebookFile = ebookConfig[format]
+    if (!ebookFile) {
+      return NextResponse.json(
+        { error: `No ${format.toUpperCase()} file available` },
         { status: 404 }
       )
     }
 
-    // Check if token is expired
-    const now = new Date()
-    const expiresAt = new Date(tokenData.expires_at)
-    
-    if (now > expiresAt) {
-      return NextResponse.json(
-        { error: 'Download link has expired' },
-        { status: 410 }
-      )
-    }
+    // Mark token as used
+    await supabaseAdmin
+      .from('download_tokens')
+      .update({ used: true })
+      .eq('token', token)
 
-    // Check if token has already been used (only after 24 hours)
-    const tokenCreatedAt = new Date(tokenData.created_at)
-    const hoursSinceCreation = (now.getTime() - tokenCreatedAt.getTime()) / (1000 * 60 * 60)
-    
-    if (hoursSinceCreation > 24) {
-      return NextResponse.json(
-        { error: 'Download link has expired (24 hours)' },
-        { status: 410 }
-      )
-    }
-
-    // Note: We don't mark token as used immediately - it can be used multiple times within 24 hours
-
-    // Track download request in analytics (with consent)
+    // Track download in analytics
     await supabaseAdmin
       .from('analytics')
       .insert([
         {
           email: tokenData.email,
-          action: 'download_requested',
+          action: 'download_completed',
           timestamp: new Date().toISOString(),
           user_agent: request.headers.get('user-agent') || 'unknown',
           referrer: request.headers.get('referer') || 'unknown',
@@ -69,46 +69,16 @@ export async function GET(
                      request.headers.get('x-real-ip') || 
                      'unknown',
           created_at: new Date().toISOString(),
-          metadata: JSON.stringify({
-            token_id: tokenData.id,
-            file_size: '2.1MB', // Approximate PDF size
-            download_method: 'direct_link'
-          })
         }
       ])
 
-    // Always track anonymously (GDPR compliant)
-    const { AnonymousCounterService } = await import('@/lib/anonymous-counters')
-    await AnonymousCounterService.incrementDownloads()
-
-    // Serve the PDF file
-    try {
-      const filePath = join(process.cwd(), 'public', 'ebooks', 'fish-cannot-carry-guns.pdf')
-      const fileBuffer = readFileSync(filePath)
-      
-      return new NextResponse(fileBuffer, {
-        headers: {
-          'Content-Type': 'application/pdf',
-          'Content-Disposition': 'inline; filename="fish-cannot-carry-guns.pdf"',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-          'X-Download-Token': token, // Include token for client-side tracking
-          'X-File-Size': fileBuffer.length.toString() // Include file size
-        }
-      })
-    } catch (fileError) {
-      console.error('File read error:', fileError)
-      return NextResponse.json(
-        { error: 'Ebook file not found' },
-        { status: 404 }
-      )
-    }
+    // Redirect to the actual file URL
+    return NextResponse.redirect(ebookFile.url)
 
   } catch (error) {
     console.error('Download error:', error)
     return NextResponse.json(
-      { error: 'Failed to process download request' },
+      { error: 'Download failed' },
       { status: 500 }
     )
   }

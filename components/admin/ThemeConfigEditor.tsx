@@ -575,19 +575,19 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
         {/* Live preview */}
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="rounded border p-3">
-            <div className="text-xs text-gray-500 mb-1">Heading</div>
-            <div style={{ fontFamily: 'var(--font-heading, inherit)' }} className="text-lg">The quick brown fox</div>
-            <div style={{ fontFamily: 'var(--font-heading, inherit)' }} className="text-2xl font-semibold">Jumps over the lazy dog</div>
+            <div className="text-xs text-gray-600 mb-1 font-medium">Heading</div>
+            <div style={{ fontFamily: 'var(--font-heading, inherit)' }} className="text-lg text-gray-900">The quick brown fox</div>
+            <div style={{ fontFamily: 'var(--font-heading, inherit)' }} className="text-2xl font-semibold text-gray-900">Jumps over the lazy dog</div>
           </div>
           <div className="rounded border p-3">
-            <div className="text-xs text-gray-500 mb-1">Body</div>
-            <p style={{ fontFamily: 'var(--font-body, inherit)' }} className="text-sm leading-relaxed">
+            <div className="text-xs text-gray-600 mb-1 font-medium">Body</div>
+            <p style={{ fontFamily: 'var(--font-body, inherit)' }} className="text-sm leading-relaxed text-gray-900">
               Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live blind texts.
             </p>
           </div>
           <div className="rounded border p-3">
-            <div className="text-xs text-gray-500 mb-1">Mono</div>
-            <pre style={{ fontFamily: 'var(--font-mono, monospace)' }} className="text-xs bg-gray-50 p-2 rounded overflow-x-auto">
+            <div className="text-xs text-gray-600 mb-1 font-medium">Mono</div>
+            <pre style={{ fontFamily: 'var(--font-mono, monospace)' }} className="text-xs bg-gray-50 p-2 rounded overflow-x-auto text-gray-900">
 {`function greet(name) {
   return 'Hello, ' + name
 }`}
@@ -606,7 +606,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
           <select
             value={config.layout.type}
             onChange={(e) => onChange({...config, layout: {...config.layout, type: e.target.value}})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
           >
             <option value="default">Default</option>
             <option value="minimal">Minimal</option>

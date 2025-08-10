@@ -1,12 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
 
 
 

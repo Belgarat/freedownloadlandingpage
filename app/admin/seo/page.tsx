@@ -43,7 +43,7 @@ export default function SEOPage() {
         setSaveStatus('error')
         setTimeout(() => setSaveStatus('idle'), 2000)
       }
-    } catch (error) {
+    } catch {
       setSaveStatus('error')
       setTimeout(() => setSaveStatus('idle'), 2000)
     } finally {

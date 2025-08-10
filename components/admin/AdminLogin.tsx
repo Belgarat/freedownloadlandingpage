@@ -1,14 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/useAuth'
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const router = useRouter()
   const { login, checkAuth } = useAuth()
 
   const handleLogin = async (e: React.FormEvent) => {

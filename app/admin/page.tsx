@@ -3,10 +3,12 @@
 import { useRouter } from 'next/navigation'
 import { Settings, BookOpen, Megaphone, Search, LogOut } from 'lucide-react'
 import { useLogout } from '@/lib/useLogout'
+import { useStats } from '@/lib/useStats'
 import AdminProtected from '@/components/admin/AdminProtected'
 
 export default function AdminPage() {
   const { handleLogout } = useLogout()
+  const { stats, loading: statsLoading } = useStats()
   const router = useRouter()
 
   const adminSections = [
@@ -124,7 +126,7 @@ export default function AdminPage() {
                           Total Downloads
                         </dt>
                         <dd className="text-lg font-medium text-gray-900">
-                          Loading...
+                          {statsLoading ? 'Loading...' : (stats?.totalDownloads || 0)}
                         </dd>
                       </dl>
                     </div>
@@ -144,7 +146,7 @@ export default function AdminPage() {
                           Email Submissions
                         </dt>
                         <dd className="text-lg font-medium text-gray-900">
-                          Loading...
+                          {statsLoading ? 'Loading...' : (stats?.totalEmails || 0)}
                         </dd>
                       </dl>
                     </div>
@@ -164,7 +166,7 @@ export default function AdminPage() {
                           Page Views
                         </dt>
                         <dd className="text-lg font-medium text-gray-900">
-                          Loading...
+                          {statsLoading ? 'Loading...' : (stats?.anonymousVisits || 0)}
                         </dd>
                       </dl>
                     </div>

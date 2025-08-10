@@ -19,9 +19,9 @@ export default function AdminLogin() {
     try {
       const success = await login(password)
       if (success) {
-        // Redirect to admin dashboard after successful login
-        router.push('/admin')
-        router.refresh()
+        // Clear password field on success
+        setPassword('')
+        // AdminProtected will automatically re-render and show the admin dashboard
       } else {
         setError('Invalid password')
       }

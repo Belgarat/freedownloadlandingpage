@@ -28,6 +28,7 @@ export function useAuth() {
 
   const login = async (password: string) => {
     try {
+      console.log('[useAuth] Login attempt starting...')
       const response = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: {
@@ -37,17 +38,23 @@ export function useAuth() {
         credentials: 'include',
       })
       
+      console.log('[useAuth] Login response status:', response.status)
+      
       if (response.ok) {
+        console.log('[useAuth] Login successful, setting isAuthenticated to true')
         setIsAuthenticated(true)
+        console.log('[useAuth] About to redirect to /admin')
         // Redirect to admin dashboard after successful login
         router.push('/admin')
+        console.log('[useAuth] Redirect called')
         return true
       } else {
+        console.log('[useAuth] Login failed, setting isAuthenticated to false')
         setIsAuthenticated(false)
         return false
       }
     } catch (error) {
-      console.error('Login error:', error)
+      console.error('[useAuth] Login error:', error)
       setIsAuthenticated(false)
       return false
     }

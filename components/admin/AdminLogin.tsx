@@ -17,12 +17,16 @@ export default function AdminLogin() {
     setError('')
 
     try {
+      console.log('[AdminLogin] Calling login function...')
       const success = await login(password)
+      console.log('[AdminLogin] Login result:', success)
       if (success) {
+        console.log('[AdminLogin] Login successful, clearing password')
         // Clear password field on success
         setPassword('')
         // AdminProtected will automatically re-render and show the admin dashboard
       } else {
+        console.log('[AdminLogin] Login failed, showing error')
         setError('Invalid password')
       }
     } catch {

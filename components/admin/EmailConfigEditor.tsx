@@ -260,16 +260,18 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
           {/* Placeholder Help */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <h4 className="text-sm font-medium text-blue-900 mb-2">Placeholders Disponibili</h4>
-                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-               <div><code className="bg-blue-100 px-1 rounded">{'{{downloadUrl}}'}</code> - Link download</div>
-               <div><code className="bg-blue-100 px-1 rounded">{'{{name}}'}</code> - Nome utente</div>
-               <div><code className="bg-blue-100 px-1 rounded">{'{{bookTitle}}'}</code> - Titolo libro</div>
-               <div><code className="bg-blue-100 px-1 rounded">{'{{authorName}}'}</code> - Nome autore</div>
-               <div><code className="bg-blue-100 px-1 rounded">{'{{goodreadsUrl}}'}</code> - URL Goodreads</div>
-               <div><code className="bg-blue-100 px-1 rounded">{'{{amazonUrl}}'}</code> - URL Amazon</div>
-               <div><code className="bg-blue-100 px-1 rounded">{'{{substackUrl}}'}</code> - URL Substack</div>
-               <div><code className="bg-blue-100 px-1 rounded">{'{{publisherUrl}}'}</code> - URL Publisher</div>
-             </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs">
+              <div><code className="bg-blue-200 px-1 rounded text-blue-900 font-medium">{'{{downloadUrl}}'}</code> <span className="text-blue-800 font-medium">- Link download</span></div>
+              <div><code className="bg-blue-200 px-1 rounded text-blue-900 font-medium">{'{{name}}'}</code> <span className="text-blue-800 font-medium">- Nome utente</span></div>
+              <div><code className="bg-blue-200 px-1 rounded text-blue-900 font-medium">{'{{bookTitle}}'}</code> <span className="text-blue-800 font-medium">- Titolo libro</span></div>
+              <div><code className="bg-blue-200 px-1 rounded text-blue-900 font-medium">{'{{authorName}}'}</code> <span className="text-blue-800 font-medium">- Nome autore</span></div>
+              <div><code className="bg-blue-200 px-1 rounded text-blue-900 font-medium">{'{{goodreadsUrl}}'}</code> <span className="text-blue-800 font-medium">- URL Goodreads</span></div>
+              <div><code className="bg-blue-200 px-1 rounded text-blue-900 font-medium">{'{{amazonUrl}}'}</code> <span className="text-blue-800 font-medium">- URL Amazon</span></div>
+              <div><code className="bg-blue-200 px-1 rounded text-blue-900 font-medium">{'{{substackUrl}}'}</code> <span className="text-blue-800 font-medium">- URL Substack</span></div>
+              <div><code className="bg-blue-200 px-1 rounded text-blue-900 font-medium">{'{{substackName}}'}</code> <span className="text-blue-800 font-medium">- Nome Substack</span></div>
+              <div><code className="bg-blue-200 px-1 rounded text-blue-900 font-medium">{'{{publisherUrl}}'}</code> <span className="text-blue-800 font-medium">- URL Publisher</span></div>
+              <div><code className="bg-blue-200 px-1 rounded text-blue-900 font-medium">{'{{publisherName}}'}</code> <span className="text-blue-800 font-medium">- Nome Publisher</span></div>
+            </div>
           </div>
         </div>
       )}

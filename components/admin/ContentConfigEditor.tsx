@@ -73,7 +73,7 @@ export default function ContentConfigEditor({ config, onChange }: ContentConfigE
           {config.stories.map((story, index) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4">
               <div className="flex justify-between items-center mb-2">
-                <h4 className="font-medium">Story {index + 1}</h4>
+                <h4 className="font-medium text-gray-900">Story {index + 1}</h4>
                 <button
                   onClick={() => {
                     const newStories = config.stories.filter((_, i) => i !== index)
@@ -137,7 +137,7 @@ export default function ContentConfigEditor({ config, onChange }: ContentConfigE
           {config.testimonials.map((testimonial, index) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4">
               <div className="flex justify-between items-center mb-2">
-                <h4 className="font-medium">Testimonial {index + 1}</h4>
+                <h4 className="font-medium  text-gray-900">Testimonial {index + 1}</h4>
                 <button
                   onClick={() => {
                     const newTestimonials = config.testimonials.filter((_, i) => i !== index)
@@ -169,7 +169,7 @@ export default function ContentConfigEditor({ config, onChange }: ContentConfigE
                       newTestimonials[index] = { ...testimonial, author: e.target.value }
                       onChange({ ...config, testimonials: newTestimonials })
                     }}
-                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                     placeholder="Author name"
                   />
                   <input
@@ -183,7 +183,7 @@ export default function ContentConfigEditor({ config, onChange }: ContentConfigE
                       newTestimonials[index] = { ...testimonial, rating: parseFloat(e.target.value) }
                       onChange({ ...config, testimonials: newTestimonials })
                     }}
-                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                     placeholder="Rating"
                   />
                   <input
@@ -194,7 +194,7 @@ export default function ContentConfigEditor({ config, onChange }: ContentConfigE
                       newTestimonials[index] = { ...testimonial, source: e.target.value }
                       onChange({ ...config, testimonials: newTestimonials })
                     }}
-                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                     placeholder="Source"
                   />
                 </div>

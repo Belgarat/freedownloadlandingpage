@@ -378,8 +378,8 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
             </div>
           </div>
           <div className="mt-3 flex items-center gap-2">
-            <button type="button" onClick={applyAdjustments} className="px-3 py-2 text-xs rounded border bg-white hover:bg-gray-50">Apply adjustments</button>
-            <button type="button" onClick={resetAdjustments} className="px-3 py-2 text-xs rounded border bg-white hover:bg-gray-50">Reset</button>
+            <button type="button" onClick={applyAdjustments} className="px-3 py-2 text-xs rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors">Apply adjustments</button>
+            <button type="button" onClick={resetAdjustments} className="px-3 py-2 text-xs rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors">Reset</button>
           </div>
         </div>
 
@@ -427,12 +427,12 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
             </div>
           </div>
           <div className="mt-3 flex items-center gap-3">
-            <div className="text-xs">Contrast background vs text: 
+            <div className="text-xs text-gray-600">Contrast background vs text: 
               <span className={`ml-2 px-2 py-0.5 rounded ${textContrast.primary >= 4.5 ? 'bg-green-100 text-green-800' : textContrast.primary >= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>Primary {textContrast.primary.toFixed(2)}x</span>
               <span className={`ml-2 px-2 py-0.5 rounded ${textContrast.secondary >= 4.5 ? 'bg-green-100 text-green-800' : textContrast.secondary >= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>Secondary {textContrast.secondary.toFixed(2)}x</span>
               <span className={`ml-2 px-2 py-0.5 rounded ${textContrast.muted >= 4.5 ? 'bg-green-100 text-green-800' : textContrast.muted >= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>Muted {textContrast.muted.toFixed(2)}x</span>
             </div>
-            <button type="button" onClick={autoFixTextContrast} className="px-3 py-2 text-xs rounded border bg-white hover:bg-gray-50">Auto-fix contrast</button>
+            <button type="button" onClick={autoFixTextContrast} className="px-3 py-2 text-xs rounded border border-gray-300 bg-white text-gray-900 hover:bg-gray-50 hover:border-gray-400 transition-colors">Auto-fix contrast</button>
           </div>
         </div>
 
@@ -489,7 +489,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
                   key={p.name}
                   type="button"
                   onClick={() => applyPreset(i)}
-                  className="px-2 py-1 text-xs rounded border hover:bg-gray-50"
+                  className="px-2 py-1 text-xs rounded border border-gray-300 bg-white text-gray-900 hover:bg-gray-50 hover:border-gray-400 transition-colors"
                 >
                   {p.name}
                 </button>
@@ -501,8 +501,8 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
                 <div className="flex flex-wrap gap-2">
                   {customPresets.map((p, i) => (
                     <div key={p.name} className="flex items-center gap-1">
-                      <button type="button" onClick={() => applyColorsWithLocks(p.colors)} className="px-2 py-1 text-xs rounded border hover:bg-gray-50">{p.name}</button>
-                      <button type="button" onClick={() => { const next = customPresets.filter((_, idx) => idx !== i); saveCustomPresets(next) }} className="text-xs text-red-500 hover:underline">Del</button>
+                      <button type="button" onClick={() => applyColorsWithLocks(p.colors)} className="px-2 py-1 text-xs rounded border border-gray-300 bg-white text-gray-900 hover:bg-gray-50 hover:border-gray-400 transition-colors">{p.name}</button>
+                      <button type="button" onClick={() => { const next = customPresets.filter((_, idx) => idx !== i); saveCustomPresets(next) }} className="text-xs text-red-600 hover:text-red-800 hover:underline font-medium">Del</button>
                     </div>
                   ))}
                 </div>
@@ -511,7 +511,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
             <div className="mt-3 flex items-center gap-2">
               <button
                 type="button"
-                className="px-2 py-1 text-xs rounded border hover:bg-gray-50"
+                className="px-2 py-1 text-xs rounded border border-gray-300 bg-white text-gray-900 hover:bg-gray-50 hover:border-gray-400 transition-colors"
                 onClick={() => {
                   const name = prompt('Nome preset personalizzato?')?.trim()
                   if (!name) return

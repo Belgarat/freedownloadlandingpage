@@ -178,7 +178,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
                   newConfig.cta.social.goodreads.text = e.target.value;
                   onChange(newConfig);
                 }}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                 placeholder="Add to Goodreads"
               />
               <input
@@ -189,7 +189,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
                   newConfig.cta.social.goodreads.url = e.target.value;
                   onChange(newConfig);
                 }}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                 placeholder="https://goodreads.com/book/..."
               />
             </div>
@@ -206,7 +206,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
                   newConfig.cta.social.amazon.text = e.target.value;
                   onChange(newConfig);
                 }}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                 placeholder="View on Amazon"
               />
               <input
@@ -217,7 +217,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
                   newConfig.cta.social.amazon.url = e.target.value;
                   onChange(newConfig);
                 }}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                 placeholder="https://amazon.com/dp/..."
               />
             </div>
@@ -234,7 +234,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
                   newConfig.cta.social.publisher.text = e.target.value;
                   onChange(newConfig);
                 }}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                 placeholder="Visit Publisher"
               />
               <input
@@ -245,7 +245,7 @@ export default function MarketingConfigEditor({ config, onChange }: MarketingCon
                   newConfig.cta.social.publisher.url = e.target.value;
                   onChange(newConfig);
                 }}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                 placeholder="https://publisher.com"
               />
             </div>

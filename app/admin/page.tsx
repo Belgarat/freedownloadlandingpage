@@ -2,11 +2,11 @@
 
 import { useRouter } from 'next/navigation'
 import { Settings, BookOpen, Megaphone, Search, LogOut } from 'lucide-react'
-import { useAuth } from '@/lib/useAuth'
+import { useLogout } from '@/lib/useLogout'
 import AdminProtected from '@/components/admin/AdminProtected'
 
 export default function AdminPage() {
-  const { logout } = useAuth()
+  const { handleLogout } = useLogout()
   const router = useRouter()
 
   const adminSections = [
@@ -57,7 +57,7 @@ export default function AdminPage() {
               </div>
               <div className="flex items-center space-x-4">
                 <button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
                 >
                   <LogOut className="h-4 w-4" />

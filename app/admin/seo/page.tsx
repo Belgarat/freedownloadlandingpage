@@ -1,6 +1,6 @@
 'use client'
 
-import { useAuth } from '@/lib/useAuth'
+import { useLogout } from '@/lib/useLogout'
 import { useConfig } from '@/lib/useConfig'
 import { useState } from 'react'
 import AdminTopbar from '@/components/admin/AdminTopbar'
@@ -8,7 +8,7 @@ import AdminProtected from '@/components/admin/AdminProtected'
 import SEOConfigEditor from '@/components/admin/SEOConfigEditor'
 
 export default function SEOPage() {
-  const { logout } = useAuth()
+  const { handleLogout } = useLogout()
   const { config, loading } = useConfig()
   const [localConfig, setLocalConfig] = useState(config)
   const [saving, setSaving] = useState(false)
@@ -81,7 +81,7 @@ export default function SEOPage() {
                   {saving ? 'Saving...' : 'Save Changes'}
                 </button>
                 <button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
                 >
                   Logout

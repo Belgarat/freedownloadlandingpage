@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAuth } from '@/lib/useAuth'
+import { useLogout } from '@/lib/useLogout'
 
 const nav = [
   { href: '/admin', label: 'Dashboard' },
@@ -12,20 +12,7 @@ const nav = [
 
 export default function AdminTopbar() {
   const pathname = usePathname()
-  const { logout, checkAuth } = useAuth()
-
-  const handleLogout = async () => {
-    console.log('[AdminTopbar] Calling logout function...')
-    const success = await logout()
-    console.log('[AdminTopbar] Logout result:', success)
-    if (success) {
-      console.log('[AdminTopbar] Logout successful, forcing re-check of authentication')
-      await checkAuth()
-      // Dispatch custom event to force re-render
-      console.log('[AdminTopbar] Dispatching auth-changed event')
-      window.dispatchEvent(new CustomEvent('auth-changed', { detail: { isAuthenticated: false } }))
-    }
-  }
+  const { handleLogout } = useLogout()
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/60">

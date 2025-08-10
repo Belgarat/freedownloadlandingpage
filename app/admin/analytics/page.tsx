@@ -1,12 +1,12 @@
 'use client'
 
-import { useAuth } from '@/lib/useAuth'
+import { useLogout } from '@/lib/useLogout'
 import AnalyticsDashboard from '@/components/AnalyticsDashboard'
 import AdminTopbar from '@/components/admin/AdminTopbar'
 import AdminProtected from '@/components/admin/AdminProtected'
 
 export default function AnalyticsPage() {
-  const { logout } = useAuth()
+  const { handleLogout } = useLogout()
 
 
 
@@ -20,7 +20,7 @@ export default function AnalyticsPage() {
               <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
               <div className="flex items-center space-x-4">
                 <button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
                 >
                   Logout

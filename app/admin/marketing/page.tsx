@@ -9,7 +9,7 @@ import MarketingConfigEditor from '@/components/admin/MarketingConfigEditor'
 
 export default function MarketingPage() {
   const { logout } = useAuth()
-  const { config, loading, error } = useConfig()
+  const { config, loading } = useConfig()
   const [localConfig, setLocalConfig] = useState(config)
   const [saving, setSaving] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -62,16 +62,7 @@ export default function MarketingPage() {
     )
   }
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-600 mb-4">Error loading configuration</div>
-          <p className="text-gray-600">{error}</p>
-        </div>
-      </div>
-    )
-  }
+
 
   return (
     <AdminProtected>

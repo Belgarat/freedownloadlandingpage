@@ -19,7 +19,7 @@ export function useAuth() {
         credentials: 'include',
       })
       setIsAuthenticated(response.ok)
-    } catch (error) {
+    } catch {
       setIsAuthenticated(false)
     } finally {
       setIsLoading(false)

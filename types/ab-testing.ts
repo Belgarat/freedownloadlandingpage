@@ -5,18 +5,18 @@ export interface ABTest {
   type: ABTestType
   status: ABTestStatus
   variants: ABVariant[]
-  trafficSplit: number
-  startDate: string
-  endDate?: string
-  targetElement: string
-  targetSelector: string
-  conversionGoal: ConversionGoal
-  statisticalSignificance: number
-  totalVisitors: number
+  traffic_split: number
+  start_date: string
+  end_date?: string
+  target_element: string
+  target_selector: string
+  conversion_goal: ConversionGoal
+  statistical_significance: number
+  total_visitors: number
   conversions: number
-  conversionRate: number
-  createdAt: string
-  updatedAt: string
+  conversion_rate: number
+  created_at: string
+  updated_at: string
 }
 
 export type ABTestType = 
@@ -36,14 +36,14 @@ export interface ABVariant {
   name: string
   description: string
   value: string
-  cssClass?: string
-  cssStyle?: string
+  css_class?: string
+  css_style?: string
   visitors: number
   conversions: number
-  conversionRate: number
-  isControl: boolean
-  isWinner: boolean
-  confidenceLevel?: number
+  conversion_rate: number
+  is_control: boolean
+  is_winner: boolean
+  confidence_level?: number
   improvement?: number
 }
 
@@ -67,7 +67,7 @@ export const AB_TEST_TEMPLATES: Record<ABTestType, {
   name: string
   description: string
   targetSelector: string
-  defaultVariants: Omit<ABVariant, 'id' | 'visitors' | 'conversions' | 'conversionRate' | 'isWinner' | 'confidenceLevel' | 'improvement'>[]
+  defaultVariants: Omit<ABVariant, 'id' | 'visitors' | 'conversions' | 'conversion_rate' | 'is_winner' | 'confidence_level' | 'improvement'>[]
 }> = {
   cta_button_text: {
     name: 'CTA Button Text',
@@ -78,19 +78,19 @@ export const AB_TEST_TEMPLATES: Record<ABTestType, {
         name: 'Control',
         description: 'Original button text',
         value: 'Download Free Ebook',
-        isControl: true
+        is_control: true
       },
       {
         name: 'Variant A',
         description: 'More urgent text',
         value: 'Get Your Free Copy Now',
-        isControl: false
+        is_control: false
       },
       {
         name: 'Variant B',
         description: 'Benefit-focused text',
         value: 'Start Reading Today',
-        isControl: false
+        is_control: false
       }
     ]
   },
@@ -103,22 +103,22 @@ export const AB_TEST_TEMPLATES: Record<ABTestType, {
         name: 'Control (Primary)',
         description: 'Original primary color',
         value: 'primary',
-        cssClass: 'bg-[var(--color-primary)]',
-        isControl: true
+        css_class: 'bg-[var(--color-primary)]',
+        is_control: true
       },
       {
         name: 'Variant A (Accent)',
         description: 'Accent color',
         value: 'accent',
-        cssClass: 'bg-[var(--color-accent)]',
-        isControl: false
+        css_class: 'bg-[var(--color-accent)]',
+        is_control: false
       },
       {
         name: 'Variant B (Secondary)',
         description: 'Secondary color',
         value: 'secondary',
-        cssClass: 'bg-[var(--color-secondary)]',
-        isControl: false
+        css_class: 'bg-[var(--color-secondary)]',
+        is_control: false
       }
     ]
   },
@@ -131,19 +131,19 @@ export const AB_TEST_TEMPLATES: Record<ABTestType, {
         name: 'Control',
         description: 'Original headline',
         value: 'Fish Cannot Carry Guns',
-        isControl: true
+        is_control: true
       },
       {
         name: 'Variant A',
         description: 'More descriptive headline',
         value: 'Fish Cannot Carry Guns: Speculative Fiction Stories',
-        isControl: false
+        is_control: false
       },
       {
         name: 'Variant B',
         description: 'Benefit-focused headline',
         value: 'Discover the Future in Fish Cannot Carry Guns',
-        isControl: false
+        is_control: false
       }
     ]
   },
@@ -156,22 +156,22 @@ export const AB_TEST_TEMPLATES: Record<ABTestType, {
         name: 'Control',
         description: 'Original size',
         value: 'text-2xl sm:text-4xl md:text-5xl',
-        cssClass: 'text-2xl sm:text-4xl md:text-5xl',
-        isControl: true
+        css_class: 'text-2xl sm:text-4xl md:text-5xl',
+        is_control: true
       },
       {
         name: 'Variant A (Larger)',
         description: 'Larger headline',
         value: 'text-3xl sm:text-5xl md:text-6xl',
-        cssClass: 'text-3xl sm:text-5xl md:text-6xl',
-        isControl: false
+        css_class: 'text-3xl sm:text-5xl md:text-6xl',
+        is_control: false
       },
       {
         name: 'Variant B (Smaller)',
         description: 'Smaller headline',
         value: 'text-xl sm:text-3xl md:text-4xl',
-        cssClass: 'text-xl sm:text-3xl md:text-4xl',
-        isControl: false
+        css_class: 'text-xl sm:text-3xl md:text-4xl',
+        is_control: false
       }
     ]
   },
@@ -184,19 +184,19 @@ export const AB_TEST_TEMPLATES: Record<ABTestType, {
         name: 'Control',
         description: 'Original offer text',
         value: 'Download Your Free Copy',
-        isControl: true
+        is_control: true
       },
       {
         name: 'Variant A',
         description: 'More urgent offer',
         value: 'Get Your Free Copy - Limited Time',
-        isControl: false
+        is_control: false
       },
       {
         name: 'Variant B',
         description: 'Benefit-focused offer',
         value: 'Start Reading Your Free Copy Today',
-        isControl: false
+        is_control: false
       }
     ]
   },
@@ -209,19 +209,19 @@ export const AB_TEST_TEMPLATES: Record<ABTestType, {
         name: 'Control',
         description: 'Original social proof',
         value: 'show',
-        isControl: true
+        is_control: true
       },
       {
         name: 'Variant A',
         description: 'Enhanced social proof',
         value: 'enhanced',
-        isControl: false
+        is_control: false
       },
       {
         name: 'Variant B',
         description: 'Minimal social proof',
         value: 'minimal',
-        isControl: false
+        is_control: false
       }
     ]
   },
@@ -234,19 +234,19 @@ export const AB_TEST_TEMPLATES: Record<ABTestType, {
         name: 'Control',
         description: 'Original placeholder',
         value: 'Enter your email address',
-        isControl: true
+        is_control: true
       },
       {
         name: 'Variant A',
         description: 'More specific placeholder',
         value: 'your@email.com',
-        isControl: false
+        is_control: false
       },
       {
         name: 'Variant B',
         description: 'Benefit-focused placeholder',
         value: 'Get your free ebook',
-        isControl: false
+        is_control: false
       }
     ]
   },
@@ -259,22 +259,22 @@ export const AB_TEST_TEMPLATES: Record<ABTestType, {
         name: 'Control',
         description: 'Original layout',
         value: 'default',
-        cssClass: 'grid-cols-1 lg:grid-cols-2',
-        isControl: true
+        css_class: 'grid-cols-1 lg:grid-cols-2',
+        is_control: true
       },
       {
         name: 'Variant A',
         description: 'Single column layout',
         value: 'single',
-        cssClass: 'grid-cols-1',
-        isControl: false
+        css_class: 'grid-cols-1',
+        is_control: false
       },
       {
         name: 'Variant B',
         description: 'Full width layout',
         value: 'full-width',
-        cssClass: 'max-w-7xl grid-cols-1',
-        isControl: false
+        css_class: 'max-w-7xl grid-cols-1',
+        is_control: false
       }
     ]
   }

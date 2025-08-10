@@ -23,6 +23,7 @@ export interface AdminStats {
   // Raw data (optional)
   analytics?: any[]
   tokens?: any[]
+  abTesting?: any[]
 }
 
 export interface AdminAuthRequest {

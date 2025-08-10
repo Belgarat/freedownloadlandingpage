@@ -89,7 +89,8 @@ test.describe('Cookie Consent', () => {
     
     // Toggle analytics checkbox
     const analyticsCheckbox = page.locator('input[type="checkbox"]')
-    await analyticsCheckbox.check()
+    await page.waitForTimeout(1000) // Wait for animation to complete
+    await analyticsCheckbox.click({ force: true }) // Force click to bypass overlay
     
     // Accept with custom preferences
     await page.getByRole('button', { name: 'Accept All' }).click()

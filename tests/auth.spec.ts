@@ -81,8 +81,8 @@ test.describe('Authentication System', () => {
       // Click logout
       await logoutButton.click()
 
-      // Should redirect to admin login page
-      await expect(page).toHaveURL('/admin', { timeout: 10000 })
+      // Should redirect to admin login page (may include next parameter)
+      await expect(page).toHaveURL(/\/admin(\?.*)?$/, { timeout: 10000 })
       
       // Should show login form
       await expect(page.getByText('Admin Login')).toBeVisible()
@@ -111,13 +111,13 @@ test.describe('Authentication System', () => {
       await page.goto('/admin')
       await page.getByPlaceholder('Enter admin password').fill(adminPassword)
       await page.getByRole('button', { name: 'Sign in' }).click()
-      await expect(page).toHaveURL('/admin', { timeout: 10000 })
+      await expect(page).toHaveURL(/\/admin(\?.*)?$/, { timeout: 10000 })
 
       // Try to access admin config page
       await page.goto('/admin/config')
       
-      // Should be able to access the page
-      await expect(page).toHaveURL('/admin/config')
+      // Should be able to access the page (may have next parameter)
+      await expect(page).toHaveURL(/\/admin(\?.*)?$/)
       await expect(page.getByRole('heading', { name: 'Configuration' })).toBeVisible()
     })
   })

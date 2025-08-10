@@ -53,7 +53,7 @@ export default function DownloadPage({ params }: DownloadPageProps) {
   }, [params])
 
   const handleDownload = async () => {
-    if (!token || !book.ebook) return
+    if (!token || !book?.ebook) return
 
     setIsLoading(true)
     try {
@@ -114,12 +114,13 @@ export default function DownloadPage({ params }: DownloadPageProps) {
     }
   }
 
-  if (isLoading) {
+  // Show loading state while config is loading
+  if (isLoading || !book) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-teal-900 via-cyan-900 to-blue-900 flex items-center justify-center">
-        <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-8 text-center border border-teal-700/50 max-w-md w-full mx-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-400 mx-auto mb-4"></div>
-          <p className="text-teal-100">Validating your download link...</p>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white">Loading...</p>
         </div>
       </div>
     )
@@ -157,17 +158,17 @@ export default function DownloadPage({ params }: DownloadPageProps) {
           <div className="bg-[#073E44] backdrop-blur-sm rounded-lg shadow-xl p-6 sm:p-8 border border-teal-700/50 mb-8">
             <div className="text-center">
               <BookOpen className="w-16 h-16 text-amber-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-white mb-4">{book.title}</h2>
+              <h2 className="text-xl font-semibold text-white mb-4">{book?.title || 'Book'}</h2>
               <p className="text-teal-100 mb-6">
-                {book.description}
+                {book?.description || 'Download your free copy'}
               </p>
 
               {/* Format Selection */}
-              {book.ebook && (book.ebook.pdf || book.ebook.epub) && (
+              {book?.ebook && (book.ebook.pdf || book.ebook.epub) && (
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-teal-200 mb-3">Choose Format:</label>
                   <div className="flex justify-center gap-4">
-                    {book.ebook.pdf && (
+                    {book?.ebook.pdf && (
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="radio"
@@ -182,7 +183,7 @@ export default function DownloadPage({ params }: DownloadPageProps) {
                         <span className="text-teal-300 text-sm">({book.ebook.pdf.size})</span>
                       </label>
                     )}
-                    {book.ebook.epub && (
+                    {book?.ebook.epub && (
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="radio"
@@ -211,7 +212,7 @@ export default function DownloadPage({ params }: DownloadPageProps) {
                                 ) : (
                     <button
                       onClick={handleDownload}
-                      disabled={isLoading || !book.ebook}
+                      disabled={isLoading || !book?.ebook}
                       className="w-full bg-amber-600 hover:bg-amber-700 disabled:bg-amber-800 text-white font-semibold py-4 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 text-lg"
                     >
                       {isLoading ? (

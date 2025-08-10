@@ -36,6 +36,26 @@ export async function GET(request: NextRequest) {
     const { AnonymousCounterService } = await import('@/lib/anonymous-counters')
     const anonymousCounters = await AnonymousCounterService.getCounters()
 
+    // Get A/B testing data
+    const { data: abTests, error: abTestsError } = await supabaseAdmin
+      .from('ab_tests')
+      .select(`
+        *,
+        ab_variants (
+          id,
+          name,
+          visitors,
+          conversions,
+          conversion_rate
+        )
+      `)
+      .order('created_at', { ascending: false })
+
+    if (abTestsError) {
+      console.error('A/B Tests fetch error:', abTestsError)
+      // Don't fail the entire request, just log the error
+    }
+
     // Calculate statistics
     const totalDownloads = analytics?.filter(item => item.action === 'download_completed').length || 0
     const downloadRequests = analytics?.filter(item => item.action === 'download_requested').length || 0
@@ -73,6 +93,8 @@ export async function GET(request: NextRequest) {
       anonymousGoodreadsClicks: anonymousCounters.totalGoodreadsClicks,
       anonymousSubstackClicks: anonymousCounters.totalSubstackClicks,
       anonymousPublisherClicks: anonymousCounters.totalPublisherClicks,
+      // A/B testing data
+      abTesting: abTests || [],
       analytics: analytics || [],
       tokens: tokens || []
     }

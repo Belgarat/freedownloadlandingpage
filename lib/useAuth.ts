@@ -19,12 +19,15 @@ export function useAuth() {
 
   const checkAuth = async () => {
     try {
+      console.log('[useAuth] checkAuth called')
       const response = await fetch('/api/admin/auth', {
         method: 'GET',
         credentials: 'include',
       })
+      console.log('[useAuth] checkAuth response:', response.ok)
       setIsAuthenticated(response.ok)
     } catch {
+      console.log('[useAuth] checkAuth error')
       setIsAuthenticated(false)
     } finally {
       setIsLoading(false)
@@ -48,12 +51,8 @@ export function useAuth() {
       if (response.ok) {
         console.log('[useAuth] Login successful, setting isAuthenticated to true')
         setIsAuthenticated(true)
-        console.log('[useAuth] State set to true, will redirect after state update')
-        // Use setTimeout to ensure state update happens before redirect
-        setTimeout(() => {
-          console.log('[useAuth] Now redirecting to /admin')
-          router.push('/admin')
-        }, 100)
+        console.log('[useAuth] State set to true, no redirect - let component handle it')
+        // Don't redirect - let the component re-render naturally
         return true
       } else {
         console.log('[useAuth] Login failed, setting isAuthenticated to false')

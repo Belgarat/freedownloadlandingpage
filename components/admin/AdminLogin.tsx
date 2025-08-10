@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/lib/useAuth'
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+  const { login } = useAuth()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -15,21 +17,13 @@ export default function AdminLogin() {
     setError('')
 
     try {
-      const response = await fetch('/api/admin/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password }),
-      })
-
-      if (response.ok) {
+      const success = await login(password)
+      if (success) {
         // Redirect to admin dashboard after successful login
         router.push('/admin')
         router.refresh()
       } else {
-        const data = await response.json()
-        setError(data.error || 'Login failed')
+        setError('Invalid password')
       }
     } catch {
       setError('Network error. Please try again.')

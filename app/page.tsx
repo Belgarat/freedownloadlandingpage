@@ -359,7 +359,7 @@ export default function Home() {
                 <img src="/logo_transparent.png" alt="3/7 Indie Lab Logo" className="h-10 sm:h-12 mb-2" style={{maxWidth:'80px'}} />
               </a>
               <div className="text-xs text-theme-secondary max-w-md px-4">
-                <strong className="text-theme-primary">{book?.publisherName || '3/7 Indie Lab'}</strong> — {book?.publisherTagline || 'Be independent, be unique.'}<br/>
+                <strong className="text-theme-primary">{book?.publisher || '3/7 Indie Lab'}</strong> &mdash; {book?.publisherTagline || 'Be independent, be unique.'}<br/>
                 {content?.footer?.copyright || 'At 3/7 Indie Lab, we are fiercely independent. We will always support authors who want to push the boundaries of the publishing market with independent writing.'}<br/>
                                   <a
                     href={book?.publisherUrl || 'https://37indielab.com/'}

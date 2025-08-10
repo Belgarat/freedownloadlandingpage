@@ -288,7 +288,7 @@ export default function SEOConfigEditor({ config, onChange }: SEOConfigEditorPro
                   inLanguage: book.language,
                   numberOfPages: book.pageCount,
                   genre: book.categories,
-                  publisher: { '@type': 'Organization', name: book.publisherName || book.publisher },
+                  publisher: { '@type': 'Organization', name: book.publisher },
                   bookFormat: 'EBook',
                   url: seo?.meta?.canonical || '',
                 }

@@ -26,6 +26,31 @@ export function useAuth() {
     }
   }
 
+  const login = async (password: string) => {
+    try {
+      const response = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+        credentials: 'include',
+      })
+      
+      if (response.ok) {
+        setIsAuthenticated(true)
+        return true
+      } else {
+        setIsAuthenticated(false)
+        return false
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      setIsAuthenticated(false)
+      return false
+    }
+  }
+
   const logout = async () => {
     try {
       await fetch('/api/admin/logout', {
@@ -43,6 +68,7 @@ export function useAuth() {
   return {
     isAuthenticated,
     isLoading,
+    login,
     logout,
     checkAuth,
   }

@@ -58,10 +58,11 @@ export function useAuth() {
         credentials: 'include',
       })
       setIsAuthenticated(false)
-      router.push('/admin')
-      router.refresh()
+      // Let the component handle the re-render automatically
     } catch (error) {
       console.error('Logout error:', error)
+      // Even if logout fails, set as not authenticated
+      setIsAuthenticated(false)
     }
   }
 

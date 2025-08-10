@@ -8,6 +8,11 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
 
+  // Debug: log state changes
+  useEffect(() => {
+    console.log('[useAuth] State changed - isAuthenticated:', isAuthenticated)
+  }, [isAuthenticated])
+
   useEffect(() => {
     checkAuth()
   }, [])
@@ -43,10 +48,9 @@ export function useAuth() {
       if (response.ok) {
         console.log('[useAuth] Login successful, setting isAuthenticated to true')
         setIsAuthenticated(true)
-        console.log('[useAuth] About to redirect to /admin')
-        // Redirect to admin dashboard after successful login
-        router.push('/admin')
-        console.log('[useAuth] Redirect called')
+        console.log('[useAuth] State set to true, no redirect for now')
+        // Temporarily remove redirect to test state update
+        // router.push('/admin')
         return true
       } else {
         console.log('[useAuth] Login failed, setting isAuthenticated to false')

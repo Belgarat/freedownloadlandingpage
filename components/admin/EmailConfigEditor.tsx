@@ -72,7 +72,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                   type="text"
                   value={config.sender.name}
                   onChange={(e) => onChange({...config, sender: {...config.sender, name: e.target.value}})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                   placeholder="Il tuo nome"
                 />
                 <p className="text-xs text-gray-500 mt-1">Appare come "Da: [Nome]"</p>
@@ -84,7 +84,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                   type="email"
                   value={config.sender.email}
                   onChange={(e) => onChange({...config, sender: {...config.sender, email: e.target.value}})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                   placeholder="tuo@email.com"
                 />
                 <p className="text-xs text-gray-500 mt-1">Email da cui vengono inviate le email</p>
@@ -96,7 +96,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                   type="email"
                   value={config.sender.replyTo}
                   onChange={(e) => onChange({...config, sender: {...config.sender, replyTo: e.target.value}})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                   placeholder="risposta@email.com"
                 />
                 <p className="text-xs text-gray-500 mt-1">Email per le risposte degli utenti</p>
@@ -123,7 +123,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                 type="text"
                 value={config.templates.download.subject}
                 onChange={(e) => onChange({...config, templates: {...config.templates, download: {...config.templates.download, subject: e.target.value}}})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                 placeholder="Il tuo libro è pronto!"
               />
             </div>
@@ -172,7 +172,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                 type="text"
                 value={config.templates.followup.subject}
                 onChange={(e) => onChange({...config, templates: {...config.templates, followup: {...config.templates.followup, subject: e.target.value}}})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                 placeholder="Hai dimenticato di scaricare il libro?"
               />
             </div>
@@ -219,7 +219,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                   max="168"
                   value={config.settings.templateExpiryHours}
                   onChange={(e) => onChange({...config, settings: {...config.settings, templateExpiryHours: parseInt(e.target.value)}})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                 />
                 <p className="text-xs text-gray-500 mt-1">Dopo quante ore scade il link di download</p>
               </div>
@@ -232,7 +232,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
                   max="10"
                   value={config.settings.maxRetries}
                   onChange={(e) => onChange({...config, settings: {...config.settings, maxRetries: parseInt(e.target.value)}})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
                 />
                 <p className="text-xs text-gray-500 mt-1">Numero di tentativi per inviare l'email</p>
               </div>

@@ -39,6 +39,8 @@ export function useAuth() {
       
       if (response.ok) {
         setIsAuthenticated(true)
+        // Redirect to admin dashboard after successful login
+        router.push('/admin')
         return true
       } else {
         setIsAuthenticated(false)
@@ -58,11 +60,13 @@ export function useAuth() {
         credentials: 'include',
       })
       setIsAuthenticated(false)
-      // Let the component handle the re-render automatically
+      // Redirect to admin login page after logout
+      router.push('/admin')
     } catch (error) {
       console.error('Logout error:', error)
       // Even if logout fails, set as not authenticated
       setIsAuthenticated(false)
+      router.push('/admin')
     }
   }
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Settings, BookOpen, Megaphone, Search, LogOut } from 'lucide-react'
+import { Settings, BookOpen, Megaphone, Search, LogOut, Beaker } from 'lucide-react'
 import { useLogout } from '@/lib/useLogout'
 import { useStats } from '@/lib/useStats'
 import AdminProtected from '@/components/admin/AdminProtected'
@@ -27,6 +27,14 @@ export default function AdminPage() {
       icon: BookOpen,
       href: '/admin/analytics',
       permission: 'read'
+    },
+    { 
+      id: 'ab-testing', 
+      name: 'A/B Testing', 
+      description: 'Create and manage conversion tests',
+      icon: Beaker,
+      href: '/admin/ab-testing',
+      permission: 'write'
     },
     { 
       id: 'seo', 

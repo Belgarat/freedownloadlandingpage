@@ -1,31 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Play, Pause, BarChart3, Users, Target } from 'lucide-react'
-
-interface ABTest {
-  id: string
-  name: string
-  type: 'cta' | 'headline' | 'offer' | 'layout'
-  status: 'draft' | 'running' | 'paused' | 'completed'
-  variants: ABVariant[]
-  trafficSplit: number
-  startDate: string
-  endDate?: string
-  totalVisitors: number
-  conversions: number
-  conversionRate: number
-}
-
-interface ABVariant {
-  id: string
-  name: string
-  description: string
-  visitors: number
-  conversions: number
-  conversionRate: number
-  isWinner: boolean
-}
+import { Plus, Play, Pause, BarChart3, Users, Target, Settings } from 'lucide-react'
+import { ABTest, ABTestType, AB_TEST_TEMPLATES } from '@/types/ab-testing'
 
 export default function ABTestingDashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'tests' | 'create'>('overview')
@@ -33,33 +10,90 @@ export default function ABTestingDashboard() {
     {
       id: '1',
       name: 'CTA Button Color Test',
-      type: 'cta',
+      description: 'Testing different button colors for the main download CTA',
+      type: 'cta_button_color',
       status: 'running',
       variants: [
         {
           id: '1a',
-          name: 'Control (Blue)',
-          description: 'Original blue CTA button',
+          name: 'Control (Primary)',
+          description: 'Original primary color button',
+          value: 'primary',
+          cssClass: 'bg-[var(--color-primary)]',
           visitors: 1250,
           conversions: 89,
           conversionRate: 7.12,
+          isControl: true,
           isWinner: false
         },
         {
           id: '1b',
-          name: 'Variant A (Green)',
-          description: 'Green CTA button',
+          name: 'Variant A (Accent)',
+          description: 'Accent color button',
+          value: 'accent',
+          cssClass: 'bg-[var(--color-accent)]',
           visitors: 1230,
           conversions: 95,
           conversionRate: 7.72,
-          isWinner: true
+          isControl: false,
+          isWinner: true,
+          confidenceLevel: 95.2,
+          improvement: 8.4
         }
       ],
       trafficSplit: 50,
       startDate: '2025-01-15',
+      targetElement: 'Download CTA Button',
+      targetSelector: 'button[type="submit"]',
+      conversionGoal: { type: 'email_submit' },
+      statisticalSignificance: 95.2,
       totalVisitors: 2480,
       conversions: 184,
-      conversionRate: 7.42
+      conversionRate: 7.42,
+      createdAt: '2025-01-15T10:00:00Z',
+      updatedAt: '2025-01-20T15:30:00Z'
+    },
+    {
+      id: '2',
+      name: 'Headline Text Test',
+      description: 'Testing different headline variations',
+      type: 'headline_text',
+      status: 'draft',
+      variants: [
+        {
+          id: '2a',
+          name: 'Control',
+          description: 'Original headline',
+          value: 'Fish Cannot Carry Guns',
+          visitors: 0,
+          conversions: 0,
+          conversionRate: 0,
+          isControl: true,
+          isWinner: false
+        },
+        {
+          id: '2b',
+          name: 'Variant A',
+          description: 'More descriptive headline',
+          value: 'Fish Cannot Carry Guns: Speculative Fiction Stories',
+          visitors: 0,
+          conversions: 0,
+          conversionRate: 0,
+          isControl: false,
+          isWinner: false
+        }
+      ],
+      trafficSplit: 50,
+      startDate: '2025-02-01',
+      targetElement: 'Main Headline',
+      targetSelector: 'h1, .text-2xl.font-bold',
+      conversionGoal: { type: 'email_submit' },
+      statisticalSignificance: 0,
+      totalVisitors: 0,
+      conversions: 0,
+      conversionRate: 0,
+      createdAt: '2025-01-25T14:00:00Z',
+      updatedAt: '2025-01-25T14:00:00Z'
     }
   ])
 
@@ -78,12 +112,16 @@ export default function ABTestingDashboard() {
     }
   }
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (type: ABTestType) => {
     switch (type) {
-      case 'cta': return '🎯'
-      case 'headline': return '📝'
-      case 'offer': return '💰'
-      case 'layout': return '🎨'
+      case 'cta_button_text':
+      case 'cta_button_color': return '🎯'
+      case 'headline_text':
+      case 'headline_size': return '📝'
+      case 'offer_text': return '💰'
+      case 'social_proof': return '⭐'
+      case 'form_placeholder': return '📧'
+      case 'page_layout': return '🎨'
       default: return '🧪'
     }
   }
@@ -195,20 +233,20 @@ export default function ABTestingDashboard() {
                         {test.status}
                       </span>
                     </div>
-                    <div className="grid grid-cols-3 gap-4 text-sm">
-                      <div>
-                        <p className="text-gray-500">Visitors</p>
-                        <p className="font-medium">{test.totalVisitors.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">Conversions</p>
-                        <p className="font-medium">{test.conversions}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">Rate</p>
-                        <p className="font-medium">{test.conversionRate.toFixed(2)}%</p>
-                      </div>
-                    </div>
+                                         <div className="grid grid-cols-3 gap-4 text-sm">
+                       <div>
+                         <p className="text-gray-600 font-medium">Visitors</p>
+                         <p className="text-lg font-bold text-gray-900">{test.totalVisitors.toLocaleString()}</p>
+                       </div>
+                       <div>
+                         <p className="text-gray-600 font-medium">Conversions</p>
+                         <p className="text-lg font-bold text-gray-900">{test.conversions}</p>
+                       </div>
+                       <div>
+                         <p className="text-gray-600 font-medium">Rate</p>
+                         <p className="text-lg font-bold text-gray-900">{test.conversionRate.toFixed(2)}%</p>
+                       </div>
+                     </div>
                   </div>
                 ))}
               </div>
@@ -263,10 +301,32 @@ export default function ABTestingDashboard() {
                                 <p className="font-medium text-sm">{variant.name}</p>
                                 <p className="text-xs text-gray-500">{variant.description}</p>
                               </div>
-                              <div className="text-right">
-                                <p className="text-sm font-medium">{variant.conversionRate.toFixed(2)}%</p>
-                                <p className="text-xs text-gray-500">{variant.visitors} visitors</p>
-                              </div>
+                                                                                          <div className="text-right">
+                               <div className="flex items-center space-x-2">
+                                 <p className="text-lg font-bold text-gray-900">{variant.conversionRate.toFixed(2)}%</p>
+                                 {variant.isWinner && (
+                                   <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">
+                                     Winner
+                                   </span>
+                                 )}
+                                 {variant.isControl && (
+                                   <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
+                                     Control
+                                   </span>
+                                 )}
+                               </div>
+                               <p className="text-sm text-gray-600 font-medium">{variant.visitors} visitors</p>
+                               {variant.confidenceLevel && (
+                                 <p className="text-xs text-gray-500">
+                                   {variant.confidenceLevel.toFixed(1)}% confidence
+                                 </p>
+                               )}
+                               {variant.improvement && (
+                                 <p className="text-xs text-green-600 font-medium">
+                                   +{variant.improvement.toFixed(1)}% improvement
+                                 </p>
+                               )}
+                             </div>
                             </div>
                           ))}
                         </div>
@@ -274,20 +334,34 @@ export default function ABTestingDashboard() {
                       
                       <div>
                         <h5 className="font-medium text-gray-900 mb-3">Performance</h5>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Total Visitors:</span>
-                            <span className="font-medium">{test.totalVisitors.toLocaleString()}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Conversions:</span>
-                            <span className="font-medium">{test.conversions}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Conversion Rate:</span>
-                            <span className="font-medium">{test.conversionRate.toFixed(2)}%</span>
-                          </div>
-                        </div>
+                                                 <div className="space-y-3">
+                           <div className="flex justify-between">
+                             <span className="text-sm font-medium text-gray-700">Total Visitors:</span>
+                             <span className="text-lg font-bold text-gray-900">{test.totalVisitors.toLocaleString()}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-sm font-medium text-gray-700">Conversions:</span>
+                             <span className="text-lg font-bold text-gray-900">{test.conversions}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-sm font-medium text-gray-700">Conversion Rate:</span>
+                             <span className="text-lg font-bold text-gray-900">{test.conversionRate.toFixed(2)}%</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-sm font-medium text-gray-700">Significance:</span>
+                             <span className="text-lg font-bold text-gray-900">{test.statisticalSignificance.toFixed(1)}%</span>
+                           </div>
+                           <div className="pt-2 border-t border-gray-200">
+                             <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Target Element</p>
+                             <p className="text-sm text-gray-700 font-medium">{test.targetElement}</p>
+                           </div>
+                           <div>
+                             <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Conversion Goal</p>
+                             <p className="text-sm text-gray-700 font-medium capitalize">
+                               {test.conversionGoal.type.replace('_', ' ')}
+                             </p>
+                           </div>
+                         </div>
                       </div>
                     </div>
                   </div>
@@ -298,17 +372,56 @@ export default function ABTestingDashboard() {
 
           {activeTab === 'create' && (
             <div className="space-y-6">
-              <h3 className="text-lg font-medium text-gray-900">Create New A/B Test</h3>
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-medium text-gray-900">Create New A/B Test</h3>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center space-x-2">
+                  <Plus className="h-4 w-4" />
+                  <span>Create Test</span>
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Object.entries(AB_TEST_TEMPLATES).map(([type, template]) => (
+                  <div key={type} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <span className="text-2xl">{getTypeIcon(type as ABTestType)}</span>
+                      <div>
+                        <h4 className="font-semibold text-gray-900">{template.name}</h4>
+                        <p className="text-sm text-gray-600">{template.description}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Target Element</p>
+                        <p className="text-sm text-gray-700 font-medium">{template.targetSelector}</p>
+                      </div>
+                      
+                      <div>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Variants</p>
+                        <p className="text-sm text-gray-700">{template.defaultVariants.length} variants</p>
+                      </div>
+                      
+                      <div className="pt-2">
+                        <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded text-sm font-medium transition-colors">
+                          Use Template
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-blue-800">
-                  🚧 A/B Test creation interface coming soon! This will allow you to create tests for:
-                </p>
-                <ul className="mt-2 text-blue-700 space-y-1">
-                  <li>• CTA button text and colors</li>
-                  <li>• Headline variations</li>
-                  <li>• Offer messaging</li>
-                  <li>• Layout changes</li>
-                </ul>
+                <div className="flex items-start space-x-3">
+                  <Settings className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <h4 className="font-medium text-blue-900">Test Templates</h4>
+                    <p className="text-sm text-blue-700 mt-1">
+                      These templates are based on actual elements from your landing page. Each template includes predefined variants that are commonly tested for conversion optimization.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           )}

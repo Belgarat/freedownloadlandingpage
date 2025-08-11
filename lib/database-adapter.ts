@@ -8,6 +8,14 @@ import type {
   TemplateAnalyticsSummary, 
   AnalyticsFilters 
 } from '@/types/email-analytics'
+import type { 
+  EmailTheme, 
+  EmailThemeCategory, 
+  EmailThemeProperty, 
+  EmailTemplateTheme,
+  ThemeStyles,
+  ThemeFormData 
+} from '@/types/email-themes'
 
 export interface DatabaseAdapter {
   // A/B Testing
@@ -57,6 +65,16 @@ export interface DatabaseAdapter {
   // Template Categories
   getTemplateCategories(): Promise<any[]>
   createTemplateCategory(category: any): Promise<any>
+  
+  // Email Themes
+  getEmailThemes(): Promise<EmailTheme[]>
+  getEmailTheme(id: number): Promise<EmailTheme>
+  createEmailTheme(theme: ThemeFormData): Promise<EmailTheme>
+  updateEmailTheme(id: number, theme: Partial<ThemeFormData>): Promise<EmailTheme>
+  deleteEmailTheme(id: number): Promise<void>
+  getEmailThemeCategories(): Promise<EmailThemeCategory[]>
+  getTemplateTheme(templateId: number): Promise<EmailTemplateTheme | null>
+  assignThemeToTemplate(templateId: number, themeId: number): Promise<EmailTemplateTheme>
   
   // Database Setup
   initDatabase(): Promise<void>
@@ -519,6 +537,175 @@ export class SupabaseAdapter implements DatabaseAdapter {
       click_rate: metric.total_sent > 0 ? (metric.total_clicked / metric.total_sent) * 100 : 0,
       performance_score: metric.total_sent > 0 ? ((metric.total_opened * 0.6 + metric.total_clicked * 0.4) / metric.total_sent) * 100 : 0
     }))
+  }
+
+  // Email Themes Methods
+  async getEmailThemes(): Promise<EmailTheme[]> {
+    const { data, error } = await this.supabase
+      .from('email_themes')
+      .select(`
+        *,
+        category:email_theme_categories(*),
+        properties:email_theme_properties(*)
+      `)
+      .order('name', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  }
+
+  async getEmailTheme(id: number): Promise<EmailTheme> {
+    const { data, error } = await this.supabase
+      .from('email_themes')
+      .select(`
+        *,
+        category:email_theme_categories(*),
+        properties:email_theme_properties(*)
+      `)
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async createEmailTheme(theme: ThemeFormData): Promise<EmailTheme> {
+    const { data, error } = await this.supabase
+      .from('email_themes')
+      .insert({
+        name: theme.name,
+        description: theme.description,
+        category_id: theme.category_id,
+        is_custom: theme.is_custom
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+
+    // Insert theme properties
+    if (theme.properties) {
+      const properties = Object.entries(theme.properties).map(([key, value]) => ({
+        theme_id: data.id,
+        property_key: key,
+        property_value: typeof value === 'object' ? JSON.stringify(value) : String(value),
+        property_type: typeof value === 'object' ? 'json' : 'css'
+      }))
+
+      const { error: propsError } = await this.supabase
+        .from('email_theme_properties')
+        .insert(properties)
+
+      if (propsError) throw propsError
+    }
+
+    return this.getEmailTheme(data.id)
+  }
+
+  async updateEmailTheme(id: number, theme: Partial<ThemeFormData>): Promise<EmailTheme> {
+    const { data, error } = await this.supabase
+      .from('email_themes')
+      .update({
+        name: theme.name,
+        description: theme.description,
+        category_id: theme.category_id,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+
+    // Update theme properties if provided
+    if (theme.properties) {
+      // Delete existing properties
+      await this.supabase
+        .from('email_theme_properties')
+        .delete()
+        .eq('theme_id', id)
+
+      // Insert new properties
+      const properties = Object.entries(theme.properties).map(([key, value]) => ({
+        theme_id: id,
+        property_key: key,
+        property_value: typeof value === 'object' ? JSON.stringify(value) : String(value),
+        property_type: typeof value === 'object' ? 'json' : 'css'
+      }))
+
+      const { error: propsError } = await this.supabase
+        .from('email_theme_properties')
+        .insert(properties)
+
+      if (propsError) throw propsError
+    }
+
+    return this.getEmailTheme(id)
+  }
+
+  async deleteEmailTheme(id: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('email_themes')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+  }
+
+  async getEmailThemeCategories(): Promise<EmailThemeCategory[]> {
+    const { data, error } = await this.supabase
+      .from('email_theme_categories')
+      .select('*')
+      .order('name', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  }
+
+  async getTemplateTheme(templateId: number): Promise<EmailTemplateTheme | null> {
+    const { data, error } = await this.supabase
+      .from('email_template_themes')
+      .select(`
+        *,
+        theme:email_themes(
+          *,
+          category:email_theme_categories(*),
+          properties:email_theme_properties(*)
+        )
+      `)
+      .eq('template_id', templateId)
+      .single()
+
+    if (error && error.code !== 'PGRST116') throw error // PGRST116 = no rows returned
+    return data || null
+  }
+
+  async assignThemeToTemplate(templateId: number, themeId: number): Promise<EmailTemplateTheme> {
+    // Delete existing assignment
+    await this.supabase
+      .from('email_template_themes')
+      .delete()
+      .eq('template_id', templateId)
+
+    // Create new assignment
+    const { data, error } = await this.supabase
+      .from('email_template_themes')
+      .insert({
+        template_id: templateId,
+        theme_id: themeId
+      })
+      .select(`
+        *,
+        theme:email_themes(
+          *,
+          category:email_theme_categories(*),
+          properties:email_theme_properties(*)
+        )
+      `)
+      .single()
+
+    if (error) throw error
+    return data
   }
 }
 
@@ -1160,6 +1347,215 @@ export class SQLiteAdapter implements DatabaseAdapter {
     const result = stmt.run(category.name, category.description)
     
     return { id: result.lastInsertRowid, ...category }
+  }
+
+  // Email Themes Methods
+  async getEmailThemes(): Promise<EmailTheme[]> {
+    const stmt = this.db.prepare(`
+      SELECT 
+        et.*,
+        etc.name as category_name,
+        etc.description as category_description
+      FROM email_themes et
+      LEFT JOIN email_theme_categories etc ON et.category_id = etc.id
+      ORDER BY et.name
+    `)
+    
+    const themes = stmt.all()
+    
+    // Get properties for each theme
+    for (const theme of themes) {
+      const propsStmt = this.db.prepare(`
+        SELECT * FROM email_theme_properties WHERE theme_id = ?
+      `)
+      theme.properties = propsStmt.all(theme.id)
+      theme.category = theme.category_name ? {
+        id: theme.category_id,
+        name: theme.category_name,
+        description: theme.category_description,
+        created_at: theme.created_at
+      } : null
+    }
+    
+    return themes
+  }
+
+  async getEmailTheme(id: number): Promise<EmailTheme> {
+    const stmt = this.db.prepare(`
+      SELECT 
+        et.*,
+        etc.name as category_name,
+        etc.description as category_description
+      FROM email_themes et
+      LEFT JOIN email_theme_categories etc ON et.category_id = etc.id
+      WHERE et.id = ?
+    `)
+    
+    const theme = stmt.get(id)
+    if (!theme) throw new Error('Theme not found')
+    
+    // Get properties
+    const propsStmt = this.db.prepare(`
+      SELECT * FROM email_theme_properties WHERE theme_id = ?
+    `)
+    theme.properties = propsStmt.all(id)
+    theme.category = theme.category_name ? {
+      id: theme.category_id,
+      name: theme.category_name,
+      description: theme.category_description,
+      created_at: theme.created_at
+    } : null
+    
+    return theme
+  }
+
+  async createEmailTheme(theme: ThemeFormData): Promise<EmailTheme> {
+    const stmt = this.db.prepare(`
+      INSERT INTO email_themes (name, description, category_id, is_custom)
+      VALUES (?, ?, ?, ?)
+    `)
+    
+    const result = stmt.run(
+      theme.name,
+      theme.description,
+      theme.category_id,
+      theme.is_custom ? 1 : 0
+    )
+    
+    const themeId = result.lastInsertRowid
+    
+    // Insert properties
+    if (theme.properties) {
+      const propsStmt = this.db.prepare(`
+        INSERT INTO email_theme_properties (theme_id, property_key, property_value, property_type)
+        VALUES (?, ?, ?, ?)
+      `)
+      
+      for (const [key, value] of Object.entries(theme.properties)) {
+        propsStmt.run(
+          themeId,
+          key,
+          typeof value === 'object' ? JSON.stringify(value) : String(value),
+          typeof value === 'object' ? 'json' : 'css'
+        )
+      }
+    }
+    
+    return this.getEmailTheme(themeId)
+  }
+
+  async updateEmailTheme(id: number, theme: Partial<ThemeFormData>): Promise<EmailTheme> {
+    const stmt = this.db.prepare(`
+      UPDATE email_themes 
+      SET name = ?, description = ?, category_id = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `)
+    
+    stmt.run(theme.name, theme.description, theme.category_id, id)
+    
+    // Update properties if provided
+    if (theme.properties) {
+      // Delete existing properties
+      const deleteStmt = this.db.prepare(`
+        DELETE FROM email_theme_properties WHERE theme_id = ?
+      `)
+      deleteStmt.run(id)
+      
+      // Insert new properties
+      const propsStmt = this.db.prepare(`
+        INSERT INTO email_theme_properties (theme_id, property_key, property_value, property_type)
+        VALUES (?, ?, ?, ?)
+      `)
+      
+      for (const [key, value] of Object.entries(theme.properties)) {
+        propsStmt.run(
+          id,
+          key,
+          typeof value === 'object' ? JSON.stringify(value) : String(value),
+          typeof value === 'object' ? 'json' : 'css'
+        )
+      }
+    }
+    
+    return this.getEmailTheme(id)
+  }
+
+  async deleteEmailTheme(id: number): Promise<void> {
+    const stmt = this.db.prepare(`
+      DELETE FROM email_themes WHERE id = ?
+    `)
+    
+    stmt.run(id)
+  }
+
+  async getEmailThemeCategories(): Promise<EmailThemeCategory[]> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM email_theme_categories ORDER BY name
+    `)
+    
+    return stmt.all()
+  }
+
+  async getTemplateTheme(templateId: number): Promise<EmailTemplateTheme | null> {
+    const stmt = this.db.prepare(`
+      SELECT 
+        ett.*,
+        et.name as theme_name,
+        et.description as theme_description,
+        etc.name as category_name
+      FROM email_template_themes ett
+      LEFT JOIN email_themes et ON ett.theme_id = et.id
+      LEFT JOIN email_theme_categories etc ON et.category_id = etc.id
+      WHERE ett.template_id = ?
+    `)
+    
+    const result = stmt.get(templateId)
+    if (!result) return null
+    
+    // Get theme properties
+    const propsStmt = this.db.prepare(`
+      SELECT * FROM email_theme_properties WHERE theme_id = ?
+    `)
+    const properties = propsStmt.all(result.theme_id)
+    
+    return {
+      ...result,
+      theme: {
+        id: result.theme_id,
+        name: result.theme_name,
+        description: result.theme_description,
+        category_id: result.category_id,
+        is_default: false,
+        is_custom: false,
+        created_at: result.created_at,
+        updated_at: result.created_at,
+        category: result.category_name ? {
+          id: result.category_id,
+          name: result.category_name,
+          description: '',
+          created_at: result.created_at
+        } : undefined,
+        properties
+      }
+    }
+  }
+
+  async assignThemeToTemplate(templateId: number, themeId: number): Promise<EmailTemplateTheme> {
+    // Delete existing assignment
+    const deleteStmt = this.db.prepare(`
+      DELETE FROM email_template_themes WHERE template_id = ?
+    `)
+    deleteStmt.run(templateId)
+    
+    // Create new assignment
+    const stmt = this.db.prepare(`
+      INSERT INTO email_template_themes (template_id, theme_id)
+      VALUES (?, ?)
+    `)
+    
+    stmt.run(templateId, themeId)
+    
+    return this.getTemplateTheme(templateId) as Promise<EmailTemplateTheme>
   }
 }
 

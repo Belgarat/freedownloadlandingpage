@@ -1,6 +1,14 @@
 // Database Adapter Pattern
 // Support for multiple database providers
 
+import type { 
+  EmailTemplateUsage, 
+  EmailTemplateMetrics, 
+  EmailTemplateABTest, 
+  TemplateAnalyticsSummary, 
+  AnalyticsFilters 
+} from '@/types/email-analytics'
+
 export interface DatabaseAdapter {
   // A/B Testing
   createABTest(test: any): Promise<any>
@@ -444,6 +452,73 @@ export class SupabaseAdapter implements DatabaseAdapter {
   async initDatabase() {
     // For Supabase, tables are managed via migrations
     console.log('🗄️ Supabase database initialized (tables managed via migrations)')
+  }
+
+  // Email Analytics Methods
+  async trackEmailUsage(usage: Omit<EmailTemplateUsage, 'id' | 'created_at'>): Promise<EmailTemplateUsage> {
+    const { data, error } = await this.supabase
+      .from('email_template_usage')
+      .insert(usage)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async getTemplateAnalytics(templateId: number, filters?: AnalyticsFilters): Promise<TemplateAnalyticsSummary> {
+    const { data, error } = await this.supabase
+      .from('email_template_metrics')
+      .select('*')
+      .eq('template_id', templateId)
+      .gte('date', filters?.date_from || '2020-01-01')
+      .lte('date', filters?.date_to || new Date().toISOString().split('T')[0])
+
+    if (error) throw error
+
+    const metrics = data || []
+    const totalSent = metrics.reduce((sum: number, m: any) => sum + m.total_sent, 0)
+    const totalOpened = metrics.reduce((sum: number, m: any) => sum + m.total_opened, 0)
+    const totalClicked = metrics.reduce((sum: number, m: any) => sum + m.total_clicked, 0)
+
+    return {
+      template_id: templateId,
+      template_name: '', // Will be filled by caller
+      total_sent: totalSent,
+      total_opened: totalOpened,
+      total_clicked: totalClicked,
+      open_rate: totalSent > 0 ? (totalOpened / totalSent) * 100 : 0,
+      click_rate: totalSent > 0 ? (totalClicked / totalSent) * 100 : 0,
+      performance_score: totalSent > 0 ? ((totalOpened * 0.6 + totalClicked * 0.4) / totalSent) * 100 : 0
+    }
+  }
+
+  async getAnalyticsSummary(filters?: AnalyticsFilters): Promise<TemplateAnalyticsSummary[]> {
+    const { data, error } = await this.supabase
+      .from('email_template_metrics')
+      .select(`
+        template_id,
+        SUM(total_sent) as total_sent,
+        SUM(total_opened) as total_opened,
+        SUM(total_clicked) as total_clicked,
+        MAX(date) as last_date
+      `)
+      .gte('date', filters?.date_from || '2020-01-01')
+      .lte('date', filters?.date_to || new Date().toISOString().split('T')[0])
+      .group('template_id')
+
+    if (error) throw error
+
+    return (data || []).map((metric: any) => ({
+      template_id: metric.template_id,
+      template_name: '', // Will be filled by caller
+      total_sent: metric.total_sent || 0,
+      total_opened: metric.total_opened || 0,
+      total_clicked: metric.total_clicked || 0,
+      open_rate: metric.total_sent > 0 ? (metric.total_opened / metric.total_sent) * 100 : 0,
+      click_rate: metric.total_sent > 0 ? (metric.total_clicked / metric.total_sent) * 100 : 0,
+      performance_score: metric.total_sent > 0 ? ((metric.total_opened * 0.6 + metric.total_clicked * 0.4) / metric.total_sent) * 100 : 0
+    }))
   }
 }
 

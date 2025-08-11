@@ -240,11 +240,12 @@ export default function EmailTemplatesPage() {
               <p className="text-sm text-gray-900">{selectedTemplate.subject}</p>
             </div>
             <div className="mb-4">
-              <h4 className="text-sm font-medium text-gray-700">HTML Content:</h4>
-              <div className="mt-2 p-4 bg-gray-50 rounded-md max-h-96 overflow-y-auto">
-                <pre className="text-xs text-gray-800 whitespace-pre-wrap">
-                  {selectedTemplate.html_content}
-                </pre>
+              <h4 className="text-sm font-medium text-gray-700">Email Preview:</h4>
+              <div className="mt-2 p-4 bg-gray-50 rounded-md max-h-96 overflow-y-auto border">
+                <div 
+                  className="bg-white rounded shadow-sm"
+                  dangerouslySetInnerHTML={{ __html: selectedTemplate.html_content }}
+                />
               </div>
             </div>
             {selectedTemplate.text_content && (
@@ -257,6 +258,15 @@ export default function EmailTemplatesPage() {
                 </div>
               </div>
             )}
+            
+            <div className="mb-4">
+              <h4 className="text-sm font-medium text-gray-700">HTML Code:</h4>
+              <div className="mt-2 p-4 bg-gray-50 rounded-md max-h-32 overflow-y-auto">
+                <pre className="text-xs text-gray-800 whitespace-pre-wrap">
+                  {selectedTemplate.html_content}
+                </pre>
+              </div>
+            </div>
             {selectedTemplate.placeholders && selectedTemplate.placeholders.length > 0 && (
               <div>
                 <h4 className="text-sm font-medium text-gray-700">Placeholders:</h4>

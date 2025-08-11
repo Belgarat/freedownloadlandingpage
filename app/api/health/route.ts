@@ -1,48 +1,21 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { getDatabaseAdapter } from '@/lib/database-config'
 
 export async function GET() {
   const startTime = Date.now()
   
   try {
-    // Check environment variables
-    const requiredEnvVars = [
-      'NEXT_PUBLIC_SUPABASE_URL',
-      'NEXT_PUBLIC_SUPABASE_ANON_KEY',
-      'SUPABASE_SERVICE_ROLE_KEY'
-    ]
+    // Get database adapter (automatically chooses provider based on ENV)
+    const adapter = getDatabaseAdapter()
     
-    const missingEnvVars = requiredEnvVars.filter(
-      varName => !process.env[varName]
-    )
-    
-    if (missingEnvVars.length > 0) {
-      return NextResponse.json({
-        status: 'error',
-        message: 'Missing environment variables',
-        missing: missingEnvVars,
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
-        environment: process.env.NODE_ENV
-      }, { status: 500 })
-    }
-
     // Check database connection
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
-    
-    const { data: dbTest, error: dbError } = await supabase
-      .from('ab_tests')
-      .select('count')
-      .limit(1)
-    
-    if (dbError) {
+    try {
+      await adapter.getABTests()
+    } catch (dbError) {
       return NextResponse.json({
         status: 'error',
         message: 'Database connection failed',
-        error: dbError.message,
+        error: dbError instanceof Error ? dbError.message : 'Unknown database error',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
         environment: process.env.NODE_ENV

@@ -334,6 +334,26 @@ booklandingstack/
 
 Create a `.env.local` file with the following variables:
 
+### Database Configuration
+
+The system supports two database engines, configured via the `DB_ENGINE` environment variable:
+
+#### SQLite (Default for Development)
+```bash
+DB_ENGINE=sqlite
+SQLITE_DB_PATH=/tmp/development.db  # Optional, defaults to /tmp/development.db
+```
+
+#### Supabase (Production)
+```bash
+DB_ENGINE=supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_key
+```
+
+**Note**: If `DB_ENGINE` is not specified, the system defaults to SQLite for development safety.
+
 ```bash
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here

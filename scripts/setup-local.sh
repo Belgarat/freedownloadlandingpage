@@ -34,21 +34,41 @@ print_status "Setting up local development environment..."
 # Check if .env.local exists
 if [ ! -f .env.local ]; then
     print_status "Creating .env.local file..."
-    cat > .env.local << 'EOF'
-# ===== LOCAL DEVELOPMENT =====
-# Database: SQLite (gratuito per development)
+                cat > .env.local << 'EOF'
+# ===== DATABASE CONFIGURATION =====
+# Choose database engine: 'sqlite' or 'supabase'
+DB_ENGINE=sqlite
+
+# ===== SQLITE CONFIGURATION =====
+# Path to SQLite database file (used when DB_ENGINE=sqlite)
 SQLITE_DB_PATH=/tmp/development.db
-NODE_ENV=development
+
+# ===== SUPABASE CONFIGURATION =====
+# These are required when DB_ENGINE=supabase
+# NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
+# NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+# SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_key_here
+
+# ===== SITE CONFIGURATION =====
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# ===== ADMIN AUTHENTICATION =====
+# Password per accedere al pannello admin (/admin)
+ADMIN_PASSWORD=admin123
+# Secret per firmare i cookie di autenticazione (cambia in production!)
+ADMIN_SECRET=dev-secret-change-in-production
 
 # ===== EMAIL SERVICE =====
 # Usa la tua chiave Resend per development
 RESEND_API_KEY=your_resend_key_here
 
-# ===== PRODUCTION DATABASE (COMMENTATO) =====
-# Non usato in development locale
-# NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-# NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-# SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_key
+# ===== STORAGE (Vercel Blob) =====
+# Token per upload file (opzionale per development locale)
+# BLOB_READ_WRITE_TOKEN=your_vercel_blob_token_here
+
+# ===== ANALYTICS =====
+# Per development locale, analytics sempre attivi
+# (non serve configurazione aggiuntiva)
 EOF
     print_warning "Please update RESEND_API_KEY in .env.local with your actual key"
 else

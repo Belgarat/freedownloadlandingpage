@@ -1,6 +1,24 @@
 import { createClient } from '@supabase/supabase-js'
 import { createDatabaseAdapter, DatabaseAdapter } from './database-adapter'
 
+/**
+ * Database Configuration System
+ * 
+ * The database provider is determined by the DB_ENGINE environment variable:
+ * 
+ * - DB_ENGINE=sqlite: Uses SQLite database (default for development)
+ *   - Requires: SQLITE_DB_PATH (optional, defaults to /tmp/development.db)
+ * 
+ * - DB_ENGINE=supabase: Uses Supabase PostgreSQL database
+ *   - Requires: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+ * 
+ * Examples:
+ *   DB_ENGINE=sqlite npm run dev
+ *   DB_ENGINE=supabase npm run dev
+ * 
+ * If DB_ENGINE is not specified, defaults to SQLite for development safety.
+ */
+
 // Database configuration based on environment
 export interface DatabaseConfig {
   provider: 'supabase' | 'railway' | 'sqlite'
@@ -9,58 +27,43 @@ export interface DatabaseConfig {
   path?: string
 }
 
-// Environment-specific database configurations
-const databaseConfigs: Record<string, DatabaseConfig> = {
-  development: {
-    provider: 'sqlite', // Usa SQLite per development (gratuito)
-    path: process.env.SQLITE_DB_PATH || '/tmp/development.db'
-  },
-  staging: {
-    provider: 'sqlite', // Usa SQLite per staging (gratuito)
-    path: process.env.SQLITE_DB_PATH || '/tmp/staging.db'
-  },
-  production: {
-    provider: 'supabase',
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    key: process.env.SUPABASE_SERVICE_ROLE_KEY
-  }
-}
+// Database configuration is now determined dynamically based on environment variables
+// No need for static configurations
 
-// Get current environment
-function getCurrentEnvironment(): string {
-  if (process.env.NODE_ENV === 'production') {
-    return 'production'
-  } else if (process.env.NODE_ENV === 'staging') {
-    return 'staging'
-  } else {
-    return 'development'
+// Determine database provider based on DB_ENGINE environment variable
+function determineDatabaseProvider(): 'supabase' | 'sqlite' {
+  const dbEngine = process.env.DB_ENGINE?.toLowerCase()
+  
+  switch (dbEngine) {
+    case 'supabase':
+      return 'supabase'
+    case 'sqlite':
+      return 'sqlite'
+    default:
+      // Fallback: se DB_ENGINE non è specificato, usa SQLite per development
+      console.log('⚠️ DB_ENGINE not specified, defaulting to SQLite')
+      return 'sqlite'
   }
 }
 
 // Create database client based on provider
-function createDatabaseClient(config: DatabaseConfig) {
-  switch (config.provider) {
+function createDatabaseClient(provider: 'supabase' | 'sqlite') {
+  switch (provider) {
     case 'supabase':
-      if (!config.url || !config.key) {
-        throw new Error('Supabase URL and key are required')
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+      
+      if (!url || !key) {
+        throw new Error('DB_ENGINE=supabase requires NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables')
       }
-      return createClient(config.url, config.key)
-    
-    case 'railway':
-      if (!config.url) {
-        throw new Error('Railway database URL is required')
-      }
-      // Railway usa PostgreSQL, quindi possiamo usare Supabase client
-      return createClient(config.url, config.key || '')
+      return createClient(url, key)
     
     case 'sqlite':
-      if (!config.path) {
-        throw new Error('SQLite database path is required')
-      }
-      return { path: config.path }
+      const path = process.env.SQLITE_DB_PATH || '/tmp/development.db'
+      return { path }
     
     default:
-      throw new Error(`Unsupported database provider: ${config.provider}`)
+      throw new Error(`Unsupported database provider: ${provider}`)
   }
 }
 
@@ -73,17 +76,13 @@ export function getDatabaseAdapter(): DatabaseAdapter {
     return databaseAdapter
   }
 
-  const environment = getCurrentEnvironment()
-  const config = databaseConfigs[environment]
+  const provider = determineDatabaseProvider()
+  console.log(`🗄️ Using database provider: ${provider}`)
   
-  if (!config) {
-    throw new Error(`No database configuration found for environment: ${environment}`)
-  }
-
-  const client = createDatabaseClient(config)
-  databaseAdapter = createDatabaseAdapter(config.provider, { 
+  const client = createDatabaseClient(provider)
+  databaseAdapter = createDatabaseAdapter(provider, { 
     client, 
-    path: config.provider === 'sqlite' ? config.path : undefined 
+    path: provider === 'sqlite' ? (client as any).path : undefined 
   })
   
   return databaseAdapter
@@ -111,9 +110,9 @@ export async function setupDatabase() {
 // Migration utilities
 export async function runMigrations() {
   const adapter = getDatabaseAdapter()
-  const environment = getCurrentEnvironment()
+  const provider = determineDatabaseProvider()
   
-  console.log(`Running migrations for environment: ${environment}`)
+  console.log(`Running migrations for provider: ${provider}`)
   
   // Per ora, le migrazioni sono gestite manualmente
   // In futuro possiamo implementare un sistema di migrazioni automatiche

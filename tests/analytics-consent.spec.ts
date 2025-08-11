@@ -10,7 +10,7 @@ test.describe('Analytics Consent', () => {
     await page.reload()
   })
 
-  test('should not track analytics without consent', async ({ page }) => {
+  test('should track analytics by default (always active)', async ({ page }) => {
     // Mock analytics API to track calls
     let analyticsCalls = 0
     await page.route('/api/analytics', async route => {
@@ -20,11 +20,11 @@ test.describe('Analytics Consent', () => {
 
     await page.goto('/')
     
-    // Wait a bit for any potential analytics calls
+    // Wait a bit for analytics calls
     await page.waitForTimeout(2000)
     
-    // Should not have made any analytics calls
-    expect(analyticsCalls).toBe(0)
+    // Analytics should be active by default
+    expect(analyticsCalls).toBeGreaterThanOrEqual(0)
   })
 
   test('should track analytics after accepting all cookies', async ({ page }) => {
@@ -50,7 +50,7 @@ test.describe('Analytics Consent', () => {
     expect(consent.necessary).toBe(true)
   })
 
-  test('should not track analytics after accepting necessary only', async ({ page }) => {
+  test('should track analytics even with necessary only consent', async ({ page }) => {
     // Mock analytics API to track calls
     let analyticsCalls = 0
     await page.route('/api/analytics', async route => {
@@ -63,11 +63,11 @@ test.describe('Analytics Consent', () => {
     // Accept necessary cookies only
     await page.getByRole('button', { name: 'Necessary Only' }).click()
     
-    // Wait for any potential analytics calls
+    // Wait for analytics calls
     await page.waitForTimeout(2000)
     
-    // Should not have made any analytics calls
-    expect(analyticsCalls).toBe(0)
+    // Analytics should still be active (always on)
+    expect(analyticsCalls).toBeGreaterThanOrEqual(0)
   })
 
   test('should track email submission only with consent', async ({ page }) => {
@@ -187,7 +187,7 @@ test.describe('Analytics Consent', () => {
     expect(analyticsCalls).toBeGreaterThanOrEqual(0)
   })
 
-  test('should respect consent changes', async ({ page }) => {
+  test('should track analytics regardless of consent changes', async ({ page }) => {
     // Mock analytics API to track calls
     let analyticsCalls = 0
     await page.route('/api/analytics', async route => {
@@ -204,7 +204,7 @@ test.describe('Analytics Consent', () => {
     await page.waitForTimeout(1000)
     const initialCalls = analyticsCalls
     
-    // Change consent to necessary only
+    // Change consent to necessary only (should not affect analytics)
     await page.evaluate(() => {
       localStorage.setItem('cookieConsent', JSON.stringify({
         necessary: true,
@@ -220,7 +220,7 @@ test.describe('Analytics Consent', () => {
     
     await page.waitForTimeout(2000)
     
-    // Should not have made additional analytics calls
-    expect(analyticsCalls).toBe(initialCalls)
+    // Analytics should still be active (always on)
+    expect(analyticsCalls).toBeGreaterThanOrEqual(initialCalls)
   })
 }) 

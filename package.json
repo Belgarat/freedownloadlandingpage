@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "type-check": "tsc --noEmit",
     "test": "playwright test",
     "test:headless": "playwright test --headed=false",
+    "test:ci": "playwright test --reporter=html --project=chromium",
     "test:auto": "timeout 300s npx playwright test --project=chromium || exit 1",
     "test:component": "timeout 60s npx playwright test tests/components/ --project=chromium || exit 1",
     "test:landing": "timeout 30s npx playwright test tests/landing-page.spec.ts --project=chromium || exit 1",
@@ -21,7 +23,13 @@
     "test:download": "timeout 30s npx playwright test tests/landing-page.spec.ts --grep='Download Page' --project=chromium || exit 1",
     "test:all": "timeout 600s npx playwright test --project=chromium || exit 1",
     "test:report": "playwright show-report",
-    "test:install": "playwright install"
+    "test:install": "playwright install",
+    "release": "./scripts/release.sh",
+    "release:patch": "./scripts/release.sh patch",
+    "release:minor": "./scripts/release.sh minor",
+    "release:major": "./scripts/release.sh major",
+    "deploy:staging": "vercel --prod",
+    "deploy:production": "vercel --prod --yes"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",

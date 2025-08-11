@@ -29,7 +29,9 @@
     "release:minor": "./scripts/release.sh minor",
     "release:major": "./scripts/release.sh major",
     "deploy:staging": "vercel --target=preview",
-    "deploy:production": "vercel --prod --yes"
+    "deploy:production": "vercel --prod --yes",
+    "db:backup": "curl -X POST http://localhost:3000/api/sqlite/backup",
+    "db:info": "curl http://localhost:3000/api/sqlite/backup"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",
@@ -40,11 +42,13 @@
     "@tiptap/pm": "^3.0.9",
     "@tiptap/react": "^3.0.9",
     "@tiptap/starter-kit": "^3.0.9",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@vercel/blob": "^1.1.1",
     "autoprefixer": "^10.4.16",
+    "better-sqlite3": "^12.2.0",
     "chokidar": "^4.0.3",
     "lucide-react": "^0.294.0",
     "next": "15.0.0",

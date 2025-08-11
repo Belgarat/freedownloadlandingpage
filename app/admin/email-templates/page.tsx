@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, Mail, Copy, Eye, Edit, Trash2 } from 'lucide-react'
+import { Plus, Mail, Copy, Eye, Edit, Trash2, Search, Filter } from 'lucide-react'
 import { useEmailTemplates } from '@/lib/useEmailTemplates'
 import type { EmailTemplate } from '@/types/email-templates'
 
@@ -13,6 +13,11 @@ export default function EmailTemplatesPage() {
   const [showPreview, setShowPreview] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [templateToDelete, setTemplateToDelete] = useState<EmailTemplate | null>(null)
+  
+  // Search and filter states
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState<number | 'all'>('all')
+  const [templateType, setTemplateType] = useState<'all' | 'default' | 'custom'>('all')
 
   const handleCreateTemplate = () => {
     router.push('/admin/email-templates/new')
@@ -50,6 +55,26 @@ export default function EmailTemplatesPage() {
       router.push(`/admin/email-templates/${newTemplate.id}/edit`)
     }
   }
+
+  // Filter templates based on search and filters
+  const filteredTemplates = templates.filter(template => {
+    // Search filter
+    const matchesSearch = searchTerm === '' || 
+      template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      template.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (template.description && template.description.toLowerCase().includes(searchTerm.toLowerCase()))
+
+    // Category filter
+    const matchesCategory = selectedCategory === 'all' || 
+      template.categories?.some(cat => cat.id === selectedCategory)
+
+    // Type filter
+    const matchesType = templateType === 'all' || 
+      (templateType === 'default' && template.is_default) ||
+      (templateType === 'custom' && !template.is_default)
+
+    return matchesSearch && matchesCategory && matchesType
+  })
 
   if (loading) {
     return (
@@ -177,6 +202,86 @@ export default function EmailTemplatesPage() {
           </div>
         </div>
 
+        {/* Search and Filters */}
+        <div className="bg-white shadow rounded-lg mb-6">
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* Search */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Search Templates
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    placeholder="Search by name, subject, or description..."
+                  />
+                </div>
+              </div>
+
+              {/* Category Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category
+                </label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value === 'all' ? 'all' : parseInt(e.target.value))}
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                >
+                  <option value="all">All Categories</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Type Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Type
+                </label>
+                <select
+                  value={templateType}
+                  onChange={(e) => setTemplateType(e.target.value as 'all' | 'default' | 'custom')}
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                >
+                  <option value="all">All Types</option>
+                  <option value="default">Default Only</option>
+                  <option value="custom">Custom Only</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Results Count */}
+            <div className="mt-4 flex items-center justify-between">
+              <p className="text-sm text-gray-600">
+                Showing {filteredTemplates.length} of {templates.length} templates
+              </p>
+              {(searchTerm || selectedCategory !== 'all' || templateType !== 'all') && (
+                <button
+                  onClick={() => {
+                    setSearchTerm('')
+                    setSelectedCategory('all')
+                    setTemplateType('all')
+                  }}
+                  className="text-sm text-blue-600 hover:text-blue-800"
+                >
+                  Clear all filters
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* Templates List */}
         <div className="bg-white shadow overflow-hidden sm:rounded-md">
           <div className="px-4 py-5 sm:px-6">
@@ -186,7 +291,7 @@ export default function EmailTemplatesPage() {
             </p>
           </div>
           <ul className="divide-y divide-gray-200">
-            {templates.length === 0 ? (
+            {filteredTemplates.length === 0 ? (
               <li className="px-4 py-8 text-center text-gray-500">
                 <Mail className="mx-auto h-12 w-12 text-gray-400" />
                 <h3 className="mt-2 text-sm font-medium text-gray-900">No templates</h3>
@@ -204,7 +309,7 @@ export default function EmailTemplatesPage() {
                 </div>
               </li>
             ) : (
-              templates.map((template) => (
+              filteredTemplates.map((template) => (
                 <li key={template.id} className="px-4 py-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">

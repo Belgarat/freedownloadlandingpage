@@ -202,7 +202,7 @@ export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageP
                     required
                   />
                   <p className="mt-1 text-xs text-gray-500">
-                    You can use placeholders like {{userName}}, {{downloadUrl}}, {{bookTitle}} in the subject line.
+                    You can use placeholders like {'{{userName}}'}, {'{{downloadUrl}}'}, {'{{bookTitle}}'} in the subject line.
                   </p>
                   {placeholders && placeholders.length > 0 && (
                     <div className="mt-2">

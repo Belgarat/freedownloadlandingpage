@@ -197,6 +197,8 @@ Complete documentation is available in the [`docs/`](./docs/) directory:
 - **[🔧 Environment Configuration](./docs/environment.md)** - Environment variables guide
 - **[📡 API Reference](./docs/api.md)** - Complete API documentation
 - **[⚡ API Quick Start](./docs/api-quick-start.md)** - Get started with APIs quickly
+- **[🔍 Interactive API Docs](./api-docs)** - Swagger UI documentation
+- **[📖 Swagger Integration](./docs/swagger-integration.md)** - How to use and extend Swagger docs
 - **[🏗️ Architecture](./docs/architecture.md)** - System design and architecture
 - **[🧪 Testing Guide](./docs/testing.md)** - Testing strategies and examples
 - **[🚀 Deployment Guide](./docs/deployment.md)** - Production deployment instructions

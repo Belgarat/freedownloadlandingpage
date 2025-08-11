@@ -4,6 +4,49 @@ import { generateDownloadToken, createDownloadUrl } from '@/lib/download-tokens'
 import { supabaseAdmin } from '@/lib/supabase'
 import { EmailRequest, EmailResponse } from '@/types/email'
 
+/**
+ * @swagger
+ * /api/send-ebook:
+ *   post:
+ *     summary: Send ebook download link
+ *     description: Send an ebook download link via email to the provided email address
+ *     tags: [Email]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EmailRequest'
+ *     responses:
+ *       200:
+ *         description: Email sent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Download link sent successfully"
+ *                 messageId:
+ *                   type: string
+ *                   example: "msg_123456789"
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function POST(request: NextRequest) {
   try {
     const body: EmailRequest = await request.json()

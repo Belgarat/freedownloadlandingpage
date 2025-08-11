@@ -107,6 +107,9 @@ main() {
         "storage")
             run_test_with_timeout "npx playwright test tests/storage.spec.ts --project=chromium" 60 "Storage Tests"
             ;;
+        "swagger")
+            run_test_with_timeout "npx playwright test tests/swagger-docs.spec.ts --project=chromium" 30 "Swagger Documentation Tests"
+            ;;
         "admin")
             run_test_with_timeout "npx playwright test tests/admin.spec.ts --project=chromium" 30 "Admin Tests"
             ;;
@@ -127,7 +130,7 @@ main() {
             ;;
         *)
             error "Tipo di test non riconosciuto: $1"
-            echo "Tipi disponibili: component, landing, ab-testing, api, storage, admin, auth, analytics, cookie, download, all"
+            echo "Tipi disponibili: component, landing, ab-testing, api, storage, swagger, admin, auth, analytics, cookie, download, all"
             exit 1
             ;;
     esac

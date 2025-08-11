@@ -1,6 +1,58 @@
 import { NextResponse } from 'next/server'
 import { getDatabaseAdapter } from '@/lib/database-config'
 
+/**
+ * @swagger
+ * /api/health:
+ *   get:
+ *     summary: Check system health
+ *     description: Check the health status of the system including database connectivity
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: System is healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "healthy"
+ *                 message:
+ *                   type: string
+ *                   example: "All systems operational"
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ *                 uptime:
+ *                   type: number
+ *                   example: 14.563479125
+ *                 environment:
+ *                   type: string
+ *                   example: "development"
+ *                 responseTime:
+ *                   type: string
+ *                   example: "9ms"
+ *                 checks:
+ *                   type: object
+ *                   properties:
+ *                     environment:
+ *                       type: string
+ *                       example: "ok"
+ *                     database:
+ *                       type: string
+ *                       example: "ok"
+ *                     api:
+ *                       type: string
+ *                       example: "ok"
+ *       500:
+ *         description: System is unhealthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET() {
   const startTime = Date.now()
   

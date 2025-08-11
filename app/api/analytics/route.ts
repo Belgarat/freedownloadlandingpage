@@ -2,6 +2,45 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getDatabaseAdapter } from '@/lib/database-config'
 import { AnalyticsEvent, AnalyticsResponse } from '@/types/analytics'
 
+/**
+ * @swagger
+ * /api/analytics:
+ *   post:
+ *     summary: Track analytics event
+ *     description: Track a detailed analytics event with user data
+ *     tags: [Analytics]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AnalyticsEvent'
+ *     responses:
+ *       200:
+ *         description: Event tracked successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function POST(request: NextRequest) {
   try {
     const body: AnalyticsEvent = await request.json()

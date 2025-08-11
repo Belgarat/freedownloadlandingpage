@@ -11,9 +11,17 @@ interface EditEmailTemplatePageProps {
   };
 }
 
-export default async function EditEmailTemplatePage({ params }: EditEmailTemplatePageProps) {
+export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageProps) {
   const router = useRouter();
-  const { id } = await params;
+  const [id, setId] = useState<string>('');
+
+  useEffect(() => {
+    const getParams = async () => {
+      const resolvedParams = await params;
+      setId(resolvedParams.id);
+    };
+    getParams();
+  }, [params]);
   const { 
     templates, 
     categories, 
@@ -36,7 +44,7 @@ export default async function EditEmailTemplatePage({ params }: EditEmailTemplat
   const [showPreview, setShowPreview] = useState(false);
 
   // Find the template to edit
-  const template = templates.find(t => t.id === parseInt(id));
+  const template = templates.find(t => t.id === parseInt(id || '0'));
 
   useEffect(() => {
     if (template) {
@@ -91,7 +99,7 @@ export default async function EditEmailTemplatePage({ params }: EditEmailTemplat
     router.push('/admin/email-templates');
   };
 
-  if (isLoading) {
+  if (isLoading || !id) {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-4xl mx-auto">

@@ -183,7 +183,7 @@ export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageP
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 bg-white"
                     required
                   />
                 </div>
@@ -198,9 +198,44 @@ export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageP
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 bg-white"
                     required
                   />
+                  <p className="mt-1 text-xs text-gray-500">
+                    You can use placeholders like {{userName}}, {{downloadUrl}}, {{bookTitle}} in the subject line.
+                  </p>
+                  {placeholders && placeholders.length > 0 && (
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-600 mb-1">Quick insert placeholders:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {placeholders.slice(0, 5).map(placeholder => (
+                          <button
+                            key={placeholder.id}
+                            type="button"
+                            onClick={() => {
+                              const subjectInput = document.getElementById('subject') as HTMLInputElement;
+                              if (subjectInput) {
+                                const placeholderText = `{{${placeholder.placeholder_key}}}`;
+                                const cursorPos = subjectInput.selectionStart || 0;
+                                const currentValue = subjectInput.value;
+                                const newValue = currentValue.slice(0, cursorPos) + placeholderText + currentValue.slice(cursorPos);
+                                setFormData(prev => ({ ...prev, subject: newValue }));
+                                
+                                // Set cursor position after placeholder
+                                setTimeout(() => {
+                                  subjectInput.focus();
+                                  subjectInput.setSelectionRange(cursorPos + placeholderText.length, cursorPos + placeholderText.length);
+                                }, 0);
+                              }
+                            }}
+                            className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors"
+                          >
+                            {placeholder.placeholder_key}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -213,7 +248,7 @@ export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageP
                     value={formData.description}
                     onChange={handleInputChange}
                     rows={3}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 bg-white"
                   />
                 </div>
 

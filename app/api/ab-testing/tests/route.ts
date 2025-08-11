@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// PUT - Aggiorna un test
+    // PUT - Update a test
 export async function PUT(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -100,7 +100,7 @@ export async function PUT(request: NextRequest) {
     const testData: Partial<ABTest> = await request.json()
     const adapter = getDatabaseAdapter()
     
-    // Aggiorna il test
+    // Update the test
     const updatedTest = await adapter.updateABTest(testId, {
       name: testData.name,
       description: testData.description,
@@ -113,12 +113,12 @@ export async function PUT(request: NextRequest) {
       conversion_goal: testData.conversion_goal
     })
 
-    // Se ci sono varianti da aggiornare
+    // If there are variants to update
     if (testData.variants) {
-      // Elimina le varianti esistenti (non implementato nell'adapter, per ora)
-      // await adapter.deleteABVariants(testId)
-
-      // Inserisci le nuove varianti
+              // Delete existing variants (not implemented in adapter yet)
+        // await adapter.deleteABVariants(testId)
+        
+        // Insert new variants
       for (let i = 0; i < testData.variants.length; i++) {
         const variant = testData.variants[i]
         await adapter.createABVariant({
@@ -152,7 +152,7 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-// DELETE - Elimina un test
+    // DELETE - Delete a test
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)

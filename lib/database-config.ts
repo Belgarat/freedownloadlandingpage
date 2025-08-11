@@ -40,7 +40,7 @@ function determineDatabaseProvider(): 'supabase' | 'sqlite' {
     case 'sqlite':
       return 'sqlite'
     default:
-      // Fallback: se DB_ENGINE non è specificato, usa SQLite per development
+      // Fallback: if DB_ENGINE is not specified, use SQLite for development
       console.log('⚠️ DB_ENGINE not specified, defaulting to SQLite')
       return 'sqlite'
   }

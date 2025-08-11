@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   try {
     const result: ABTestResult = await request.json()
     
-    // Validazione base
+    // Basic validation
     if (!result.testId || !result.variantId || !result.visitorId) {
       return NextResponse.json(
         { error: 'Missing required fields' },
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Salva il risultato nel database
+    // Save the result to the database
     const { error: insertError } = await supabase
       .from('ab_test_results')
       .insert({
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Aggiorna le statistiche del test
+    // Update test statistics
     await updateTestStats(result.testId)
     
     console.log('A/B Test Result saved:', result)
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
       )
     }
     
-    // Ottieni i risultati dal database
+    // Get results from database
     const { data: testResults, error: fetchError } = await supabase
       .from('ab_test_results')
       .select(`
@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
 
     if (fetchError) {
       console.error('Error fetching test results:', fetchError)
-      // Se non ci sono risultati, restituisci statistiche vuote
+      // If no results, return empty statistics
       return NextResponse.json({
         testId,
         totalVisits: 0,
@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Calcola le statistiche
+    // Calculate statistics
     const stats = calculateTestStats(testResults || [])
     
     return NextResponse.json(stats)
@@ -105,10 +105,10 @@ export async function GET(request: NextRequest) {
 
 async function updateTestStats(testId: string) {
   try {
-    // Per ora, calcoliamo le statistiche manualmente
-    // In futuro, useremo la funzione SQL calculate_ab_test_stats
+    // For now, we calculate statistics manually
+    // In the future, we'll use the SQL calculate_ab_test_stats function
     
-    // Ottieni tutti i risultati per questo test
+    // Get all results for this test
     const { data: results, error: resultsError } = await supabase
       .from('ab_test_results')
       .select('*')
@@ -121,12 +121,12 @@ async function updateTestStats(testId: string) {
 
     if (!results || results.length === 0) return
 
-    // Calcola statistiche aggregate
+    // Calculate aggregate statistics
     const totalVisitors = results.length
     const totalConversions = results.filter(r => r.conversion).length
     const overallConversionRate = totalVisitors > 0 ? (totalConversions / totalVisitors) * 100 : 0
 
-    // Aggiorna il test
+    // Update the test
     await supabase
       .from('ab_tests')
       .update({
@@ -137,7 +137,7 @@ async function updateTestStats(testId: string) {
       })
       .eq('id', testId)
 
-    // Calcola statistiche per variante
+    // Calculate statistics per variant
     const variantStats = new Map()
     results.forEach(result => {
       const current = variantStats.get(result.variant_id) || { visits: 0, conversions: 0 }
@@ -148,7 +148,7 @@ async function updateTestStats(testId: string) {
       variantStats.set(result.variant_id, current)
     })
 
-    // Aggiorna le varianti
+    // Update variants
     for (const [variantId, stats] of variantStats.entries()) {
       const conversionRate = stats.visits > 0 ? (stats.conversions / stats.visits) * 100 : 0
       

@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString()
     }
 
-    // Test connessione database
+    // Test database connection
     try {
       const { data, error } = await supabase
         .from('ab_tests')
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       console.error('Database connection error:', err)
     }
 
-    // Test altre tabelle se ab_tests esiste
+    // Test other tables if ab_tests exists
     if (health.tables.ab_tests) {
       try {
         await supabase.from('ab_variants').select('count').limit(1)

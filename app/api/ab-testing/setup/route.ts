@@ -8,7 +8,7 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
   try {
-    // Per ora, restituiamo un messaggio che indica di eseguire la migrazione manualmente
+    // For now, we return a message indicating to run the migration manually
     return NextResponse.json({ 
       success: true, 
       message: 'Please run the SQL migration manually in your Supabase dashboard',

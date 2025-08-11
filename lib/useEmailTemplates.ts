@@ -88,6 +88,38 @@ export function useEmailTemplates() {
     }
   }
 
+  // Duplicate template
+  const duplicateTemplate = async (id: number): Promise<EmailTemplate | null> => {
+    try {
+      const template = templates.find(t => t.id === id)
+      if (!template) throw new Error('Template not found')
+
+      const duplicateData: EmailTemplateFormData = {
+        name: `${template.name} (Copy)`,
+        subject: template.subject,
+        description: template.description ? `${template.description} (Copy)` : 'Duplicated template',
+        html_content: template.html_content,
+        text_content: template.text_content || '',
+        is_default: false,
+        category_ids: template.categories?.map(c => c.id) || []
+      }
+
+      const response = await fetch('/api/email-templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(duplicateData)
+      })
+      
+      if (!response.ok) throw new Error('Failed to duplicate template')
+      const newTemplate = await response.json()
+      setTemplates(prev => [newTemplate, ...prev])
+      return newTemplate
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error')
+      return null
+    }
+  }
+
   // Get template by ID
   const getTemplate = (id: number): EmailTemplate | undefined => {
     return templates.find(t => t.id === id)
@@ -121,6 +153,7 @@ export function useEmailTemplates() {
     createTemplate,
     updateTemplate,
     deleteTemplate,
+    duplicateTemplate,
     getTemplate,
     getDefaultTemplate,
     getTemplatesByCategory

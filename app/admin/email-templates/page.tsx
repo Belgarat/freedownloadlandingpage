@@ -8,7 +8,7 @@ import type { EmailTemplate } from '@/types/email-templates'
 
 export default function EmailTemplatesPage() {
   const router = useRouter()
-  const { templates, categories, loading, error, deleteTemplate } = useEmailTemplates()
+  const { templates, categories, loading, error, deleteTemplate, duplicateTemplate } = useEmailTemplates()
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null)
   const [showPreview, setShowPreview] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -41,6 +41,14 @@ export default function EmailTemplatesPage() {
   const cancelDelete = () => {
     setShowDeleteConfirm(false)
     setTemplateToDelete(null)
+  }
+
+  const handleDuplicateTemplate = async (template: EmailTemplate) => {
+    const newTemplate = await duplicateTemplate(template.id)
+    if (newTemplate) {
+      // Show success message or redirect to edit page
+      router.push(`/admin/email-templates/${newTemplate.id}/edit`)
+    }
   }
 
   if (loading) {
@@ -221,6 +229,13 @@ export default function EmailTemplatesPage() {
                         title="Edit"
                       >
                         ✏️
+                      </button>
+                      <button
+                        onClick={() => handleDuplicateTemplate(template)}
+                        className="p-2 text-gray-400 hover:text-green-600"
+                        title="Duplicate"
+                      >
+                        📋
                       </button>
                       <button
                         onClick={() => handleDeleteTemplate(template)}

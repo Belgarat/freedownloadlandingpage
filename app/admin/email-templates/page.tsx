@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, Mail } from 'lucide-react'
+import { Plus, Mail, Copy, Eye, Edit, Trash2 } from 'lucide-react'
 import { useEmailTemplates } from '@/lib/useEmailTemplates'
 import type { EmailTemplate } from '@/types/email-templates'
 
@@ -232,32 +232,32 @@ export default function EmailTemplatesPage() {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => handlePreviewTemplate(template)}
-                        className="p-2 text-gray-400 hover:text-gray-600"
+                        className="p-3 text-gray-400 hover:text-gray-600"
                         title="Preview"
                       >
-                        👁️
+                        <Eye className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => router.push(`/admin/email-templates/${template.id}/edit`)}
-                        className="p-2 text-gray-400 hover:text-blue-600"
+                        className="p-3 text-gray-400 hover:text-blue-600"
                         title="Edit"
                       >
-                        ✏️
+                        <Edit className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => handleDuplicateTemplate(template)}
-                        className="p-2 text-gray-400 hover:text-green-600"
+                        className="p-3 text-gray-400 hover:text-green-600"
                         title="Duplicate"
                       >
-                        📋
+                        <Copy className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => handleDeleteTemplate(template)}
-                        className="p-2 text-gray-400 hover:text-red-600"
+                        className="p-3 text-gray-400 hover:text-red-600"
                         title="Delete"
                         disabled={template.is_default}
                       >
-                        🗑️
+                        <Trash2 className="h-5 w-5" />
                       </button>
                     </div>
                   </div>

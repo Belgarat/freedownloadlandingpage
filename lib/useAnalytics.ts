@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { useConfig } from './useConfig'
 
 interface AnalyticsEvent {
   action: string
@@ -13,15 +12,11 @@ interface AnalyticsEvent {
 }
 
 export const useAnalytics = () => {
-  const { isAnalyticsEnabled, isTrackingEnabled, isDevelopmentMode } = useConfig()
   const [hasTrackedPageView, setHasTrackedPageView] = useState(false)
   const [hasTrackedScroll, setHasTrackedScroll] = useState(false)
   const [analyticsConsent, setAnalyticsConsent] = useState(false)
   const startTime = useRef(Date.now())
   const scrollDepth = useRef(0)
-
-  // Check if analytics should be disabled based on configuration
-  const shouldDisableAnalytics = isDevelopmentMode || !isAnalyticsEnabled || !isTrackingEnabled
 
   // Check for analytics consent
   useEffect(() => {
@@ -63,12 +58,6 @@ export const useAnalytics = () => {
   }, [])
 
   const trackAnonymousEvent = async (action: string) => {
-    // Disable tracking if in development mode or analytics disabled
-    if (shouldDisableAnalytics) {
-      console.log(`🔕 Analytics disabled: ${action} (development mode or config disabled)`)
-      return
-    }
-
     // Always track anonymously (GDPR compliant)
     try {
       const response = await fetch('/api/analytics/anonymous', {
@@ -88,15 +77,7 @@ export const useAnalytics = () => {
   }
 
   const trackEvent = async (event: Omit<AnalyticsEvent, 'timestamp' | 'userAgent' | 'referrer'>) => {
-    // Disable tracking if in development mode or analytics disabled
-    if (shouldDisableAnalytics) {
-      console.log(`🔕 Analytics disabled: ${event.action} (development mode or config disabled)`)
-      return
-    }
-
-    // Only track if user has given consent for analytics
-    if (!analyticsConsent) return
-    
+    // Always track detailed analytics (simplified system)
     try {
       const response = await fetch('/api/analytics', {
         method: 'POST',
@@ -125,20 +106,16 @@ export const useAnalytics = () => {
       // Always track anonymously (GDPR compliant)
       trackAnonymousEvent('page_view')
       
-      // Track with consent if available
-      if (analyticsConsent) {
-        trackEvent({
-          action: 'page_view',
-        })
-      }
+      // Always track detailed analytics (simplified system)
+      trackEvent({
+        action: 'page_view',
+      })
       setHasTrackedPageView(true)
     }
-  }, [hasTrackedPageView, analyticsConsent, shouldDisableAnalytics])
+  }, [hasTrackedPageView])
 
   // Track scroll events
   useEffect(() => {
-    if (!analyticsConsent || shouldDisableAnalytics) return
-
     const handleScroll = () => {
       const scrollTop = window.scrollY
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
@@ -159,12 +136,10 @@ export const useAnalytics = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [hasTrackedScroll, analyticsConsent, shouldDisableAnalytics])
+  }, [hasTrackedScroll])
 
   // Track time on page when user leaves
   useEffect(() => {
-    if (!analyticsConsent || shouldDisableAnalytics) return
-
     let hasTrackedExit = false
 
     const trackExit = () => {
@@ -196,21 +171,19 @@ export const useAnalytics = () => {
       window.removeEventListener('pagehide', handlePageHide)
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
-  }, [analyticsConsent, shouldDisableAnalytics])
+  }, [])
 
   const trackEmailSubmit = async (email: string) => {
     // Always track anonymously (GDPR compliant)
     trackAnonymousEvent('email_submitted')
     
-    // Track with consent if available
-    if (analyticsConsent) {
-      await trackEvent({
-        action: 'email_submitted',
-        email,
-        timeOnPage: Date.now() - startTime.current,
-        scrollDepth: scrollDepth.current,
-      })
-    }
+    // Always track detailed analytics (simplified system)
+    await trackEvent({
+      action: 'email_submitted',
+      email,
+      timeOnPage: Date.now() - startTime.current,
+      scrollDepth: scrollDepth.current,
+    })
   }
 
   const trackGoodreadsClick = async () => {

@@ -37,8 +37,6 @@
     "easing": "ease-in-out"
   },
   "development": {
-    "analytics": false,
-    "tracking": false,
     "debug": true,
     "hotReload": true
   },

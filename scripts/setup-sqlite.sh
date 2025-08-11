@@ -115,6 +115,11 @@ db.exec(`
     user_agent TEXT,
     ip_address TEXT,
     referrer TEXT,
+    email TEXT,
+    action TEXT,
+    timestamp TEXT,
+    scroll_depth INTEGER,
+    time_on_page INTEGER,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
   );
 
@@ -126,6 +131,17 @@ db.exec(`
     ip_address TEXT,
     user_agent TEXT,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS anonymous_counters (
+    key TEXT PRIMARY KEY,
+    total_visits INTEGER DEFAULT 0,
+    total_downloads INTEGER DEFAULT 0,
+    total_email_submissions INTEGER DEFAULT 0,
+    total_goodreads_clicks INTEGER DEFAULT 0,
+    total_substack_clicks INTEGER DEFAULT 0,
+    total_publisher_clicks INTEGER DEFAULT 0,
+    last_updated TEXT DEFAULT CURRENT_TIMESTAMP
   );
 `);
 

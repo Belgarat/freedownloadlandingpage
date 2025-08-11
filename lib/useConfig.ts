@@ -64,9 +64,7 @@ export function useConfig() {
     seo: config?.seo || null,
     email: config?.email || null,
     // Development mode helpers
-    isDevelopmentMode: config?.theme?.development?.debug || false,
-    isAnalyticsEnabled: config?.theme?.development?.analytics || false,
-    isTrackingEnabled: config?.theme?.development?.tracking || false
+    isDevelopmentMode: config?.theme?.development?.debug || false
   }
 }
 
@@ -103,12 +101,9 @@ export function useEmailConfig(): EmailConfig | null {
 
 // Development mode hook
 export function useDevelopmentMode() {
-  const { isDevelopmentMode, isAnalyticsEnabled, isTrackingEnabled } = useConfig()
+  const { isDevelopmentMode } = useConfig()
   
   return {
-    isDevelopmentMode,
-    isAnalyticsEnabled,
-    isTrackingEnabled,
-    shouldTrack: isAnalyticsEnabled && isTrackingEnabled && !isDevelopmentMode
+    isDevelopmentMode
   }
 } 

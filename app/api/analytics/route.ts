@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getDatabaseAdapter } from '@/lib/database-config'
 import { AnalyticsEvent, AnalyticsResponse } from '@/types/analytics'
 
 export async function POST(request: NextRequest) {
@@ -23,33 +23,25 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Insert analytics data into Supabase
-    const { data, error } = await supabaseAdmin
-      .from('analytics')
-      .insert([
-        {
-          email: email || null,
-          action,
-          timestamp,
-          user_agent: userAgent,
-          referrer,
-          ip_address: request.headers.get('x-forwarded-for') || 
-                     request.headers.get('x-real-ip') || 
-                     'unknown',
-          scroll_depth: scrollDepth || null,
-          time_on_page: timeOnPage || null,
-          created_at: new Date().toISOString(),
-        }
-      ])
-      .select()
+    const adapter = getDatabaseAdapter()
 
-    if (error) {
-      console.error('Supabase error:', error)
-      return NextResponse.json(
-        { error: 'Failed to save analytics data' },
-        { status: 500 }
-      )
-    }
+    // Insert analytics data
+    const data = await adapter.trackVisit({
+      id: `analytics-${Date.now()}`,
+      visitor_id: `visitor-${Date.now()}`,
+      page_url: request.url,
+      user_agent: userAgent,
+      ip_address: request.headers.get('x-forwarded-for') || 
+                 request.headers.get('x-real-ip') || 
+                 'unknown',
+      referrer,
+      email: email || null,
+      action,
+      timestamp,
+      scroll_depth: scrollDepth || null,
+      time_on_page: timeOnPage || null,
+      created_at: new Date().toISOString(),
+    })
 
     return NextResponse.json({ success: true, data })
   } catch (error) {

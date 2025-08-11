@@ -760,28 +760,6 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
-              id="analytics"
-              checked={config.development.analytics}
-              onChange={(e) => onChange({...config, development: {...config.development, analytics: e.target.checked}})}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <label htmlFor="analytics" className="text-sm font-medium text-gray-700">Enable Analytics</label>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="tracking"
-              checked={config.development.tracking}
-              onChange={(e) => onChange({...config, development: {...config.development, tracking: e.target.checked}})}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <label htmlFor="tracking" className="text-sm font-medium text-gray-700">Enable Tracking</label>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
               id="debug"
               checked={config.development.debug}
               onChange={(e) => onChange({...config, development: {...config.development, debug: e.target.checked}})}
@@ -800,6 +778,13 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
             />
             <label htmlFor="hotReload" className="text-sm font-medium text-gray-700">Hot Reload</label>
           </div>
+        </div>
+        
+        <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+          <p className="text-sm text-green-800">
+            <strong>Analytics sempre attivi:</strong> Il tracciamento analytics è ora sempre abilitato per tutti gli ambienti. 
+            Non è più necessario configurare flag separati.
+          </p>
         </div>
       </div>
       )}

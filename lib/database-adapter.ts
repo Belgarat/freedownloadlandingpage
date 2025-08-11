@@ -24,7 +24,14 @@ export interface DatabaseAdapter {
   // Analytics
   trackVisit(data: any): Promise<any>
   trackDownload(data: any): Promise<any>
-  getAnalytics(): Promise<any>
+  getAnalytics(): Promise<any[]>
+  
+  // Download Tokens
+  getDownloadTokens(): Promise<any[]>
+  
+  // Anonymous Counters
+  getAnonymousCounters(): Promise<any>
+  incrementAnonymousCounter(type: string): Promise<void>
 }
 
 // Supabase Adapter
@@ -189,6 +196,97 @@ export class SupabaseAdapter implements DatabaseAdapter {
     if (error) throw error
     return data || []
   }
+
+  async getDownloadTokens() {
+    const { data, error } = await this.supabase
+      .from('download_tokens')
+      .select('*')
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    return data || []
+  }
+
+  async getAnonymousCounters() {
+    const { data, error } = await this.supabase
+      .from('anonymous_counters')
+      .select('*')
+      .eq('key', 'anonymous_counters')
+      .single()
+    
+    if (error) throw error
+    return data || {
+      total_visits: 0,
+      total_downloads: 0,
+      total_email_submissions: 0,
+      total_goodreads_clicks: 0,
+      total_substack_clicks: 0,
+      total_publisher_clicks: 0,
+      last_updated: new Date().toISOString()
+    }
+  }
+
+  async incrementAnonymousCounter(type: string) {
+    // Try RPC first, then fallback to manual update
+    const rpcMap: Record<string, string> = {
+      'visits': 'increment_visits',
+      'downloads': 'increment_downloads',
+      'email_submissions': 'increment_email_submissions',
+      'goodreads_clicks': 'increment_goodreads_clicks',
+      'substack_clicks': 'increment_substack_clicks',
+      'publisher_clicks': 'increment_publisher_clicks'
+    }
+
+    const rpcName = rpcMap[type]
+    if (rpcName) {
+      const { error: rpcError } = await this.supabase.rpc(rpcName)
+      if (!rpcError) return
+    }
+
+    // Fallback: manual increment
+    const { data: existing, error: selectError } = await this.supabase
+      .from('anonymous_counters')
+      .select('*')
+      .eq('key', 'anonymous_counters')
+      .single()
+
+    if (selectError) {
+      // Create if doesn't exist
+      await this.supabase
+        .from('anonymous_counters')
+        .insert({
+          key: 'anonymous_counters',
+          total_visits: type === 'visits' ? 1 : 0,
+          total_downloads: type === 'downloads' ? 1 : 0,
+          total_email_submissions: type === 'email_submissions' ? 1 : 0,
+          total_goodreads_clicks: type === 'goodreads_clicks' ? 1 : 0,
+          total_substack_clicks: type === 'substack_clicks' ? 1 : 0,
+          total_publisher_clicks: type === 'publisher_clicks' ? 1 : 0,
+          last_updated: new Date().toISOString()
+        })
+      return
+    }
+
+    const updateData: any = { last_updated: new Date().toISOString() }
+    const fieldMap: Record<string, string> = {
+      'visits': 'total_visits',
+      'downloads': 'total_downloads',
+      'email_submissions': 'total_email_submissions',
+      'goodreads_clicks': 'total_goodreads_clicks',
+      'substack_clicks': 'total_substack_clicks',
+      'publisher_clicks': 'total_publisher_clicks'
+    }
+
+    const field = fieldMap[type]
+    if (field) {
+      updateData[field] = (existing?.[field] || 0) + 1
+    }
+
+    await this.supabase
+      .from('anonymous_counters')
+      .update(updateData)
+      .eq('key', 'anonymous_counters')
+  }
 }
 
 // SQLite Adapter (per staging/testing)
@@ -271,6 +369,11 @@ export class SQLiteAdapter implements DatabaseAdapter {
         user_agent TEXT,
         ip_address TEXT,
         referrer TEXT,
+        email TEXT,
+        action TEXT,
+        timestamp TEXT,
+        scroll_depth INTEGER,
+        time_on_page INTEGER,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP
       );
 
@@ -282,6 +385,17 @@ export class SQLiteAdapter implements DatabaseAdapter {
         ip_address TEXT,
         user_agent TEXT,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS anonymous_counters (
+        key TEXT PRIMARY KEY,
+        total_visits INTEGER DEFAULT 0,
+        total_downloads INTEGER DEFAULT 0,
+        total_email_submissions INTEGER DEFAULT 0,
+        total_goodreads_clicks INTEGER DEFAULT 0,
+        total_substack_clicks INTEGER DEFAULT 0,
+        total_publisher_clicks INTEGER DEFAULT 0,
+        last_updated TEXT DEFAULT CURRENT_TIMESTAMP
       );
     `)
   }
@@ -503,13 +617,16 @@ export class SQLiteAdapter implements DatabaseAdapter {
   async trackVisit(data: any) {
     const stmt = this.db.prepare(`
       INSERT INTO analytics (
-        id, visitor_id, page_url, user_agent, ip_address, referrer
-      ) VALUES (?, ?, ?, ?, ?, ?)
+        id, visitor_id, page_url, user_agent, ip_address, referrer,
+        email, action, timestamp, scroll_depth, time_on_page
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `)
     
     stmt.run(
       data.id, data.visitor_id, data.page_url,
-      data.user_agent, data.ip_address, data.referrer
+      data.user_agent, data.ip_address, data.referrer,
+      data.email, data.action, data.timestamp,
+      data.scroll_depth, data.time_on_page
     )
     
     return { id: data.id, ...data }
@@ -536,6 +653,66 @@ export class SQLiteAdapter implements DatabaseAdapter {
     `)
     
     return stmt.all()
+  }
+
+  async getDownloadTokens() {
+    const stmt = this.db.prepare(`
+      SELECT * FROM downloads ORDER BY created_at DESC
+    `)
+    
+    return stmt.all()
+  }
+
+  async getAnonymousCounters() {
+    const stmt = this.db.prepare(`
+      SELECT * FROM anonymous_counters WHERE key = ?
+    `)
+    
+    const result = stmt.get('anonymous_counters')
+    
+    return result || {
+      total_visits: 0,
+      total_downloads: 0,
+      total_email_submissions: 0,
+      total_goodreads_clicks: 0,
+      total_substack_clicks: 0,
+      total_publisher_clicks: 0,
+      last_updated: new Date().toISOString()
+    }
+  }
+
+  async incrementAnonymousCounter(type: string) {
+    const fieldMap: Record<string, string> = {
+      'visits': 'total_visits',
+      'downloads': 'total_downloads',
+      'email_submissions': 'total_email_submissions',
+      'goodreads_clicks': 'total_goodreads_clicks',
+      'substack_clicks': 'total_substack_clicks',
+      'publisher_clicks': 'total_publisher_clicks'
+    }
+
+    const field = fieldMap[type]
+    if (!field) return
+
+    // Try to update existing record
+    const updateStmt = this.db.prepare(`
+      UPDATE anonymous_counters 
+      SET ${field} = ${field} + 1, last_updated = CURRENT_TIMESTAMP
+      WHERE key = ?
+    `)
+    
+    const result = updateStmt.run('anonymous_counters')
+    
+    // If no rows were updated, create the record
+    if (result.changes === 0) {
+      const insertStmt = this.db.prepare(`
+        INSERT INTO anonymous_counters (
+          key, ${field}, last_updated
+        ) VALUES (?, 1, CURRENT_TIMESTAMP)
+      `)
+      
+      insertStmt.run('anonymous_counters')
+    }
   }
 }
 

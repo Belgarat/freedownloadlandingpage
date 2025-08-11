@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { CheckCircle, XCircle, AlertCircle, Loader2, ChevronUp, ChevronDown, X } from 'lucide-react'
 
 export default function ConfigStatus() {
-  const { config, loading, error, isDevelopmentMode, isAnalyticsEnabled, isTrackingEnabled } = useConfig()
+  const { config, loading, error, isDevelopmentMode } = useConfig()
   const [isVisible, setIsVisible] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
 
@@ -15,8 +15,6 @@ export default function ConfigStatus() {
   }, [isDevelopmentMode])
 
   if (!isVisible) return null
-
-  const shouldDisableAnalytics = isDevelopmentMode || !isAnalyticsEnabled || !isTrackingEnabled
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
@@ -81,25 +79,11 @@ export default function ConfigStatus() {
               </div>
               <div className="flex items-center justify-between">
                 <span>Analytics:</span>
-                {shouldDisableAnalytics ? (
-                  <XCircle className="w-3 h-3 text-red-300" />
-                ) : (
-                  <CheckCircle className="w-3 h-3 text-green-300" />
-                )}
+                <CheckCircle className="w-3 h-3 text-green-300" />
               </div>
-              <div className="flex items-center justify-between">
-                <span>Tracking:</span>
-                {shouldDisableAnalytics ? (
-                  <XCircle className="w-3 h-3 text-red-300" />
-                ) : (
-                  <CheckCircle className="w-3 h-3 text-green-300" />
-                )}
+              <div className="text-green-200 text-xs bg-blue-600/50 rounded px-2 py-1">
+                ✅ Analytics sempre attivi
               </div>
-              {shouldDisableAnalytics && (
-                <div className="text-yellow-200 text-xs bg-blue-600/50 rounded px-2 py-1">
-                  🔕 Analytics disabled in development
-                </div>
-              )}
             </div>
           )}
         </div>

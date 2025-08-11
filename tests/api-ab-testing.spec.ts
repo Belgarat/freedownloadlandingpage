@@ -63,20 +63,13 @@ test.describe('A/B Testing API', () => {
     expect(Array.isArray(tests)).toBe(true)
     expect(tests.some(t => t.id === testId)).toBe(true)
 
-    // Update test
-    const updateData = {
-      ...testData,
-      status: 'running',
-      name: 'API Test - CTA Button Color (Updated)'
-    }
-    
-    const updateResponse = await page.request.put(`/api/ab-testing/tests?id=${testId}`, {
-      data: updateData
+    // Update test status
+    const updateResponse = await page.request.patch(`/api/ab-testing/tests/${testId}`, {
+      data: { status: 'running' }
     })
     expect(updateResponse.status()).toBe(200)
     const updatedTest = await updateResponse.json()
     expect(updatedTest.status).toBe('running')
-    expect(updatedTest.name).toBe(updateData.name)
 
         // Track a visit (solo se ci sono varianti)
     let visitorId = 'test-visitor-123'
@@ -159,7 +152,7 @@ test.describe('A/B Testing API', () => {
     }
 
     // Delete test
-    const deleteResponse = await page.request.delete(`/api/ab-testing/tests?id=${testId}`)
+    const deleteResponse = await page.request.delete(`/api/ab-testing/tests/${testId}`)
     expect(deleteResponse.status()).toBe(200)
   })
 

@@ -1,58 +1,35 @@
 import { NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getDatabaseAdapter } from '@/lib/database-config'
 import { AnonymousCounterService } from '@/lib/anonymous-counters'
 import { AdminStats } from '@/types/admin'
 
 export async function GET() {
   try {
-    // Get page views
-    const { count: pageViews } = await supabaseAdmin
-      .from('analytics')
-      .select('*', { count: 'exact', head: true })
-      .eq('action', 'page_view')
+    const adapter = getDatabaseAdapter()
+    
+    // Get all analytics data
+    const analytics = await adapter.getAnalytics()
+    
+    // Calculate stats from analytics data
+    const pageViews = analytics.filter(item => item.action === 'page_view').length
+    const scrollToBottom = analytics.filter(item => item.action === 'scroll_to_bottom').length
+    const emailSubmissions = analytics.filter(item => item.action === 'email_submitted').length
+    const downloadRequests = analytics.filter(item => item.action === 'download_requested').length
+    const completedDownloads = analytics.filter(item => item.action === 'download_completed').length
 
-    // Get scroll to bottom events
-    const { count: scrollToBottom } = await supabaseAdmin
-      .from('analytics')
-      .select('*', { count: 'exact', head: true })
-      .eq('action', 'scroll_to_bottom')
-
-    // Get email submissions
-    const { count: emailSubmissions } = await supabaseAdmin
-      .from('analytics')
-      .select('*', { count: 'exact', head: true })
-      .eq('action', 'email_submitted')
-
-    // Get download requests
-    const { count: downloadRequests } = await supabaseAdmin
-      .from('analytics')
-      .select('*', { count: 'exact', head: true })
-      .eq('action', 'download_requested')
-
-    // Get completed downloads
-    const { count: completedDownloads } = await supabaseAdmin
-      .from('analytics')
-      .select('*', { count: 'exact', head: true })
-      .eq('action', 'download_completed')
-
-    // Get average time on page
-    // Get average time on page (use SQL AVG for efficiency)
-    const { data: avgRows } = await supabaseAdmin
-      .from('analytics')
-      .select('time_on_page')
-      .not('time_on_page', 'is', null)
-
-    const avgTimeOnPage = avgRows && avgRows.length > 0
-      ? avgRows.reduce((sum, r: any) => sum + (r.time_on_page || 0), 0) / avgRows.length
+    // Calculate average time on page
+    const timeOnPageData = analytics.filter(item => item.time_on_page && item.time_on_page > 0)
+    const avgTimeOnPage = timeOnPageData.length > 0
+      ? timeOnPageData.reduce((sum, item) => sum + (item.time_on_page || 0), 0) / timeOnPageData.length
       : 0
 
     // Calculate conversion rates
-    const emailConversionRate = pageViews && pageViews > 0
-      ? ((emailSubmissions || 0) / pageViews) * 100
+    const emailConversionRate = pageViews > 0
+      ? (emailSubmissions / pageViews) * 100
       : 0
 
-    const downloadCompletionRate = downloadRequests && downloadRequests > 0
-      ? ((completedDownloads || 0) / downloadRequests) * 100
+    const downloadCompletionRate = downloadRequests > 0
+      ? (completedDownloads / downloadRequests) * 100
       : 0
 
     // Get anonymous counters
@@ -68,17 +45,17 @@ export async function GET() {
       partial?: boolean
     } = {
       // Lightweight keys for the simple dashboard
-      pageViews: pageViews || 0,
-      scrollToBottom: scrollToBottom || 0,
-      emailSubmissions: emailSubmissions || 0,
+      pageViews,
+      scrollToBottom,
+      emailSubmissions,
       avgTimeOnPage: Math.round(avgTimeOnPage),
       conversionRate: Math.round((emailConversionRate + Number.EPSILON) * 10) / 10,
-      totalDownloads: completedDownloads || 0,
-      downloadRequests: downloadRequests || 0,
+      totalDownloads: completedDownloads,
+      downloadRequests,
       downloadCompletionRate: Math.round(downloadCompletionRate * 100) / 100,
-      totalEmails: emailSubmissions || 0,
-      recentDownloads: completedDownloads || 0,
-      recentEmails: emailSubmissions || 0,
+      totalEmails: emailSubmissions,
+      recentDownloads: completedDownloads,
+      recentEmails: emailSubmissions,
       // Anonymous counters (always available)
       anonymousVisits: anonymousCounters.totalVisits,
       anonymousDownloads: anonymousCounters.totalDownloads,
@@ -86,7 +63,7 @@ export async function GET() {
       anonymousGoodreadsClicks: anonymousCounters.totalGoodreadsClicks,
       anonymousSubstackClicks: anonymousCounters.totalSubstackClicks,
       anonymousPublisherClicks: anonymousCounters.totalPublisherClicks,
-      analytics: [],
+      analytics,
       tokens: []
     }
 
@@ -114,10 +91,13 @@ export async function GET() {
         anonymousSubstackClicks: 0,
         anonymousPublisherClicks: 0,
         analytics: [],
-        tokens: [],
-        partial: true,
+        tokens: []
       })
     }
-    return NextResponse.json({ error: 'Failed to fetch analytics stats' }, { status: 500 })
+    
+    return NextResponse.json(
+      { error: 'Failed to fetch analytics stats' },
+      { status: 500 }
+    )
   }
 } 

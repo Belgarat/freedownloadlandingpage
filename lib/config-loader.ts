@@ -195,8 +195,6 @@ export interface ThemeConfig {
     easing: string
   }
   development: {
-    analytics: boolean
-    tracking: boolean
     debug: boolean
     hotReload: boolean
   }
@@ -272,7 +270,7 @@ export interface AppConfig {
 
 class ConfigLoader {
   private config: AppConfig | null = null
-  private watcher: chokidar.FSWatcher | null = null
+  private watcher: any = null
   private configPath: string
   private onChangeCallbacks: Array<(config: AppConfig) => void> = []
 
@@ -339,7 +337,7 @@ class ConfigLoader {
       }
     })
 
-    this.watcher.on('change', async (filePath) => {
+    this.watcher.on('change', async (filePath: string) => {
       console.log(`🔄 Configuration file changed: ${path.basename(filePath)}`)
       
       try {
@@ -349,7 +347,7 @@ class ConfigLoader {
           this.onChangeCallbacks.forEach(callback => {
             try {
               callback(this.config!)
-            } catch (error) {
+            } catch (error: any) {
               console.error('Error in config change callback:', error)
             }
           })
@@ -359,7 +357,7 @@ class ConfigLoader {
       }
     })
 
-    this.watcher.on('error', (error) => {
+    this.watcher.on('error', (error: any) => {
       console.error('❌ File watcher error:', error)
     })
 
@@ -402,14 +400,6 @@ class ConfigLoader {
   // Development mode helpers
   isDevelopmentMode(): boolean {
     return this.config?.theme?.development?.debug || false
-  }
-
-  isAnalyticsEnabled(): boolean {
-    return this.config?.theme?.development?.analytics || false
-  }
-
-  isTrackingEnabled(): boolean {
-    return this.config?.theme?.development?.tracking || false
   }
 }
 

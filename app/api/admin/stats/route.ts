@@ -1,60 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getDatabaseAdapter } from '@/lib/database-config'
 import { AdminStats } from '@/types/admin'
 
 export async function GET(request: NextRequest) {
   try {
-    // Get analytics data from Supabase
-    const { data: analytics, error: analyticsError } = await supabaseAdmin
-      .from('analytics')
-      .select('*')
-      .order('created_at', { ascending: false })
+    const adapter = getDatabaseAdapter()
 
-    if (analyticsError) {
-      console.error('Analytics fetch error:', analyticsError)
-      return NextResponse.json(
-        { error: 'Failed to fetch analytics' },
-        { status: 500 }
-      )
-    }
+    // Get analytics data
+    const analytics = await adapter.getAnalytics()
 
     // Get download tokens data
-    const { data: tokens, error: tokensError } = await supabaseAdmin
-      .from('download_tokens')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (tokensError) {
-      console.error('Tokens fetch error:', tokensError)
-      return NextResponse.json(
-        { error: 'Failed to fetch tokens' },
-        { status: 500 }
-      )
-    }
+    const tokens = await adapter.getDownloadTokens()
 
     // Get anonymous counters (always available)
     const { AnonymousCounterService } = await import('@/lib/anonymous-counters')
     const anonymousCounters = await AnonymousCounterService.getCounters()
 
     // Get A/B testing data
-    const { data: abTests, error: abTestsError } = await supabaseAdmin
-      .from('ab_tests')
-      .select(`
-        *,
-        ab_variants (
-          id,
-          name,
-          visitors,
-          conversions,
-          conversion_rate
-        )
-      `)
-      .order('created_at', { ascending: false })
-
-    if (abTestsError) {
-      console.error('A/B Tests fetch error:', abTestsError)
-      // Don't fail the entire request, just log the error
-    }
+    const abTests = await adapter.getABTests()
 
     // Calculate statistics
     const totalDownloads = analytics?.filter(item => item.action === 'download_completed').length || 0

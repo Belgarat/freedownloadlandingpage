@@ -65,6 +65,7 @@
   "devDependencies": {
     "@playwright/test": "^1.40.0",
     "@tailwindcss/typography": "^0.5.16",
+    "@types/chokidar": "^1.7.5",
     "eslint": "^8",
     "eslint-config-next": "15.0.0"
   },

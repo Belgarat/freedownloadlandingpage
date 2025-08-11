@@ -12,6 +12,10 @@ export default function NewEmailTemplatePage() {
   const { createTemplate, categories, loading } = useEmailTemplates()
   const [saving, setSaving] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
+  
+  // Validation states
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [formData, setFormData] = useState<EmailTemplateFormData>({
     name: '',
     subject: '',
@@ -24,8 +28,15 @@ export default function NewEmailTemplatePage() {
   })
 
   const handleSave = async () => {
-    if (!formData.name || !formData.subject || !formData.html_content) {
-      alert('Please fill in all required fields')
+    // Mark all fields as touched to show all errors
+    const allTouched = Object.keys(formData).reduce((acc, key) => {
+      acc[key] = true
+      return acc
+    }, {} as Record<string, boolean>)
+    setTouched(allTouched)
+
+    // Validate form
+    if (!validateForm()) {
       return
     }
 
@@ -45,6 +56,94 @@ export default function NewEmailTemplatePage() {
 
   const handleCancel = () => {
     router.push('/admin/email-templates')
+  }
+
+  // Validation functions
+  const validateField = (name: string, value: any): string => {
+    switch (name) {
+      case 'name':
+        if (!value || value.trim() === '') {
+          return 'Template name is required'
+        }
+        if (value.length < 3) {
+          return 'Template name must be at least 3 characters'
+        }
+        if (value.length > 100) {
+          return 'Template name must be less than 100 characters'
+        }
+        return ''
+      
+      case 'subject':
+        if (!value || value.trim() === '') {
+          return 'Subject line is required'
+        }
+        if (value.length < 5) {
+          return 'Subject line must be at least 5 characters'
+        }
+        if (value.length > 200) {
+          return 'Subject line must be less than 200 characters'
+        }
+        return ''
+      
+      case 'html_content':
+        if (!value || value.trim() === '') {
+          return 'HTML content is required'
+        }
+        if (value.length < 10) {
+          return 'HTML content must be at least 10 characters'
+        }
+        // Basic HTML validation
+        if (!value.includes('<') || !value.includes('>')) {
+          return 'HTML content must contain valid HTML tags'
+        }
+        return ''
+      
+      case 'description':
+        if (value && value.length > 500) {
+          return 'Description must be less than 500 characters'
+        }
+        return ''
+      
+      default:
+        return ''
+    }
+  }
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {}
+    
+    // Validate all fields
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key as keyof EmailTemplateFormData])
+      if (error) {
+        newErrors[key] = error
+      }
+    })
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleFieldChange = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+    
+    // Validate field if it has been touched
+    if (touched[field]) {
+      const error = validateField(field, value)
+      setErrors(prev => ({
+        ...prev,
+        [field]: error
+      }))
+    }
+  }
+
+  const handleFieldBlur = (field: string) => {
+    setTouched(prev => ({ ...prev, [field]: true }))
+    const error = validateField(field, formData[field as keyof EmailTemplateFormData])
+    setErrors(prev => ({
+      ...prev,
+      [field]: error
+    }))
   }
 
   if (loading) {
@@ -87,8 +186,8 @@ export default function NewEmailTemplatePage() {
               </button>
               <button
                 onClick={handleSave}
-                disabled={saving}
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                disabled={saving || Object.keys(errors).length > 0}
+                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="h-4 w-4" />
                 <span>{saving ? 'Saving...' : 'Save Template'}</span>
@@ -112,10 +211,18 @@ export default function NewEmailTemplatePage() {
                   <input
                     type="text"
                     value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                    onChange={(e) => handleFieldChange('name', e.target.value)}
+                    onBlur={() => handleFieldBlur('name')}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                      errors.name && touched.name 
+                        ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                        : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                    }`}
                     placeholder="e.g., Welcome Email"
                   />
+                  {errors.name && touched.name && (
+                    <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -124,10 +231,18 @@ export default function NewEmailTemplatePage() {
                   <input
                     type="text"
                     value={formData.subject}
-                    onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                    onChange={(e) => handleFieldChange('subject', e.target.value)}
+                    onBlur={() => handleFieldBlur('subject')}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                      errors.subject && touched.subject 
+                        ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                        : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                    }`}
                     placeholder="e.g., Welcome to our platform!"
                   />
+                  {errors.subject && touched.subject && (
+                    <p className="mt-1 text-sm text-red-600">{errors.subject}</p>
+                  )}
                 </div>
               </div>
 
@@ -137,11 +252,22 @@ export default function NewEmailTemplatePage() {
                 </label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) => handleFieldChange('description', e.target.value)}
+                  onBlur={() => handleFieldBlur('description')}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                    errors.description && touched.description 
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                      : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                  }`}
                   placeholder="Brief description of this template"
                 />
+                {errors.description && touched.description && (
+                  <p className="mt-1 text-sm text-red-600">{errors.description}</p>
+                )}
+                <p className="mt-1 text-xs text-gray-500">
+                  {(formData.description || '').length}/500 characters
+                </p>
               </div>
 
               <div className="mb-6">
@@ -198,11 +324,14 @@ export default function NewEmailTemplatePage() {
                 </label>
                 <EmailTemplateEditor
                   value={formData.html_content}
-                  onChange={(html) => setFormData(prev => ({ ...prev, html_content: html }))}
+                  onChange={(html) => handleFieldChange('html_content', html)}
                   onTextChange={(text) => setFormData(prev => ({ ...prev, text_content: text }))}
                   showPreview={showPreview}
                   onShowPreviewChange={setShowPreview}
                 />
+                {errors.html_content && touched.html_content && (
+                  <p className="mt-1 text-sm text-red-600">{errors.html_content}</p>
+                )}
               </div>
             </div>
           </div>

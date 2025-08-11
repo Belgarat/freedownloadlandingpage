@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, Mail, Copy, Eye, Edit, Trash2, Search, Filter, BarChart3 } from 'lucide-react'
+import { Plus, Mail, Copy, Eye, Edit, Trash2, Search, Filter, BarChart3, Palette } from 'lucide-react'
 import { useEmailTemplates } from '@/lib/useEmailTemplates'
 import type { EmailTemplate } from '@/types/email-templates'
 
@@ -114,6 +114,13 @@ export default function EmailTemplatesPage() {
               <p className="text-sm text-gray-600">Create and manage email templates</p>
             </div>
             <div className="flex items-center space-x-3">
+              <button
+                onClick={() => router.push('/admin/email-templates/themes')}
+                className="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                <Palette className="h-4 w-4" />
+                <span>Themes</span>
+              </button>
               <button
                 onClick={() => router.push('/admin/email-templates/analytics')}
                 className="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"

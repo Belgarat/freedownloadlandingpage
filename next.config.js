@@ -1,61 +1,42 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // App Router is now stable in Next.js 15, no need for experimental flag
-  
-  // Performance optimizations
-  compress: true,
-  poweredByHeader: false,
-  
-  // Environment variables
-  env: {
-    NEXT_PUBLIC_OFFER_END_DATE: process.env.OFFER_END_DATE,
+  reactStrictMode: true,
+  swcMinify: true,
+  experimental: {
+    appDir: true,
   },
-  
-  // Image optimization
-  images: {
-    formats: ['image/webp', 'image/avif'],
-    minimumCacheTTL: 60,
-    remotePatterns: [
-      // Vercel Blob public URLs
-      { protocol: 'https', hostname: '**.blob.vercel-storage.com' },
-    ],
+  // Disable React Strict Mode for Swagger UI page to avoid legacy component warnings
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      }
+    }
+    return config
   },
-  
-  // Headers for better caching
+  // Custom headers for API documentation
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/api-docs',
         headers: [
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
           {
             key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            value: 'SAMEORIGIN',
           },
         ],
       },
       {
-        source: '/static/(.*)',
+        source: '/api/docs/:path*',
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: 'Content-Type',
+            value: 'application/json',
           },
-        ],
-      },
-      {
-        source: '/api/download/:path*',
-        headers: [
           {
             key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
+            value: 'public, max-age=3600',
           },
         ],
       },

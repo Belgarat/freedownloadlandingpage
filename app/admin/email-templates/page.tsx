@@ -263,7 +263,7 @@ export default function EmailTemplatesPage() {
                 <div className="mt-2 grid grid-cols-2 gap-2">
                   {selectedTemplate.placeholders.map((placeholder) => (
                     <div key={placeholder.id} className="p-2 bg-blue-50 rounded text-xs">
-                      <span className="font-medium">{{{placeholder.placeholder_key}}}</span>
+                      <span className="font-medium">{`{{${placeholder.placeholder_key}}}`}</span>
                       <span className="text-gray-600"> - {placeholder.placeholder_name}</span>
                     </div>
                   ))}

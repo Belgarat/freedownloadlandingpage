@@ -62,8 +62,16 @@ ADMIN_SECRET=dev-secret-change-in-production
 # Use your Resend key for development
 RESEND_API_KEY=your_resend_key_here
 
-# ===== STORAGE (Vercel Blob) =====
-# Token for file upload (optional for local development)
+# ===== STORAGE CONFIGURATION =====
+# Choose storage engine: 'filesystem' or 'vercel'
+STORAGE_ENGINE=filesystem
+
+# ===== FILESYSTEM STORAGE =====
+# Files are saved to /public/uploads/ directory (used when STORAGE_ENGINE=filesystem)
+# No additional configuration needed
+
+# ===== VERCEL BLOB STORAGE =====
+# Token for file upload (required when STORAGE_ENGINE=vercel)
 # BLOB_READ_WRITE_TOKEN=your_vercel_blob_token_here
 
 # ===== ANALYTICS =====

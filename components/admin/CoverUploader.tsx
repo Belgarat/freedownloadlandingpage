@@ -17,11 +17,11 @@ export default function CoverUploader({ value, onUploaded }: CoverUploaderProps)
   const onSelect = async (file: File) => {
     setError(null)
     if (!file.type.startsWith('image/')) {
-      setError('Il file deve essere un\'immagine')
+      setError('File must be an image')
       return
     }
     if (file.size > 5 * 1024 * 1024) {
-      setError('Dimensione massima 5MB')
+      setError('Maximum size 5MB')
       return
     }
     setPreview(URL.createObjectURL(file))
@@ -31,7 +31,7 @@ export default function CoverUploader({ value, onUploaded }: CoverUploaderProps)
       const { publicUrl } = await storage.uploadFile(file, { path: 'covers', contentType: file.type })
       onUploaded(publicUrl)
     } catch (e: any) {
-      setError(e?.message || 'Upload fallito')
+      setError(e?.message || 'Upload failed')
     } finally {
       setUploading(false)
     }
@@ -50,7 +50,7 @@ export default function CoverUploader({ value, onUploaded }: CoverUploaderProps)
           className="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
           disabled={uploading}
         >
-          {uploading ? 'Caricamento...' : 'Carica immagine'}
+          {uploading ? 'Uploading...' : 'Upload image'}
         </button>
         <input
           ref={inputRef}

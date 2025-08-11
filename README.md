@@ -56,8 +56,9 @@ NEXT_PUBLIC_SITE_URL=https://yourdomain.com
 ADMIN_PASSWORD=your_secure_admin_password_here
 ADMIN_SECRET=your_hmac_secret_for_cookie_token
 
-# Storage (Vercel Blob)
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_token
+# Storage Configuration
+STORAGE_ENGINE=filesystem  # 'filesystem' or 'vercel'
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_token  # Required when STORAGE_ENGINE=vercel
 ```
 
 ### 2. Resend Setup

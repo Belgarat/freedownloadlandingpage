@@ -1,15 +1,9 @@
 import { NextResponse } from 'next/server'
 import { put, del } from '@vercel/blob'
+import { getStorageProvider } from '@/lib/storage'
 
 export async function POST(req: Request) {
   try {
-    const token = process.env.BLOB_READ_WRITE_TOKEN
-    if (!token) {
-      return NextResponse.json(
-        { error: 'Missing BLOB_READ_WRITE_TOKEN. Set it in .env.local (local) or Project Settings (Vercel).'},
-        { status: 500 }
-      )
-    }
     const form = await req.formData()
     const file = form.get('file') as File | null
     const path = (form.get('path') as string | null) || 'covers'
@@ -42,12 +36,18 @@ export async function POST(req: Request) {
       }
     }
 
-    const key = `${path}/${Date.now()}-${file.name}`
-    const { url, pathname } = await put(key, file, { access: 'public', addRandomSuffix: true, token })
+    // Get storage provider (filesystem or vercel blob)
+    const storage = getStorageProvider()
+    
+    // Upload file using the appropriate storage provider
+    const result = await storage.uploadFile(file, { 
+      path, 
+      contentType: file.type 
+    })
     
     return NextResponse.json({ 
-      publicUrl: url, 
-      pathname,
+      publicUrl: result.publicUrl, 
+      pathname: result.pathname,
       filename: file.name,
       size: file.size,
       type: file.type
@@ -59,16 +59,15 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const token = process.env.BLOB_READ_WRITE_TOKEN
-    if (!token) {
-      return NextResponse.json(
-        { error: 'Missing BLOB_READ_WRITE_TOKEN. Set it in .env.local (local) or Project Settings (Vercel).'},
-        { status: 500 }
-      )
-    }
     const { pathname } = await req.json()
     if (!pathname) return NextResponse.json({ error: 'Missing pathname' }, { status: 400 })
-    await del(pathname, { token })
+    
+    // Get storage provider (filesystem or vercel blob)
+    const storage = getStorageProvider()
+    
+    // Delete file using the appropriate storage provider
+    await storage.deleteFile(pathname)
+    
     return NextResponse.json({ ok: true })
   } catch (e: any) {
     return NextResponse.json({ error: e?.message || 'Delete failed' }, { status: 500 })

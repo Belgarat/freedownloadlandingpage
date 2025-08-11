@@ -27,20 +27,22 @@ main (production)
 ### **1. Vercel Project Configuration**
 
 #### **Staging Environment (develop branch)**
-- **URL**: `https://booklandingstack-staging.vercel.app`
+- **URL**: `https://booklandingstack-git-develop-yourusername.vercel.app`
 - **Branch**: `develop`
 - **Auto-deploy**: ✅ Enabled
 - **Preview**: ✅ Enabled
+- **Target**: `preview`
 
 #### **Production Environment (main branch)**
 - **URL**: `https://booklandingstack.vercel.app`
 - **Branch**: `main`
 - **Auto-deploy**: ✅ Enabled
 - **Preview**: ❌ Disabled
+- **Target**: `production`
 
 ### **2. Environment Variables**
 
-#### **Staging (.env.staging)**
+#### **Staging Environment Variables (Vercel Dashboard)**
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_staging_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_staging_anon_key
@@ -49,13 +51,30 @@ RESEND_API_KEY=your_staging_resend_key
 NODE_ENV=staging
 ```
 
-#### **Production (.env.production)**
+#### **Production Environment Variables (Vercel Dashboard)**
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_production_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_production_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_production_service_key
 RESEND_API_KEY=your_production_resend_key
 NODE_ENV=production
+```
+
+### **3. Environment Variable Management**
+
+#### **Vercel CLI Commands**
+```bash
+# Add environment variable to staging (develop branch)
+vercel env add NODE_ENV staging
+
+# Add environment variable to production (main branch)
+vercel env add NODE_ENV production
+
+# List all environment variables
+vercel env ls
+
+# Pull environment variables locally
+vercel env pull .env.local
 ```
 
 ## 🔄 Release Workflow

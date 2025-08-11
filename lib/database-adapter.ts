@@ -354,7 +354,9 @@ export class SQLiteAdapter implements DatabaseAdapter {
     
     stmt.run(
       variant.id, variant.test_id, variant.name, variant.content,
-      variant.css_class, variant.css_style, variant.is_control, variant.is_winner
+      variant.css_class, variant.css_style, 
+      variant.is_control ? 1 : 0, 
+      variant.is_winner ? 1 : 0
     )
     
     return { id: variant.id, ...variant }
@@ -370,7 +372,13 @@ export class SQLiteAdapter implements DatabaseAdapter {
 
   async updateABVariant(id: string, data: any) {
     const fields = Object.keys(data).map(key => `${key} = ?`).join(', ')
-    const values = Object.values(data)
+    const values = Object.values(data).map(value => {
+      // Convert boolean values to integers for SQLite
+      if (typeof value === 'boolean') {
+        return value ? 1 : 0
+      }
+      return value
+    })
     values.push(id)
     
     const stmt = this.db.prepare(`

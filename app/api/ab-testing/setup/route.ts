@@ -1,24 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { getDatabaseAdapter } from '@/lib/database-config'
 
 export async function POST(request: NextRequest) {
   try {
-    // For now, we return a message indicating to run the migration manually
+    const adapter = getDatabaseAdapter()
+    
+    // Initialize database tables
+    await adapter.initDatabase()
+    
     return NextResponse.json({ 
       success: true, 
-      message: 'Please run the SQL migration manually in your Supabase dashboard',
-      instructions: [
-        '1. Go to your Supabase dashboard',
-        '2. Navigate to SQL Editor',
-        '3. Copy and paste the contents of migrations/ab_testing_tables.sql',
-        '4. Execute the SQL script'
-      ],
-      migrationFile: 'migrations/ab_testing_tables.sql'
+      message: 'A/B testing tables initialized successfully',
+      database: process.env.DB_ENGINE || 'sqlite'
     })
 
   } catch (error) {

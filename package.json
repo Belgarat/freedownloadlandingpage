@@ -26,6 +26,8 @@
     "test:all": "timeout 600s npx playwright test --project=chromium || exit 1",
     "test:report": "playwright show-report",
     "test:install": "playwright install",
+    "test:unit": "vitest",
+    "test:unit:run": "vitest run",
     "release": "./scripts/release.sh",
     "release:patch": "./scripts/release.sh patch",
     "release:minor": "./scripts/release.sh minor",
@@ -72,7 +74,8 @@
     "@tailwindcss/typography": "^0.5.16",
     "@types/chokidar": "^1.7.5",
     "eslint": "^8",
-    "eslint-config-next": "15.0.0"
+    "eslint-config-next": "15.0.0",
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=20 <21"

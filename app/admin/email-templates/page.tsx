@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, Mail, Copy, Eye, Edit, Trash2, Search, Filter } from 'lucide-react'
+import { Plus, Mail, Copy, Eye, Edit, Trash2, Search, Filter, BarChart3 } from 'lucide-react'
 import { useEmailTemplates } from '@/lib/useEmailTemplates'
 import type { EmailTemplate } from '@/types/email-templates'
 
@@ -113,13 +113,22 @@ export default function EmailTemplatesPage() {
               <h1 className="text-2xl font-bold text-gray-900">Email Templates</h1>
               <p className="text-sm text-gray-600">Create and manage email templates</p>
             </div>
-            <button
-              onClick={handleCreateTemplate}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              <Plus className="h-4 w-4" />
-              <span>New Template</span>
-            </button>
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => router.push('/admin/email-templates/analytics')}
+                className="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                <BarChart3 className="h-4 w-4" />
+                <span>Analytics</span>
+              </button>
+              <button
+                onClick={handleCreateTemplate}
+                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                <Plus className="h-4 w-4" />
+                <span>New Template</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

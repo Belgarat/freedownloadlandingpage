@@ -304,6 +304,7 @@ export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageP
                 onHtmlChange={setHtmlContent}
                 onTextChange={setTextContent}
                 showPreview={showPreview}
+                onShowPreviewChange={setShowPreview}
                 onTextChange={(text) => setTextContent(text)}
               />
             </div>

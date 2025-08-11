@@ -60,6 +60,7 @@ interface EmailTemplateEditorProps {
   placeholder?: string
   className?: string
   showPreview?: boolean
+  onShowPreviewChange?: (show: boolean) => void
 }
 
 const emailPlaceholders = [
@@ -90,7 +91,8 @@ export default function EmailTemplateEditor({
   onTextChange,
   placeholder = "Start writing...",
   className = "",
-  showPreview = false
+  showPreview = false,
+  onShowPreviewChange
 }: EmailTemplateEditorProps) {
   const [isMounted, setIsMounted] = useState(false)
   const [showContentPlaceholders, setShowContentPlaceholders] = useState(false)
@@ -451,7 +453,14 @@ export default function EmailTemplateEditor({
           </div>
 
           <button
-                            onClick={() => setInternalShowPreview(!internalShowPreview)}
+            onClick={() => {
+              const newShowPreview = !effectiveShowPreview;
+              if (onShowPreviewChange) {
+                onShowPreviewChange(newShowPreview);
+              } else {
+                setInternalShowPreview(newShowPreview);
+              }
+            }}
             className={`flex items-center gap-1 px-2 py-1 text-xs rounded border ${
               effectiveShowPreview 
                 ? 'text-green-600 bg-green-50 border-green-200' 

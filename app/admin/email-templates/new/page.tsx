@@ -201,6 +201,7 @@ export default function NewEmailTemplatePage() {
                   onChange={(html) => setFormData(prev => ({ ...prev, html_content: html }))}
                   onTextChange={(text) => setFormData(prev => ({ ...prev, text_content: text }))}
                   showPreview={showPreview}
+                  onShowPreviewChange={setShowPreview}
                 />
               </div>
             </div>

@@ -2,6 +2,53 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import configLoader from '@/lib/config-loader'
 
+/**
+ * @swagger
+ * /api/download/{token}:
+ *   get:
+ *     summary: Download ebook with token
+ *     description: Download an ebook file using a valid download token
+ *     tags: [Email]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Download token received via email
+ *       - in: query
+ *         name: format
+ *         schema:
+ *           type: string
+ *           enum: [pdf, epub]
+ *         description: Preferred ebook format (optional)
+ *     responses:
+ *       302:
+ *         description: Redirect to ebook file
+ *         headers:
+ *           Location:
+ *             description: URL to the ebook file
+ *             schema:
+ *               type: string
+ *       400:
+ *         description: Invalid or expired token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Ebook file not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ token: string }> }

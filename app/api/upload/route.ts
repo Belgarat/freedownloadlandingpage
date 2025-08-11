@@ -2,6 +2,93 @@ import { NextResponse } from 'next/server'
 import { put, del } from '@vercel/blob'
 import { getStorageProvider } from '@/lib/storage'
 
+/**
+ * @swagger
+ * /api/upload:
+ *   post:
+ *     summary: Upload a file
+ *     description: Upload a file (cover image or ebook) to the storage provider
+ *     tags: [Files]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [file]
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: File to upload
+ *               path:
+ *                 type: string
+ *                 example: "covers"
+ *                 description: Storage path (optional)
+ *               type:
+ *                 type: string
+ *                 enum: [cover, ebook]
+ *                 example: "cover"
+ *                 description: File type for validation
+ *     responses:
+ *       200:
+ *         description: File uploaded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UploadResult'
+ *       400:
+ *         description: Invalid request or file type
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   delete:
+ *     summary: Delete a file
+ *     description: Delete a file from the storage provider
+ *     tags: [Files]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [pathname]
+ *             properties:
+ *               pathname:
+ *                 type: string
+ *                 example: "/uploads/covers/1234567890-abc123.jpg"
+ *                 description: Path to the file to delete
+ *     responses:
+ *       200:
+ *         description: File deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function POST(req: Request) {
   try {
     const form = await req.formData()

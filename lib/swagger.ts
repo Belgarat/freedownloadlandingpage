@@ -1,9 +1,8 @@
-import { createSwaggerSpec } from 'next-swagger-doc'
+import swaggerJSDoc from 'swagger-jsdoc'
 import path from 'path'
 
 export const getApiDocs = async () => {
-  const spec = createSwaggerSpec({
-    apiFolder: path.join(process.cwd(), 'app', 'api'), // define api folder under app folder
+  const options: swaggerJSDoc.Options = {
     definition: {
       openapi: '3.0.0',
       info: {
@@ -290,7 +289,14 @@ export const getApiDocs = async () => {
           description: 'System configuration management'
         }
       ]
-    }
-  })
-  return spec
+    },
+    apis: [
+      path.join(process.cwd(), 'app', 'api', '**', '*.ts'),
+      path.join(process.cwd(), 'app', 'api', '**', '*.js'),
+      path.join(process.cwd(), 'lib', '**', '*.ts'),
+      path.join(process.cwd(), 'lib', '**', '*.js')
+    ]
+  }
+
+  return swaggerJSDoc(options)
 }

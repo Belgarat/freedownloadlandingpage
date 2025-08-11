@@ -2,6 +2,35 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getDatabaseAdapter } from '@/lib/database-config'
 import { AdminStats } from '@/types/admin'
 
+/**
+ * @swagger
+ * /api/admin/stats:
+ *   get:
+ *     summary: Get admin dashboard statistics
+ *     description: Retrieve comprehensive statistics for the admin dashboard including analytics, downloads, emails, and A/B testing data
+ *     tags: [Admin]
+ *     security:
+ *       - adminAuth: []
+ *     responses:
+ *       200:
+ *         description: Admin statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AdminStats'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(request: NextRequest) {
   try {
     const adapter = getDatabaseAdapter()

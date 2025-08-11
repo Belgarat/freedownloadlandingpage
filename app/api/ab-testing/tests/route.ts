@@ -2,6 +2,164 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getDatabaseAdapter } from '@/lib/database-config'
 import { ABTest, ABVariant } from '@/types/ab-testing'
 
+/**
+ * @swagger
+ * /api/ab-testing/tests:
+ *   get:
+ *     summary: Get all A/B tests
+ *     description: Retrieve all A/B tests with their variants and statistics
+ *     tags: [A/B Testing]
+ *     responses:
+ *       200:
+ *         description: A/B tests retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ABTest'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   post:
+ *     summary: Create a new A/B test
+ *     description: Create a new A/B test with variants
+ *     tags: [A/B Testing]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, description, type, target_selector, variants]
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "CTA Button Test"
+ *               description:
+ *                 type: string
+ *                 example: "Testing different button colors"
+ *               type:
+ *                 type: string
+ *                 enum: [headline, cta_button, layout]
+ *                 example: "cta_button"
+ *               traffic_split:
+ *                 type: integer
+ *                 minimum: 1
+ *                 maximum: 100
+ *                 example: 50
+ *               target_element:
+ *                 type: string
+ *                 example: "cta-button"
+ *               target_selector:
+ *                 type: string
+ *                 example: ".cta-button"
+ *               conversion_goal:
+ *                 type: string
+ *                 example: "email_submit"
+ *               variants:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/ABVariant'
+ *     responses:
+ *       200:
+ *         description: A/B test created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 test:
+ *                   $ref: '#/components/schemas/ABTest'
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   put:
+ *     summary: Update an A/B test
+ *     description: Update an existing A/B test
+ *     tags: [A/B Testing]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: A/B test ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ABTest'
+ *     responses:
+ *       200:
+ *         description: A/B test updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ABTest'
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   delete:
+ *     summary: Delete an A/B test
+ *     description: Delete an A/B test and all its variants
+ *     tags: [A/B Testing]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: A/B test ID
+ *     responses:
+ *       200:
+ *         description: A/B test deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET() {
   try {
     const adapter = getDatabaseAdapter()

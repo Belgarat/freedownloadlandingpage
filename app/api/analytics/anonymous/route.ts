@@ -2,6 +2,79 @@ import { NextRequest, NextResponse } from 'next/server'
 import { AnonymousCounterService } from '@/lib/anonymous-counters'
 import { AnonymousAnalyticsEvent, AnonymousAnalyticsResponse } from '@/types/analytics'
 
+/**
+ * @swagger
+ * /api/analytics/anonymous:
+ *   post:
+ *     summary: Track anonymous analytics event
+ *     description: Track GDPR-compliant anonymous analytics events without storing personal data
+ *     tags: [Analytics]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AnonymousEvent'
+ *     responses:
+ *       200:
+ *         description: Event tracked successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   get:
+ *     summary: Get anonymous analytics counters
+ *     description: Retrieve current anonymous analytics counters
+ *     tags: [Analytics]
+ *     responses:
+ *       200:
+ *         description: Anonymous counters retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 visits:
+ *                   type: integer
+ *                   example: 1234
+ *                 downloads:
+ *                   type: integer
+ *                   example: 567
+ *                 emailSubmissions:
+ *                   type: integer
+ *                   example: 89
+ *                 goodreadsClicks:
+ *                   type: integer
+ *                   example: 12
+ *                 substackClicks:
+ *                   type: integer
+ *                   example: 34
+ *                 publisherClicks:
+ *                   type: integer
+ *                   example: 56
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function POST(request: NextRequest) {
   try {
     const { action }: AnonymousAnalyticsEvent = await request.json()

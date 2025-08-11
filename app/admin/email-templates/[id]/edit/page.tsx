@@ -238,20 +238,24 @@ export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageP
               <h3 className="text-lg font-medium text-gray-900 mb-4">Categories</h3>
               
               <div className="space-y-3">
-                {categories.map(category => (
-                  <div key={category.id} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id={`category-${category.id}`}
-                      checked={formData.category_ids.includes(category.id)}
-                      onChange={() => handleCategoryChange(category.id)}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <label htmlFor={`category-${category.id}`} className="ml-2 block text-sm text-gray-900">
-                      {category.name}
-                    </label>
-                  </div>
-                ))}
+                {categories && categories.length > 0 ? (
+                  categories.map(category => (
+                    <div key={category.id} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={`category-${category.id}`}
+                        checked={formData.category_ids.includes(category.id)}
+                        onChange={() => handleCategoryChange(category.id)}
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <label htmlFor={`category-${category.id}`} className="ml-2 block text-sm text-gray-900">
+                        {category.name}
+                      </label>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-sm">No categories available</p>
+                )}
               </div>
             </div>
 
@@ -299,12 +303,16 @@ export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageP
               <h3 className="text-lg font-medium text-gray-900 mb-4">Available Placeholders</h3>
               
               <div className="space-y-2">
-                {placeholders.map(placeholder => (
-                  <div key={placeholder.id} className="text-sm">
-                    <span className="font-medium text-gray-900">{placeholder.placeholder_key}</span>
-                    <p className="text-gray-600 text-xs mt-1">{placeholder.description}</p>
-                  </div>
-                ))}
+                {placeholders && placeholders.length > 0 ? (
+                  placeholders.map(placeholder => (
+                    <div key={placeholder.id} className="text-sm">
+                      <span className="font-medium text-gray-900">{placeholder.placeholder_key}</span>
+                      <p className="text-gray-600 text-xs mt-1">{placeholder.description}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-sm">No placeholders available</p>
+                )}
               </div>
             </div>
 

@@ -4,6 +4,21 @@
 
 Questo progetto utilizza un workflow GitFlow modificato con deployment automatico su Vercel per gestire gli ambienti di sviluppo, staging e produzione.
 
+### **Why Vercel Only?**
+
+Abbiamo scelto di utilizzare esclusivamente Vercel per il deployment per i seguenti motivi:
+
+- ✅ **Deployment automatico** su push ai branch
+- ✅ **Preview deployments** per ogni PR
+- ✅ **Build e test integrati** nel processo di deployment
+- ✅ **Zero configurazione** per CI/CD
+- ✅ **Integrazione nativa** con GitHub
+- ✅ **Gestione automatica** delle variabili d'ambiente
+- ✅ **Rollback automatico** in caso di errori
+- ✅ **Analytics e monitoring** integrati
+- ❌ **Nessuna ridondanza** con GitHub Actions
+- ❌ **Nessun costo aggiuntivo** per CI/CD separato
+
 ## 🌿 Branch Strategy
 
 ```
@@ -275,5 +290,4 @@ vercel ls
 
 - [Vercel Documentation](https://vercel.com/docs)
 - [Next.js Deployment](https://nextjs.org/docs/deployment)
-- [GitHub Actions](https://docs.github.com/en/actions)
 - [Supabase Documentation](https://supabase.com/docs)

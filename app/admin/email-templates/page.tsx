@@ -1,15 +1,24 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Plus, Mail } from 'lucide-react'
 import { useEmailTemplates } from '@/lib/useEmailTemplates'
+import type { EmailTemplate } from '@/types/email-templates'
 
 export default function EmailTemplatesPage() {
   const router = useRouter()
   const { templates, categories, loading, error } = useEmailTemplates()
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null)
+  const [showPreview, setShowPreview] = useState(false)
 
   const handleCreateTemplate = () => {
     router.push('/admin/email-templates/new')
+  }
+
+  const handlePreviewTemplate = (template: EmailTemplate) => {
+    setSelectedTemplate(template)
+    setShowPreview(true)
   }
 
   if (loading) {
@@ -178,7 +187,7 @@ export default function EmailTemplatesPage() {
                     </div>
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => alert('Preview functionality coming soon!')}
+                        onClick={() => handlePreviewTemplate(template)}
                         className="p-2 text-gray-400 hover:text-gray-600"
                         title="Preview"
                       >
@@ -207,6 +216,63 @@ export default function EmailTemplatesPage() {
           </ul>
         </div>
       </div>
+
+      {/* Preview Modal */}
+      {showPreview && selectedTemplate && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium text-gray-900">
+                Preview: {selectedTemplate.name}
+              </h3>
+              <button
+                onClick={() => setShowPreview(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <span className="sr-only">Close</span>
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="mb-4">
+              <h4 className="text-sm font-medium text-gray-700">Subject:</h4>
+              <p className="text-sm text-gray-900">{selectedTemplate.subject}</p>
+            </div>
+            <div className="mb-4">
+              <h4 className="text-sm font-medium text-gray-700">HTML Content:</h4>
+              <div className="mt-2 p-4 bg-gray-50 rounded-md max-h-96 overflow-y-auto">
+                <pre className="text-xs text-gray-800 whitespace-pre-wrap">
+                  {selectedTemplate.html_content}
+                </pre>
+              </div>
+            </div>
+            {selectedTemplate.text_content && (
+              <div className="mb-4">
+                <h4 className="text-sm font-medium text-gray-700">Text Content:</h4>
+                <div className="mt-2 p-4 bg-gray-50 rounded-md max-h-32 overflow-y-auto">
+                  <pre className="text-xs text-gray-800 whitespace-pre-wrap">
+                    {selectedTemplate.text_content}
+                  </pre>
+                </div>
+              </div>
+            )}
+            {selectedTemplate.placeholders && selectedTemplate.placeholders.length > 0 && (
+              <div>
+                <h4 className="text-sm font-medium text-gray-700">Placeholders:</h4>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {selectedTemplate.placeholders.map((placeholder) => (
+                    <div key={placeholder.id} className="p-2 bg-blue-50 rounded text-xs">
+                      <span className="font-medium">{{{placeholder.placeholder_key}}}</span>
+                      <span className="text-gray-600"> - {placeholder.placeholder_name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

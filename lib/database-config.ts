@@ -12,9 +12,8 @@ export interface DatabaseConfig {
 // Environment-specific database configurations
 const databaseConfigs: Record<string, DatabaseConfig> = {
   development: {
-    provider: 'supabase',
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    key: process.env.SUPABASE_SERVICE_ROLE_KEY
+    provider: 'sqlite', // Usa SQLite per development (gratuito)
+    path: process.env.SQLITE_DB_PATH || '/tmp/development.db'
   },
   staging: {
     provider: 'sqlite', // Usa SQLite per staging (gratuito)

@@ -26,12 +26,13 @@ main (production)
 
 ### **1. Vercel Project Configuration**
 
-#### **Staging Environment (develop branch)**
+#### **Development Environment (develop branch)**
 - **URL**: `https://booklandingstack-git-develop-yourusername.vercel.app`
 - **Branch**: `develop`
 - **Auto-deploy**: ✅ Enabled
 - **Preview**: ✅ Enabled
 - **Target**: `preview`
+- **Database**: SQLite (`/tmp/development.db`)
 
 #### **Production Environment (main branch)**
 - **URL**: `https://booklandingstack.vercel.app`
@@ -39,16 +40,15 @@ main (production)
 - **Auto-deploy**: ✅ Enabled
 - **Preview**: ❌ Disabled
 - **Target**: `production`
+- **Database**: Supabase (PostgreSQL)
 
 ### **2. Environment Variables**
 
-#### **Staging Environment Variables (Vercel Dashboard)**
+#### **Development Environment Variables (Vercel Dashboard)**
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=your_staging_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_staging_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_staging_service_key
-RESEND_API_KEY=your_staging_resend_key
-NODE_ENV=staging
+SQLITE_DB_PATH=/tmp/development.db
+RESEND_API_KEY=your_development_resend_key
+NODE_ENV=development
 ```
 
 #### **Production Environment Variables (Vercel Dashboard)**

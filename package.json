@@ -28,10 +28,12 @@
     "release:patch": "./scripts/release.sh patch",
     "release:minor": "./scripts/release.sh minor",
     "release:major": "./scripts/release.sh major",
-    "deploy:staging": "vercel --target=preview",
+    "deploy:development": "vercel --target=preview",
     "deploy:production": "vercel --prod --yes",
     "db:backup": "curl -X POST http://localhost:3000/api/sqlite/backup",
-    "db:info": "curl http://localhost:3000/api/sqlite/backup"
+    "db:info": "curl http://localhost:3000/api/sqlite/backup",
+    "setup:local": "./scripts/setup-local.sh",
+    "setup:sqlite": "./scripts/setup-sqlite.sh"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",

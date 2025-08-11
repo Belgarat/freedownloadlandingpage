@@ -39,14 +39,14 @@ fi
 
 # Create database directory
 DB_DIR="/tmp"
-DB_PATH="$DB_DIR/staging.db"
+DB_PATH="$DB_DIR/development.db"
 
 print_status "Creating SQLite database at: $DB_PATH"
 
 # Create a simple test script to initialize the database
 cat > /tmp/init-sqlite.js << 'EOF'
 const Database = require('better-sqlite3');
-const db = new Database('/tmp/staging.db');
+const db = new Database('/tmp/development.db');
 
 // Create tables
 db.exec(`
@@ -161,7 +161,7 @@ insertVariant.run('variant-2', 'sample-test-1', 'Variant A', 'The Ultimate Guide
 
 console.log('✅ SQLite database initialized successfully!');
 console.log('📊 Sample test data inserted');
-console.log('🗄️ Database path: /tmp/staging.db');
+console.log('🗄️ Database path: /tmp/development.db');
 
 db.close();
 EOF
@@ -175,8 +175,8 @@ rm /tmp/init-sqlite.js
 print_success "SQLite setup completed!"
 print_status "Next steps:"
 echo ""
-echo "1. Add environment variable to Vercel staging environment:"
-echo "   SQLITE_DB_PATH=/tmp/staging.db"
+echo "1. Add environment variable to Vercel development environment:"
+echo "   SQLITE_DB_PATH=/tmp/development.db"
 echo ""
 echo "2. Test the database connection:"
 echo "   npm run test:api"

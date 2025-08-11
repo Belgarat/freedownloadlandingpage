@@ -36,7 +36,7 @@
 - `POST /api/ab-testing/assignments` - Assegna variante a visitatore
 - `DELETE /api/ab-testing/assignments?visitorId=<visitorId>&testId=<testId>` - Rimuovi assegnazione
 
-## 📊 Funzionalità
+## 📊 Features
 
 ### ✅ Implementate
 - Dashboard completo per gestione test

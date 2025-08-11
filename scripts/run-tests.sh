@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# Script per eseguire i test con timeout automatico
-# Uso: ./scripts/run-tests.sh [test-type]
+# Script to run tests with automatic timeout
+# Usage: ./scripts/run-tests.sh [test-type]
 
-set -e  # Termina se qualsiasi comando fallisce
+set -e  # Exit if any command fails
 
-# Colori per output
+# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Funzione per log
+# Function for logging
 log() {
     echo -e "${GREEN}[$(date +'%Y-%m-%d %H:%M:%S')] $1${NC}"
 }
@@ -24,51 +24,51 @@ warning() {
     echo -e "${YELLOW}[$(date +'%Y-%m-%d %H:%M:%S')] WARNING: $1${NC}"
 }
 
-# Funzione per killare processi Node.js
+# Function to kill Node.js processes
 cleanup() {
-    log "Pulizia processi in background..."
+    log "Cleaning up background processes..."
     pkill -f "next dev" || true
     pkill -f "playwright" || true
-    log "Pulizia completata"
+    log "Cleanup completed"
 }
 
-# Trap per cleanup automatico
+# Trap for automatic cleanup
 trap cleanup EXIT
 
-# Controlla se il server è già in esecuzione
+# Check if server is already running
 check_server() {
     if curl -s http://localhost:3000 > /dev/null 2>&1; then
-        log "Server già in esecuzione su porta 3000"
+        log "Server already running on port 3000"
         return 0
     else
-        log "Avvio server di sviluppo..."
+        log "Starting development server..."
         npm run dev &
         SERVER_PID=$!
         
-        # Aspetta che il server sia pronto
+        # Wait for server to be ready
         for i in {1..30}; do
             if curl -s http://localhost:3000 > /dev/null 2>&1; then
-                log "Server pronto!"
+                log "Server ready!"
                 return 0
             fi
             sleep 2
         done
         
-        error "Server non si è avviato entro 60 secondi"
+        error "Server did not start within 60 seconds"
         return 1
     fi
 }
 
-# Funzione per eseguire test con timeout
+# Function to run tests with timeout
 run_test_with_timeout() {
     local test_command="$1"
     local timeout_seconds="$2"
     local test_name="$3"
     
-    log "Esecuzione: $test_name (timeout: ${timeout_seconds}s)"
+    log "Executing: $test_name (timeout: ${timeout_seconds}s)"
     
     if timeout $timeout_seconds $test_command; then
-        log "✅ $test_name completato con successo"
+        log "✅ $test_name completed successfully"
         return 0
     else
         local exit_code=$?
@@ -83,14 +83,14 @@ run_test_with_timeout() {
 
 # Main execution
 main() {
-    log "🚀 Avvio test automatici"
+    log "🚀 Starting automatic tests"
     
-    # Controlla server
+    # Check server
     if ! check_server; then
         exit 1
     fi
     
-    # Determina tipo di test
+    # Determine test type
     case "${1:-all}" in
         "component")
             run_test_with_timeout "npx playwright test tests/components/ --project=chromium" 60 "Component Tests"
@@ -129,8 +129,8 @@ main() {
             ;;
     esac
     
-    log "🎉 Tutti i test completati!"
+    log "🎉 All tests completed!"
 }
 
-# Esegui main
+# Execute main
 main "$@"

@@ -53,22 +53,22 @@ SQLITE_DB_PATH=/tmp/development.db
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 # ===== ADMIN AUTHENTICATION =====
-# Password per accedere al pannello admin (/admin)
+# Password to access admin panel (/admin)
 ADMIN_PASSWORD=admin123
-# Secret per firmare i cookie di autenticazione (cambia in production!)
+# Secret for signing authentication cookies (change in production!)
 ADMIN_SECRET=dev-secret-change-in-production
 
 # ===== EMAIL SERVICE =====
-# Usa la tua chiave Resend per development
+# Use your Resend key for development
 RESEND_API_KEY=your_resend_key_here
 
 # ===== STORAGE (Vercel Blob) =====
-# Token per upload file (opzionale per development locale)
+# Token for file upload (optional for local development)
 # BLOB_READ_WRITE_TOKEN=your_vercel_blob_token_here
 
 # ===== ANALYTICS =====
-# Per development locale, analytics sempre attivi
-# (non serve configurazione aggiuntiva)
+# For local development, analytics are always active
+# (no additional configuration needed)
 EOF
     print_warning "Please update RESEND_API_KEY in .env.local with your actual key"
 else

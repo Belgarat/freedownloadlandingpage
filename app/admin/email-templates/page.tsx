@@ -194,7 +194,7 @@ export default function EmailTemplatesPage() {
                         👁️
                       </button>
                       <button
-                        onClick={() => alert('Edit functionality coming soon!')}
+                        onClick={() => router.push(`/admin/email-templates/${template.id}/edit`)}
                         className="p-2 text-gray-400 hover:text-blue-600"
                         title="Edit"
                       >

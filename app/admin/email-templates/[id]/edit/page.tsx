@@ -11,9 +11,9 @@ interface EditEmailTemplatePageProps {
   };
 }
 
-export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageProps) {
+export default async function EditEmailTemplatePage({ params }: EditEmailTemplatePageProps) {
   const router = useRouter();
-  const { id } = params;
+  const { id } = await params;
   const { 
     templates, 
     categories, 

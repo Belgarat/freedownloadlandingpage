@@ -19,6 +19,7 @@
     "test:admin": "timeout 30s npx playwright test tests/admin.spec.ts --project=chromium || exit 1",
     "test:auth": "timeout 30s npx playwright test tests/auth.spec.ts --project=chromium || exit 1",
     "test:analytics": "timeout 30s npx playwright test tests/analytics-*.spec.ts --project=chromium || exit 1",
+    "test:storage": "timeout 60s npx playwright test tests/storage.spec.ts --project=chromium || exit 1",
     "test:cookie": "timeout 30s npx playwright test tests/cookie-*.spec.ts --project=chromium || exit 1",
     "test:download": "timeout 30s npx playwright test tests/landing-page.spec.ts --grep='Download Page' --project=chromium || exit 1",
     "test:all": "timeout 600s npx playwright test --project=chromium || exit 1",

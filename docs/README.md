@@ -1,57 +1,90 @@
-# Book Landing Stack Website
+# Book Landing Stack Documentation
 
-This directory contains the website for Book Landing Stack, hosted on GitHub Pages.
+Welcome to the complete documentation for Book Landing Stack - a modern, feature-rich landing page framework for authors and publishers.
 
-## Structure
+## 📚 Documentation Index
 
-- `index.html` - Main website with landing page, features, roadmap, and community sections
-- `README.md` - This file
+### 🚀 Getting Started
+- **[Installation Guide](./installation.md)** - Complete setup instructions
+- **[Quick Start](./quick-start.md)** - Get up and running in 5 minutes
+- **[Environment Configuration](./environment.md)** - All environment variables explained
 
-## GitHub Pages Setup
+### 🏗️ Architecture
+- **[System Overview](./architecture.md)** - High-level architecture and design decisions
+- **[Database Configuration](./database.md)** - SQLite vs Supabase setup
+- **[Storage Configuration](./storage.md)** - Filesystem vs Vercel Blob storage
+- **[API Reference](./api.md)** - Complete API documentation
 
-To enable GitHub Pages for this repository:
+### 🎨 Configuration
+- **[Dynamic Configuration](./configuration.md)** - JSON-based content management
+- **[Admin Panel](./admin.md)** - Web-based configuration interface
+- **[Email Templates](./email-templates.md)** - Customizing email content
+- **[Theme Customization](./theming.md)** - Visual customization options
 
-1. Go to repository Settings
-2. Navigate to Pages section
-3. Set Source to "Deploy from a branch"
-4. Select branch: `main`
-5. Select folder: `/docs`
-6. Click Save
+### 🧪 Testing
+- **[Testing Guide](./testing.md)** - Running and writing tests
+- **[Test Coverage](./test-coverage.md)** - What's tested and what's not
+- **[CI/CD Pipeline](./ci-cd.md)** - Automated testing and deployment
 
-The website will be available at: `https://marcobrunet.github.io/booklandingstack/`
+### 🚀 Deployment
+- **[Deployment Guide](./deployment.md)** - Production deployment instructions
+- **[Vercel Setup](./vercel.md)** - Deploying to Vercel
+- **[Environment Management](./environments.md)** - Managing dev/staging/prod
+- **[Monitoring](./monitoring.md)** - Health checks and logging
 
-## Features
+### 🔧 Development
+- **[Development Guide](./development.md)** - Development workflow and best practices
+- **[Contributing](./contributing.md)** - How to contribute to the project
+- **[Code Style](./code-style.md)** - Coding standards and conventions
+- **[Troubleshooting](./troubleshooting.md)** - Common issues and solutions
 
-- **Responsive Design**: Works on all devices
-- **Modern UI**: Built with Tailwind CSS
-- **SEO Optimized**: Meta tags, Open Graph, Twitter Cards
-- **Fast Loading**: Optimized for performance
-- **Accessibility**: ARIA labels, semantic HTML
+### 📊 Features
+- **[A/B Testing](./ab-testing.md)** - Setting up and managing A/B tests
+- **[Analytics](./analytics.md)** - Tracking and analyzing user behavior
+- **[Email Automation](./email-automation.md)** - Email workflows and automation
+- **[File Management](./file-management.md)** - Upload and storage management
 
-## Customization
+### 🔒 Security
+- **[Security Guide](./security.md)** - Security best practices
+- **[Authentication](./authentication.md)** - Admin authentication system
+- **[Data Protection](./data-protection.md)** - GDPR compliance and data handling
 
-The website uses:
-- **Colors**: Book blue (#0f766e), cyan (#0891b2), amber (#f59e0b)
-- **Font**: System fonts with Tailwind defaults
-- **Icons**: Emoji icons for simplicity
-- **Animations**: CSS transitions and hover effects
+## 🎯 Quick Navigation
 
-## Links
+### For New Users
+1. Start with [Installation Guide](./installation.md)
+2. Follow [Quick Start](./quick-start.md)
+3. Read [Environment Configuration](./environment.md)
 
-- **GitHub**: https://github.com/marcobrunet/booklandingstack
-- **Substack**: https://openbookstack.substack.com
-- **Website**: https://marcobrunet.github.io/booklandingstack/
+### For Developers
+1. Review [Architecture](./architecture.md)
+2. Check [Development Guide](./development.md)
+3. Explore [API Reference](./api.md)
 
-## Development
+### For Deployment
+1. Read [Deployment Guide](./deployment.md)
+2. Configure [Environment Management](./environments.md)
+3. Set up [Monitoring](./monitoring.md)
 
-To modify the website:
-1. Edit `index.html`
-2. Test locally by opening the file in a browser
-3. Commit and push changes
-4. GitHub Pages will automatically deploy
+## 📖 Additional Resources
 
-## Branding
+- **[GitHub Repository](https://github.com/yourusername/booklandingstack)** - Source code
+- **[Issues](https://github.com/yourusername/booklandingstack/issues)** - Bug reports and feature requests
+- **[Discussions](https://github.com/yourusername/booklandingstack/discussions)** - Community discussions
+- **[Releases](https://github.com/yourusername/booklandingstack/releases)** - Version history
 
-- **Name**: Book Landing Stack (BLS)
-- **Tagline**: "The open source framework for indie book landing pages that actually convert"
-- **Mission**: Help indie authors create landing pages that convert readers into buyers 
+## 🤝 Support
+
+- **Documentation Issues**: Create an issue in the repository
+- **Feature Requests**: Use the discussions tab
+- **Bug Reports**: Use the issues tab with the bug template
+- **Questions**: Use the discussions tab or create an issue
+
+## 📝 Contributing to Documentation
+
+We welcome contributions to improve this documentation! Please see [Contributing](./contributing.md) for guidelines.
+
+---
+
+**Last Updated**: August 2025  
+**Version**: 2.0.0-beta.1 

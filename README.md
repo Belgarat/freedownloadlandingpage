@@ -34,43 +34,65 @@ A beautiful Next.js 15 landing page for free ebook downloads with email collecti
 
 This landing page is designed for the book "Fish Cannot Carry Guns" by Michael B. Morgan - a collection of speculative short stories for fans of Black Mirror, cyberpunk noir, and fringe futurism. The entire ebook is offered for free download. This serves as a reference implementation of the Book Landing Stack framework.
 
-## Setup Instructions
+## Quick Start
 
-### 1. Environment Variables
-
-Create a `.env.local` file in the root directory with your credentials:
+### 1. Clone and Setup
 
 ```bash
-# Supabase Configuration
+git clone https://github.com/yourusername/booklandingstack.git
+cd booklandingstack
+npm install
+```
+
+### 2. Setup Environment
+
+```bash
+# Copy environment template
+cp .env.example .env.local
+
+# Run automated setup (creates database, tables, sample data)
+npm run setup:local
+```
+
+### 3. Environment Configuration
+
+Edit `.env.local` with your credentials:
+
+```bash
+# Database Configuration
+DB_ENGINE=sqlite  # 'sqlite' or 'supabase'
+SQLITE_DB_PATH=/tmp/development.db  # Only needed for SQLite
+
+# Supabase Configuration (only needed when DB_ENGINE=supabase)
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
 
-# Resend Configuration
-RESEND_API_KEY=your_resend_api_key_here
-
-# Site Configuration
-NEXT_PUBLIC_SITE_URL=https://yourdomain.com
-
-# Admin Authentication (HttpOnly cookie)
-ADMIN_PASSWORD=your_secure_admin_password_here
-ADMIN_SECRET=your_hmac_secret_for_cookie_token
-
 # Storage Configuration
 STORAGE_ENGINE=filesystem  # 'filesystem' or 'vercel'
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_token  # Required when STORAGE_ENGINE=vercel
+BLOB_READ_WRITE_TOKEN=your_vercel_blob_token_here  # Only needed for Vercel storage
+
+# Site Configuration
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Admin Authentication
+ADMIN_PASSWORD=admin123  # Change in production!
+ADMIN_SECRET=dev-secret-change-in-production  # Change in production!
+
+# Email Service
+RESEND_API_KEY=your_resend_api_key_here
+
+# Node Environment
+NODE_ENV=development
 ```
 
-### 2. Resend Setup
+### 4. Database Setup
 
-1. **Create Resend Account**: Sign up at [resend.com](https://resend.com)
-2. **Get API Key**: Go to your dashboard and copy your API key
-3. **Verify Domain**: Add and verify your sending domain in Resend
-4. **Set Sender in Config**: In `config/email.json`, set `sender.name` and `sender.email` to your verified domain address
+#### For Development (SQLite - Recommended)
+Already done by `npm run setup:local` above!
 
-### 3. Supabase Database Setup
-
-Create the following tables in your Supabase database:
+#### For Production (Supabase)
+If you want to use Supabase for production, create the following tables in your Supabase database:
 
 **Analytics Table:**
 ```sql
@@ -109,17 +131,81 @@ CREATE INDEX idx_download_tokens_email ON download_tokens(email);
 CREATE INDEX idx_download_tokens_expires_at ON download_tokens(expires_at);
 ```
 
-### 4. Install Dependencies
+### 5. Email Service Setup
 
-```bash
-npm install
-```
+1. **Create Resend Account**: Sign up at [resend.com](https://resend.com)
+2. **Get API Key**: Go to your dashboard and copy your API key
+3. **Verify Domain**: Add and verify your sending domain in Resend
+4. **Update .env.local**: Set your `RESEND_API_KEY`
+5. **Configure Sender**: In `config/email.json`, set `sender.name` and `sender.email` to your verified domain address
 
-### 5. Run Development Server
+### 6. Start Development
 
 ```bash
 npm run dev
 ```
+
+Visit `http://localhost:3000` to see your landing page!
+
+### 7. Admin Panel
+
+Access the admin panel at `http://localhost:3000/admin` with:
+- **Username**: admin
+- **Password**: admin123 (change in production!)
+
+## Available Scripts
+
+```bash
+# Development
+npm run dev              # Start development server
+npm run build           # Build for production
+npm run start           # Start production server
+npm run lint            # Run ESLint
+npm run type-check      # Run TypeScript type checking
+
+# Database
+npm run setup:local     # Setup local development environment
+npm run setup:sqlite    # Setup SQLite database only
+npm run db:info         # Check database status
+npm run db:backup       # Create database backup
+
+# Testing
+npm run test            # Run all tests
+npm run test:storage    # Run storage tests only
+npm run test:component  # Run component tests only
+npm run test:api        # Run API tests only
+npm run test:all        # Run all tests with timeout
+npm run test:report     # Show test report
+
+# Deployment
+npm run deploy:development  # Deploy to development environment
+npm run deploy:production   # Deploy to production environment
+
+# Release Management
+npm run release         # Create new release
+npm run release:patch   # Create patch release
+npm run release:minor   # Create minor release
+npm run release:major   # Create major release
+```
+
+## 📚 Documentation
+
+Complete documentation is available in the [`docs/`](./docs/) directory:
+
+- **[📖 Documentation Index](./docs/README.md)** - Complete documentation overview
+- **[🚀 Installation Guide](./docs/installation.md)** - Step-by-step setup instructions
+- **[🔧 Environment Configuration](./docs/environment.md)** - Environment variables guide
+- **[📡 API Reference](./docs/api.md)** - Complete API documentation
+- **[⚡ API Quick Start](./docs/api-quick-start.md)** - Get started with APIs quickly
+- **[🏗️ Architecture](./docs/architecture.md)** - System design and architecture
+- **[🧪 Testing Guide](./docs/testing.md)** - Testing strategies and examples
+- **[🚀 Deployment Guide](./docs/deployment.md)** - Production deployment instructions
+
+### Quick Links
+
+- **For New Users**: Start with [Installation Guide](./docs/installation.md)
+- **For Developers**: Check [API Reference](./docs/api.md) and [Architecture](./docs/architecture.md)
+- **For Deployment**: Read [Deployment Guide](./docs/deployment.md)
 
 ## Dynamic Configuration System
 

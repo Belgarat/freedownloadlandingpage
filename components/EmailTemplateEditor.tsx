@@ -56,8 +56,10 @@ const PlaceholderHighlight = Extension.create({
 interface EmailTemplateEditorProps {
   value: string
   onChange: (value: string) => void
+  onTextChange?: (value: string) => void
   placeholder?: string
   className?: string
+  showPreview?: boolean
 }
 
 const emailPlaceholders = [
@@ -85,13 +87,16 @@ const urlPlaceholders = [
 export default function EmailTemplateEditor({ 
   value, 
   onChange, 
+  onTextChange,
   placeholder = "Start writing...",
-  className = ""
+  className = "",
+  showPreview = false
 }: EmailTemplateEditorProps) {
   const [isMounted, setIsMounted] = useState(false)
   const [showContentPlaceholders, setShowContentPlaceholders] = useState(false)
   const [showUrlPlaceholders, setShowUrlPlaceholders] = useState(false)
-  const [showPreview, setShowPreview] = useState(false)
+  const [internalShowPreview, setInternalShowPreview] = useState(false)
+  const effectiveShowPreview = showPreview !== undefined ? showPreview : internalShowPreview
   const [previewMode, setPreviewMode] = useState<'html' | 'text'>('html')
   const [showCodeView, setShowCodeView] = useState(false)
   const [codeHtml, setCodeHtml] = useState('')
@@ -99,6 +104,14 @@ export default function EmailTemplateEditor({
   useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  // Call onTextChange when content changes
+  useEffect(() => {
+    if (onTextChange && editor) {
+      const textContent = editor.getText()
+      onTextChange(textContent)
+    }
+  }, [editor?.getHTML(), onTextChange])
 
   const editor = useEditor({
     extensions: [
@@ -196,7 +209,7 @@ export default function EmailTemplateEditor({
   const enterCodeView = () => {
     setShowContentPlaceholders(false)
     setShowUrlPlaceholders(false)
-    setShowPreview(false)
+    setInternalShowPreview(false)
     setCodeHtml(editor.getHTML())
     setShowCodeView(true)
   }
@@ -437,15 +450,15 @@ export default function EmailTemplateEditor({
           </div>
 
           <button
-            onClick={() => setShowPreview(!showPreview)}
+                            onClick={() => setInternalShowPreview(!internalShowPreview)}
             className={`flex items-center gap-1 px-2 py-1 text-xs rounded border ${
-              showPreview 
+              effectiveShowPreview 
                 ? 'text-green-600 bg-green-50 border-green-200' 
                 : 'text-gray-600 bg-gray-50 border-gray-200 hover:bg-gray-100'
             }`}
           >
-            {showPreview ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-            {showPreview ? 'Hide Preview' : 'Show Preview'}
+            {effectiveShowPreview ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+            {effectiveShowPreview ? 'Hide Preview' : 'Show Preview'}
           </button>
         </div>
       </div>
@@ -476,7 +489,7 @@ export default function EmailTemplateEditor({
             spellCheck={false}
           />
         </div>
-      ) : showPreview ? (
+      ) : effectiveShowPreview ? (
         <div className="p-4 min-h-[200px] bg-gray-50">
           <div className="flex items-center gap-2 mb-2">
             <button

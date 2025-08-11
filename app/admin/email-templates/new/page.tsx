@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Save, Eye } from 'lucide-react'
+import { ArrowLeft, Save, Eye, Plus } from 'lucide-react'
 import { useEmailTemplates } from '@/lib/useEmailTemplates'
 import EmailTemplateEditor from '@/components/EmailTemplateEditor'
 import type { EmailTemplateFormData } from '@/types/email-templates'
@@ -99,10 +99,10 @@ export default function NewEmailTemplatePage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white shadow rounded-lg">
-            <div className="p-6">
+      <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div className="bg-white shadow rounded-lg">
+          <div className="p-6">
+            <div>
               {/* Basic Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>

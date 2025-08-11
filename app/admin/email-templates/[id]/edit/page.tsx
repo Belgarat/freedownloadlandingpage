@@ -143,27 +143,56 @@ export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageP
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Edit Email Template</h1>
-              <p className="mt-1 text-sm text-gray-600">
-                Update the email template "{template.name}"
-              </p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={handleCancel}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span>Back to Templates</span>
+              </button>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Edit Email Template</h1>
+                <p className="text-sm text-gray-600">
+                  Update the email template "{template?.name || 'Loading...'}"
+                </p>
+              </div>
             </div>
-            <div className="flex space-x-3">
+            <div className="flex items-center space-x-3">
               <button
                 onClick={() => setShowPreview(!showPreview)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
               >
-                {showPreview ? 'Hide Preview' : 'Show Preview'}
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span>{showPreview ? 'Hide Preview' : 'Show Preview'}</span>
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
               </button>
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto p-6">
+
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Form */}

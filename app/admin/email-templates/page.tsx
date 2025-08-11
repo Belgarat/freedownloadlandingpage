@@ -80,19 +80,33 @@ export default function EmailTemplatesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Email Templates</h1>
-            <p className="text-sm text-gray-600">Create and manage email templates</p>
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Email Templates</h1>
+              <p className="text-sm text-gray-600">Create and manage email templates</p>
+            </div>
+            <button
+              onClick={handleCreateTemplate}
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              <Plus className="h-4 w-4" />
+              <span>New Template</span>
+            </button>
           </div>
-          <button
-            onClick={handleCreateTemplate}
-            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            <Plus className="h-4 w-4" />
-            <span>New Template</span>
-          </button>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-lg font-medium text-gray-900">Template Overview</h2>
+              <p className="text-sm text-gray-600">Quick statistics and template management</p>
+            </div>
+          </div>
         </div>
 
         {/* Stats */}

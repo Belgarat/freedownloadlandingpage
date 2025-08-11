@@ -1,10 +1,17 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+import { Plus, Mail } from 'lucide-react'
 import { useEmailTemplates } from '@/lib/useEmailTemplates'
 
 export default function EmailTemplatesPage() {
+  const router = useRouter()
   const { templates, categories, loading, error } = useEmailTemplates()
-  
+
+  const handleCreateTemplate = () => {
+    router.push('/admin/email-templates/new')
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -34,12 +41,170 @@ export default function EmailTemplatesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto py-6">
-        <h1 className="text-2xl font-bold text-gray-900">Email Templates</h1>
-        <p className="text-sm text-gray-600">Create and manage email templates</p>
-        <div className="mt-6">
-          <p>Total templates: {templates.length}</p>
-          <p>Total categories: {categories.length}</p>
+      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Email Templates</h1>
+            <p className="text-sm text-gray-600">Create and manage email templates</p>
+          </div>
+          <button
+            onClick={handleCreateTemplate}
+            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            <Plus className="h-4 w-4" />
+            <span>New Template</span>
+          </button>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="p-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Mail className="h-6 w-6 text-blue-600" />
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 truncate">Total Templates</dt>
+                    <dd className="text-lg font-medium text-gray-900">{templates.length}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="p-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Mail className="h-6 w-6 text-green-600" />
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 truncate">Default Templates</dt>
+                    <dd className="text-lg font-medium text-gray-900">
+                      {templates.filter(t => t.is_default).length}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="p-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Mail className="h-6 w-6 text-purple-600" />
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 truncate">Categories</dt>
+                    <dd className="text-lg font-medium text-gray-900">{categories.length}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="p-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Mail className="h-6 w-6 text-orange-600" />
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 truncate">Total Placeholders</dt>
+                    <dd className="text-lg font-medium text-gray-900">
+                      {templates.reduce((acc, t) => acc + (t.placeholders?.length || 0), 0)}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Templates List */}
+        <div className="bg-white shadow overflow-hidden sm:rounded-md">
+          <div className="px-4 py-5 sm:px-6">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">Email Templates</h3>
+            <p className="mt-1 max-w-2xl text-sm text-gray-500">
+              Manage your email templates and their placeholders
+            </p>
+          </div>
+          <ul className="divide-y divide-gray-200">
+            {templates.length === 0 ? (
+              <li className="px-4 py-8 text-center text-gray-500">
+                <Mail className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">No templates</h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Get started by creating a new email template.
+                </p>
+                <div className="mt-6">
+                  <button
+                    onClick={handleCreateTemplate}
+                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Plus className="-ml-1 mr-2 h-5 w-5" />
+                    New Template
+                  </button>
+                </div>
+              </li>
+            ) : (
+              templates.map((template) => (
+                <li key={template.id} className="px-4 py-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <Mail className="h-8 w-8 text-blue-600" />
+                      </div>
+                      <div className="ml-4">
+                        <div className="flex items-center space-x-2">
+                          <h4 className="text-lg font-medium text-gray-900">{template.name}</h4>
+                          {template.is_default && (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                              Default
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-500">{template.subject}</p>
+                        <p className="text-sm text-gray-400">
+                          Placeholders: {template.placeholders?.length || 0}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          Created: {new Date(template.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => alert('Preview functionality coming soon!')}
+                        className="p-2 text-gray-400 hover:text-gray-600"
+                        title="Preview"
+                      >
+                        👁️
+                      </button>
+                      <button
+                        onClick={() => alert('Edit functionality coming soon!')}
+                        className="p-2 text-gray-400 hover:text-blue-600"
+                        title="Edit"
+                      >
+                        ✏️
+                      </button>
+                      <button
+                        onClick={() => alert('Delete functionality coming soon!')}
+                        className="p-2 text-gray-400 hover:text-red-600"
+                        title="Delete"
+                        disabled={template.is_default}
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
         </div>
       </div>
     </div>

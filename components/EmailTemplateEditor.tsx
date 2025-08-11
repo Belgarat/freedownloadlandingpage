@@ -106,13 +106,6 @@ export default function EmailTemplateEditor({
   }, [])
 
   // Call onTextChange when content changes
-  useEffect(() => {
-    if (onTextChange && editor) {
-      const textContent = editor.getText()
-      onTextChange(textContent)
-    }
-  }, [editor?.getHTML(), onTextChange])
-
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -156,6 +149,14 @@ export default function EmailTemplateEditor({
     },
     immediatelyRender: false,
   })
+
+  // Call onTextChange when content changes
+  useEffect(() => {
+    if (onTextChange && editor) {
+      const textContent = editor.getText()
+      onTextChange(textContent)
+    }
+  }, [editor?.getHTML(), onTextChange])
 
   // Don't render until mounted to avoid SSR issues
   if (!isMounted || !editor) {

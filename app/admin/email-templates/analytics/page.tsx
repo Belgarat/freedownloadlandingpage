@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, TrendingUp, Mail, Eye, MousePointer, BarChart3, Calendar, Filter } from 'lucide-react'
+import { ArrowLeft, TrendingUp, Mail, Eye, MousePointer, BarChart3, Calendar, Filter, PieChart } from 'lucide-react'
 import { useEmailTemplates } from '@/lib/useEmailTemplates'
+import EmailAnalyticsCharts from '@/components/EmailAnalyticsCharts'
 import type { TemplateAnalyticsSummary, AnalyticsFilters } from '@/types/email-analytics'
 
 export default function EmailTemplateAnalyticsPage() {
@@ -15,6 +16,7 @@ export default function EmailTemplateAnalyticsPage() {
     date_from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days ago
     date_to: new Date().toISOString().split('T')[0]
   })
+  const [showCharts, setShowCharts] = useState(false)
 
   // Fetch analytics data
   useEffect(() => {
@@ -102,6 +104,19 @@ export default function EmailTemplateAnalyticsPage() {
                 <h1 className="text-2xl font-bold text-gray-900">Email Template Analytics</h1>
                 <p className="text-sm text-gray-600">Performance metrics and insights</p>
               </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => setShowCharts(!showCharts)}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-md ${
+                  showCharts 
+                    ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                    : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                <PieChart className="h-4 w-4" />
+                <span>{showCharts ? 'Hide Charts' : 'Show Charts'}</span>
+              </button>
             </div>
           </div>
         </div>
@@ -301,6 +316,16 @@ export default function EmailTemplateAnalyticsPage() {
             </table>
           </div>
         </div>
+
+        {/* Charts Section */}
+        {showCharts && (
+          <div className="mt-8">
+            <EmailAnalyticsCharts 
+              analytics={analytics}
+              dateRange={{ from: filters.date_from || '', to: filters.date_to || '' }}
+            />
+          </div>
+        )}
       </div>
     </div>
   )

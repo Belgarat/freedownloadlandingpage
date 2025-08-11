@@ -18,8 +18,11 @@ The Swagger integration provides:
 Visit the interactive API documentation at:
 
 ```
-http://localhost:3000/api-docs
+http://localhost:3000/api-docs          # Recommended (next-swagger-doc)
+http://localhost:3000/api-docs-simple   # Alternative (iframe version)
 ```
+
+**Recommended Version**: Use `/api-docs` which uses [next-swagger-doc](https://www.npmjs.com/package/next-swagger-doc) for seamless integration with Next.js App Router and automatic API discovery.
 
 This provides a full Swagger UI interface where you can:
 

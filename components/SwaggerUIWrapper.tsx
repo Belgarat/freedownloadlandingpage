@@ -57,13 +57,22 @@ export default function SwaggerUIWrapper({ spec }: SwaggerUIWrapperProps) {
           return response
         }}
         onComplete={(system) => {
-          // Suppress console warnings for legacy components
+          // Suppress all React Strict Mode warnings for Swagger UI
           const originalWarn = console.warn
           console.warn = (...args) => {
-            if (args[0]?.includes?.('UNSAFE_componentWillReceiveProps') || 
-                args[0]?.includes?.('ModelCollapse') || 
-                args[0]?.includes?.('OperationContainer')) {
-              return
+            const message = args[0]
+            if (typeof message === 'string' && (
+              message.includes('UNSAFE_componentWillReceiveProps') ||
+              message.includes('ModelCollapse') ||
+              message.includes('OperationContainer') ||
+              message.includes('Servers') ||
+              message.includes('ContentType') ||
+              message.includes('ModelExample') ||
+              message.includes('RequestBodyEditor') ||
+              message.includes('strict mode') ||
+              message.includes('componentWillReceiveProps')
+            )) {
+              return // Suppress these warnings
             }
             originalWarn.apply(console, args)
           }

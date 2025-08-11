@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { swaggerSpec } from '@/lib/swagger'
+import { getApiDocs } from '@/lib/swagger'
 
 /**
  * @swagger
@@ -17,5 +17,6 @@ import { swaggerSpec } from '@/lib/swagger'
  *               type: object
  */
 export async function GET() {
-  return NextResponse.json(swaggerSpec)
+  const spec = await getApiDocs()
+  return NextResponse.json(spec)
 }

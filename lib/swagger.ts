@@ -256,6 +256,186 @@ export const getApiDocs = async () => {
                 }
               }
             }
+          },
+          EmailTemplate: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+                example: 1
+              },
+              name: {
+                type: 'string',
+                example: 'Default Download Email'
+              },
+              subject: {
+                type: 'string',
+                example: 'Your free ebook is ready! 📚'
+              },
+              html_content: {
+                type: 'string',
+                example: '<!DOCTYPE html><html>...</html>'
+              },
+              text_content: {
+                type: 'string',
+                example: 'Hi {{user_name}}, Thank you for...'
+              },
+              description: {
+                type: 'string',
+                example: 'Default template for download confirmation emails'
+              },
+              is_default: {
+                type: 'boolean',
+                example: true
+              },
+              created_at: {
+                type: 'string',
+                format: 'date-time',
+                example: '2024-01-15T10:30:00Z'
+              },
+              updated_at: {
+                type: 'string',
+                format: 'date-time',
+                example: '2024-01-15T10:30:00Z'
+              },
+              placeholders: {
+                type: 'array',
+                items: {
+                  $ref: '#/components/schemas/TemplatePlaceholder'
+                }
+              },
+              categories: {
+                type: 'array',
+                items: {
+                  $ref: '#/components/schemas/TemplateCategory'
+                }
+              }
+            }
+          },
+          TemplatePlaceholder: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+                example: 1
+              },
+              template_id: {
+                type: 'integer',
+                example: 1
+              },
+              placeholder_key: {
+                type: 'string',
+                example: 'user_name'
+              },
+              placeholder_name: {
+                type: 'string',
+                example: 'User Name'
+              },
+              description: {
+                type: 'string',
+                example: 'The recipient\'s name'
+              },
+              default_value: {
+                type: 'string',
+                example: 'there'
+              },
+              is_required: {
+                type: 'boolean',
+                example: false
+              },
+              created_at: {
+                type: 'string',
+                format: 'date-time',
+                example: '2024-01-15T10:30:00Z'
+              }
+            }
+          },
+          TemplateCategory: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+                example: 1
+              },
+              name: {
+                type: 'string',
+                example: 'Download'
+              },
+              description: {
+                type: 'string',
+                example: 'Download confirmation emails'
+              },
+              created_at: {
+                type: 'string',
+                format: 'date-time',
+                example: '2024-01-15T10:30:00Z'
+              }
+            }
+          },
+          EmailTemplateFormData: {
+            type: 'object',
+            required: ['name', 'subject', 'html_content'],
+            properties: {
+              name: {
+                type: 'string',
+                example: 'Welcome Email'
+              },
+              subject: {
+                type: 'string',
+                example: 'Welcome to our platform!'
+              },
+              html_content: {
+                type: 'string',
+                example: '<!DOCTYPE html><html>...</html>'
+              },
+              text_content: {
+                type: 'string',
+                example: 'Welcome to our platform!'
+              },
+              description: {
+                type: 'string',
+                example: 'Welcome email template'
+              },
+              is_default: {
+                type: 'boolean',
+                example: false
+              },
+              placeholders: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    placeholder_key: {
+                      type: 'string',
+                      example: 'user_name'
+                    },
+                    placeholder_name: {
+                      type: 'string',
+                      example: 'User Name'
+                    },
+                    description: {
+                      type: 'string',
+                      example: 'The recipient\'s name'
+                    },
+                    default_value: {
+                      type: 'string',
+                      example: 'there'
+                    },
+                    is_required: {
+                      type: 'boolean',
+                      example: false
+                    }
+                  }
+                }
+              },
+              category_ids: {
+                type: 'array',
+                items: {
+                  type: 'integer'
+                },
+                example: [1, 2]
+              }
+            }
           }
         }
       },
@@ -287,6 +467,10 @@ export const getApiDocs = async () => {
         {
           name: 'Configuration',
           description: 'System configuration management'
+        },
+        {
+          name: 'Email Templates',
+          description: 'Email template management and editing'
         }
       ]
     },

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Settings, BookOpen, Megaphone, Search, LogOut, Beaker } from 'lucide-react'
+import { Settings, BookOpen, Megaphone, Search, LogOut, Beaker, Mail } from 'lucide-react'
 import { useLogout } from '@/lib/useLogout'
 import { useStats } from '@/lib/useStats'
 import AdminProtected from '@/components/admin/AdminProtected'
@@ -50,6 +50,14 @@ export default function AdminPage() {
       description: 'Manage CTAs and marketing settings',
       icon: Megaphone,
       href: '/admin/marketing',
+      permission: 'write'
+    },
+    { 
+      id: 'email-templates', 
+      name: 'Email Templates', 
+      description: 'Create and manage email templates',
+      icon: Mail,
+      href: '/admin/email-templates',
       permission: 'write'
     }
   ]

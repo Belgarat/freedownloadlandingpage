@@ -7,15 +7,32 @@ export async function GET(
 ) {
   try {
     const { id } = await params
+    const configId = parseInt(id)
+    
+    if (isNaN(configId)) {
+      return NextResponse.json({
+        success: false,
+        error: 'Invalid configuration ID'
+      }, { status: 400 })
+    }
+
     const configService = new ConfigService()
-    const config = await configService.getSEOConfig(parseInt(id))
+    const config = await configService.getSEOConfig(configId)
     
     return NextResponse.json({
       success: true,
       data: config
     })
   } catch (error) {
-    console.error('❌ Error loading SEO config:', error)
+    console.error('Error loading SEO config:', error)
+    
+    // Check if it's a "not found" error
+    if (error instanceof Error && error.message.includes('not found')) {
+      return NextResponse.json({
+        success: false,
+        error: 'SEO configuration not found'
+      }, { status: 404 })
+    }
     
     return NextResponse.json({
       success: false,

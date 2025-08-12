@@ -7,15 +7,32 @@ export async function GET(
 ) {
   try {
     const { id } = await params
+    const configId = parseInt(id)
+    
+    if (isNaN(configId)) {
+      return NextResponse.json({
+        success: false,
+        error: 'Invalid configuration ID'
+      }, { status: 400 })
+    }
+
     const configService = new ConfigService()
-    const config = await configService.getBookConfig(parseInt(id))
+    const config = await configService.getBookConfig(configId)
     
     return NextResponse.json({
       success: true,
       data: config
     })
   } catch (error) {
-    console.error('❌ Error loading book config:', error)
+    console.error('Error loading book config:', error)
+    
+    // Check if it's a "not found" error
+    if (error instanceof Error && error.message.includes('not found')) {
+      return NextResponse.json({
+        success: false,
+        error: 'Book configuration not found'
+      }, { status: 404 })
+    }
     
     return NextResponse.json({
       success: false,

@@ -372,7 +372,7 @@ async function testConfigType(type) {
       await makeRequest(`${BASE_URL}/${type}/${createdId}`)
       throw new Error(`Config should have been deleted but still exists`)
     } catch (error) {
-      if (error.message.includes('404') || error.message.includes('not found')) {
+      if (error.message.includes('404') || error.message.includes('not found') || error.message.includes('Email configuration not found') || error.message.includes('Book configuration not found') || error.message.includes('SEO configuration not found')) {
         console.log(`  ✅ Deletion verified successfully`)
       } else {
         throw error

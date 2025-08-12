@@ -49,12 +49,10 @@ export default function ConfigAdmin() {
 
       if (result.success) {
         setSaveStatus('success')
-        // Update local config immediately after successful save
-        if (result.data) {
-          setLocalConfig(result.data)
-          setLastSavedConfig(result.data)
-        }
+        // Don't update localConfig immediately to avoid flash
+        // Just mark as not dirty and update last saved config
         setIsDirty(false)
+        setLastSavedConfig(localConfig) // Use current localConfig instead of result.data
         setTimeout(() => setSaveStatus('idle'), 3000)
       } else {
         setSaveStatus('error')
@@ -200,11 +198,15 @@ export default function ConfigAdmin() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className={`px-3 py-2 text-white rounded-md flex items-center space-x-2 text-sm ${
+                className={`px-3 py-2 text-white rounded-md flex items-center space-x-2 text-sm transition-all duration-200 ${
                   saving ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
-                <Save className="h-4 w-4" />
+                {saving ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                ) : (
+                  <Save className="h-4 w-4" />
+                )}
                 <span>{saving ? 'Saving...' : 'Save Changes'}</span>
               </button>
             </div>
@@ -234,12 +236,23 @@ export default function ConfigAdmin() {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
         <div className="bg-white rounded-lg shadow">
           <div className="p-6">
             {renderTabContent()}
           </div>
         </div>
+        
+        {/* Saving overlay */}
+        {saving && (
+          <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-lg">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3"></div>
+              <p className="text-gray-600 font-medium">Saving configuration...</p>
+              <p className="text-sm text-gray-500 mt-1">Please wait</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

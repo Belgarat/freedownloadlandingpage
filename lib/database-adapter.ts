@@ -16,6 +16,15 @@ import type {
   ThemeStyles,
   ThemeFormData 
 } from '@/types/email-themes'
+import type {
+  MarketingConfig,
+  ThemeConfig,
+  ContentConfig,
+  ConfigABTest,
+  ConfigUsage,
+  ConfigStats,
+  ConfigComparison
+} from '@/types/config'
 
 export interface DatabaseAdapter {
   // A/B Testing
@@ -75,6 +84,40 @@ export interface DatabaseAdapter {
   getEmailThemeCategories(): Promise<EmailThemeCategory[]>
   getTemplateTheme(templateId: number): Promise<EmailTemplateTheme | null>
   assignThemeToTemplate(templateId: number, themeId: number): Promise<EmailTemplateTheme>
+  
+  // Configuration Management
+  getMarketingConfigs(): Promise<MarketingConfig[]>
+  getMarketingConfig(id: number): Promise<MarketingConfig>
+  createMarketingConfig(config: Omit<MarketingConfig, 'id' | 'created_at' | 'updated_at'>): Promise<MarketingConfig>
+  updateMarketingConfig(id: number, config: Partial<MarketingConfig>): Promise<MarketingConfig>
+  deleteMarketingConfig(id: number): Promise<void>
+  getActiveMarketingConfig(): Promise<MarketingConfig | null>
+  
+  getThemeConfigs(): Promise<ThemeConfig[]>
+  getThemeConfig(id: number): Promise<ThemeConfig>
+  createThemeConfig(config: Omit<ThemeConfig, 'id' | 'created_at' | 'updated_at'>): Promise<ThemeConfig>
+  updateThemeConfig(id: number, config: Partial<ThemeConfig>): Promise<ThemeConfig>
+  deleteThemeConfig(id: number): Promise<void>
+  getActiveThemeConfig(): Promise<ThemeConfig | null>
+  
+  getContentConfigs(): Promise<ContentConfig[]>
+  getContentConfig(id: number): Promise<ContentConfig>
+  createContentConfig(config: Omit<ContentConfig, 'id' | 'created_at' | 'updated_at'>): Promise<ContentConfig>
+  updateContentConfig(id: number, config: Partial<ContentConfig>): Promise<ContentConfig>
+  deleteContentConfig(id: number): Promise<void>
+  getActiveContentConfig(language?: string): Promise<ContentConfig | null>
+  
+  // Configuration A/B Testing
+  createConfigABTest(test: Omit<ConfigABTest, 'id' | 'created_at'>): Promise<ConfigABTest>
+  getConfigABTests(): Promise<ConfigABTest[]>
+  getConfigABTest(id: number): Promise<ConfigABTest>
+  updateConfigABTest(id: number, test: Partial<ConfigABTest>): Promise<ConfigABTest>
+  deleteConfigABTest(id: number): Promise<void>
+  
+  // Configuration Usage Tracking
+  trackConfigUsage(usage: Omit<ConfigUsage, 'id' | 'created_at' | 'updated_at'>): Promise<ConfigUsage>
+  getConfigStats(configId: number, configType: string): Promise<ConfigStats>
+  getConfigComparison(testId: number): Promise<ConfigComparison>
   
   // Database Setup
   initDatabase(): Promise<void>
@@ -706,6 +749,463 @@ export class SupabaseAdapter implements DatabaseAdapter {
 
     if (error) throw error
     return data
+  }
+
+  // Configuration Management Methods - Supabase Implementation
+  async getMarketingConfigs(): Promise<MarketingConfig[]> {
+    const { data, error } = await this.supabase
+      .from('marketing_configs')
+      .select('*')
+      .order('name', { ascending: true })
+
+    if (error) throw error
+    return (data || []).map(config => ({
+      ...config,
+      cta_config: typeof config.cta_config === 'string' ? JSON.parse(config.cta_config) : config.cta_config,
+      modal_config: typeof config.modal_config === 'string' ? JSON.parse(config.modal_config) : config.modal_config,
+      offer_config: typeof config.offer_config === 'string' ? JSON.parse(config.offer_config) : config.offer_config,
+      social_proof_config: typeof config.social_proof_config === 'string' ? JSON.parse(config.social_proof_config) : config.social_proof_config
+    }))
+  }
+
+  async getMarketingConfig(id: number): Promise<MarketingConfig> {
+    const { data, error } = await this.supabase
+      .from('marketing_configs')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+    if (!data) throw new Error(`Marketing config not found: ${id}`)
+
+    return {
+      ...data,
+      cta_config: typeof data.cta_config === 'string' ? JSON.parse(data.cta_config) : data.cta_config,
+      modal_config: typeof data.modal_config === 'string' ? JSON.parse(data.modal_config) : data.modal_config,
+      offer_config: typeof data.offer_config === 'string' ? JSON.parse(data.offer_config) : data.offer_config,
+      social_proof_config: typeof data.social_proof_config === 'string' ? JSON.parse(data.social_proof_config) : data.social_proof_config
+    }
+  }
+
+  async createMarketingConfig(config: Omit<MarketingConfig, 'id' | 'created_at' | 'updated_at'>): Promise<MarketingConfig> {
+    const { data, error } = await this.supabase
+      .from('marketing_configs')
+      .insert({
+        name: config.name,
+        description: config.description,
+        cta_config: config.cta_config,
+        modal_config: config.modal_config,
+        offer_config: config.offer_config,
+        social_proof_config: config.social_proof_config,
+        is_active: config.is_active,
+        is_default: config.is_default
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async updateMarketingConfig(id: number, config: Partial<MarketingConfig>): Promise<MarketingConfig> {
+    const { data, error } = await this.supabase
+      .from('marketing_configs')
+      .update({
+        ...config,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async deleteMarketingConfig(id: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('marketing_configs')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+  }
+
+  async getActiveMarketingConfig(): Promise<MarketingConfig | null> {
+    const { data, error } = await this.supabase
+      .from('marketing_configs')
+      .select('*')
+      .eq('is_active', true)
+      .limit(1)
+      .single()
+
+    if (error && error.code !== 'PGRST116') throw error
+    if (!data) return null
+
+    return {
+      ...data,
+      cta_config: typeof data.cta_config === 'string' ? JSON.parse(data.cta_config) : data.cta_config,
+      modal_config: typeof data.modal_config === 'string' ? JSON.parse(data.modal_config) : data.modal_config,
+      offer_config: typeof data.offer_config === 'string' ? JSON.parse(data.offer_config) : data.offer_config,
+      social_proof_config: typeof data.social_proof_config === 'string' ? JSON.parse(data.social_proof_config) : data.social_proof_config
+    }
+  }
+
+  // Theme Config Methods
+  async getThemeConfigs(): Promise<ThemeConfig[]> {
+    const { data, error } = await this.supabase
+      .from('theme_configs')
+      .select('*')
+      .order('name', { ascending: true })
+
+    if (error) throw error
+    return (data || []).map(config => ({
+      ...config,
+      colors: typeof config.colors === 'string' ? JSON.parse(config.colors) : config.colors,
+      fonts: typeof config.fonts === 'string' ? JSON.parse(config.fonts) : config.fonts,
+      layout: typeof config.layout === 'string' ? JSON.parse(config.layout) : config.layout,
+      spacing: typeof config.spacing === 'string' ? JSON.parse(config.spacing) : config.spacing,
+      animations: typeof config.animations === 'string' ? JSON.parse(config.animations) : config.animations,
+      development: typeof config.development === 'string' ? JSON.parse(config.development) : config.development,
+      surface: typeof config.surface === 'string' ? JSON.parse(config.surface) : config.surface
+    }))
+  }
+
+  async getThemeConfig(id: number): Promise<ThemeConfig> {
+    const { data, error } = await this.supabase
+      .from('theme_configs')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+    if (!data) throw new Error(`Theme config not found: ${id}`)
+
+    return {
+      ...data,
+      colors: typeof data.colors === 'string' ? JSON.parse(data.colors) : data.colors,
+      fonts: typeof data.fonts === 'string' ? JSON.parse(data.fonts) : data.fonts,
+      layout: typeof data.layout === 'string' ? JSON.parse(data.layout) : data.layout,
+      spacing: typeof data.spacing === 'string' ? JSON.parse(data.spacing) : data.spacing,
+      animations: typeof data.animations === 'string' ? JSON.parse(data.animations) : data.animations,
+      development: typeof data.development === 'string' ? JSON.parse(data.development) : data.development,
+      surface: typeof data.surface === 'string' ? JSON.parse(data.surface) : data.surface
+    }
+  }
+
+  async createThemeConfig(config: Omit<ThemeConfig, 'id' | 'created_at' | 'updated_at'>): Promise<ThemeConfig> {
+    const { data, error } = await this.supabase
+      .from('theme_configs')
+      .insert({
+        name: config.name,
+        description: config.description,
+        colors: config.colors,
+        fonts: config.fonts,
+        layout: config.layout,
+        spacing: config.spacing,
+        animations: config.animations,
+        development: config.development,
+        surface: config.surface,
+        is_active: config.is_active,
+        is_default: config.is_default
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async updateThemeConfig(id: number, config: Partial<ThemeConfig>): Promise<ThemeConfig> {
+    const { data, error } = await this.supabase
+      .from('theme_configs')
+      .update({
+        ...config,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async deleteThemeConfig(id: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('theme_configs')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+  }
+
+  async getActiveThemeConfig(): Promise<ThemeConfig | null> {
+    const { data, error } = await this.supabase
+      .from('theme_configs')
+      .select('*')
+      .eq('is_active', true)
+      .limit(1)
+      .single()
+
+    if (error && error.code !== 'PGRST116') throw error
+    if (!data) return null
+
+    return {
+      ...data,
+      colors: typeof data.colors === 'string' ? JSON.parse(data.colors) : data.colors,
+      fonts: typeof data.fonts === 'string' ? JSON.parse(data.fonts) : data.fonts,
+      layout: typeof data.layout === 'string' ? JSON.parse(data.layout) : data.layout,
+      spacing: typeof data.spacing === 'string' ? JSON.parse(data.spacing) : data.spacing,
+      animations: typeof data.animations === 'string' ? JSON.parse(data.animations) : data.animations,
+      development: typeof data.development === 'string' ? JSON.parse(data.development) : data.development,
+      surface: typeof data.surface === 'string' ? JSON.parse(data.surface) : data.surface
+    }
+  }
+
+  // Content Config Methods
+  async getContentConfigs(): Promise<ContentConfig[]> {
+    const { data, error } = await this.supabase
+      .from('content_configs')
+      .select('*')
+      .order('language', { ascending: true })
+      .order('name', { ascending: true })
+
+    if (error) throw error
+    return (data || []).map(config => ({
+      ...config,
+      stories: typeof config.stories === 'string' ? JSON.parse(config.stories) : config.stories,
+      testimonials: typeof config.testimonials === 'string' ? JSON.parse(config.testimonials) : config.testimonials,
+      footer: typeof config.footer === 'string' ? JSON.parse(config.footer) : config.footer
+    }))
+  }
+
+  async getContentConfig(id: number): Promise<ContentConfig> {
+    const { data, error } = await this.supabase
+      .from('content_configs')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+    if (!data) throw new Error(`Content config not found: ${id}`)
+
+    return {
+      ...data,
+      stories: typeof data.stories === 'string' ? JSON.parse(data.stories) : data.stories,
+      testimonials: typeof data.testimonials === 'string' ? JSON.parse(data.testimonials) : data.testimonials,
+      footer: typeof data.footer === 'string' ? JSON.parse(data.footer) : data.footer
+    }
+  }
+
+  async createContentConfig(config: Omit<ContentConfig, 'id' | 'created_at' | 'updated_at'>): Promise<ContentConfig> {
+    const { data, error } = await this.supabase
+      .from('content_configs')
+      .insert({
+        language: config.language,
+        name: config.name,
+        about_book: config.about_book,
+        author_bio: config.author_bio,
+        stories: config.stories,
+        testimonials: config.testimonials,
+        footer: config.footer,
+        is_active: config.is_active,
+        is_default: config.is_default
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async updateContentConfig(id: number, config: Partial<ContentConfig>): Promise<ContentConfig> {
+    const { data, error } = await this.supabase
+      .from('content_configs')
+      .update({
+        ...config,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async deleteContentConfig(id: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('content_configs')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+  }
+
+  async getActiveContentConfig(language: string = 'en'): Promise<ContentConfig | null> {
+    const { data, error } = await this.supabase
+      .from('content_configs')
+      .select('*')
+      .eq('is_active', true)
+      .eq('language', language)
+      .limit(1)
+      .single()
+
+    if (error && error.code !== 'PGRST116') throw error
+    if (!data) return null
+
+    return {
+      ...data,
+      stories: typeof data.stories === 'string' ? JSON.parse(data.stories) : data.stories,
+      testimonials: typeof data.testimonials === 'string' ? JSON.parse(data.testimonials) : data.testimonials,
+      footer: typeof data.footer === 'string' ? JSON.parse(data.footer) : data.footer
+    }
+  }
+
+  // Configuration A/B Testing Methods
+  async createConfigABTest(test: Omit<ConfigABTest, 'id' | 'created_at'>): Promise<ConfigABTest> {
+    const { data, error } = await this.supabase
+      .from('config_ab_tests')
+      .insert({
+        test_name: test.test_name,
+        config_type: test.config_type,
+        config_a_id: test.config_a_id,
+        config_b_id: test.config_b_id,
+        start_date: test.start_date,
+        end_date: test.end_date,
+        status: test.status,
+        winner_config_id: test.winner_config_id,
+        confidence_level: test.confidence_level,
+        total_participants: test.total_participants
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async getConfigABTests(): Promise<ConfigABTest[]> {
+    const { data, error } = await this.supabase
+      .from('config_ab_tests')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  }
+
+  async getConfigABTest(id: number): Promise<ConfigABTest> {
+    const { data, error } = await this.supabase
+      .from('config_ab_tests')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+    if (!data) throw new Error(`Config A/B test not found: ${id}`)
+
+    return data
+  }
+
+  async updateConfigABTest(id: number, test: Partial<ConfigABTest>): Promise<ConfigABTest> {
+    const { data, error } = await this.supabase
+      .from('config_ab_tests')
+      .update(test)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async deleteConfigABTest(id: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('config_ab_tests')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+  }
+
+  // Configuration Usage Tracking Methods
+  async trackConfigUsage(usage: Omit<ConfigUsage, 'id' | 'created_at' | 'updated_at'>): Promise<ConfigUsage> {
+    const { data, error } = await this.supabase
+      .from('config_usage')
+      .insert({
+        config_type: usage.config_type,
+        config_id: usage.config_id,
+        visitor_id: usage.visitor_id,
+        page_view: usage.page_view,
+        email_submission: usage.email_submission,
+        download_request: usage.download_request,
+        download_completed: usage.download_completed
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async getConfigStats(configId: number, configType: string): Promise<ConfigStats> {
+    const { data, error } = await this.supabase
+      .from('config_usage')
+      .select(`
+        config_id,
+        config_type,
+        count(*) as total_visitors,
+        sum(download_completed) as total_conversions,
+        avg(page_view) as avg_time_on_page,
+        sum(case when page_view = 1 and download_completed = 0 then 1 else 0 end) as bounces
+      `)
+      .eq('config_id', configId)
+      .eq('config_type', configType)
+      .single()
+
+    if (error) throw error
+
+    const totalVisitors = data?.total_visitors || 0
+    const totalConversions = data?.total_conversions || 0
+    const bounces = data?.bounces || 0
+
+    return {
+      config_id: configId,
+      config_type: configType as any,
+      total_visitors: totalVisitors,
+      total_conversions: totalConversions,
+      conversion_rate: totalVisitors > 0 ? (totalConversions / totalVisitors) * 100 : 0,
+      avg_time_on_page: data?.avg_time_on_page || 0,
+      bounce_rate: totalVisitors > 0 ? (bounces / totalVisitors) * 100 : 0
+    }
+  }
+
+  async getConfigComparison(testId: number): Promise<ConfigComparison> {
+    const test = await this.getConfigABTest(testId)
+    const statsA = await this.getConfigStats(test.config_a_id, test.config_type)
+    const statsB = await this.getConfigStats(test.config_b_id, test.config_type)
+
+    const improvement = statsB.conversion_rate - statsA.conversion_rate
+    const confidenceLevel = 95 // Placeholder - would need statistical calculation
+
+    return {
+      config_a: {
+        id: test.config_a_id,
+        name: `Config A`,
+        stats: statsA
+      },
+      config_b: {
+        id: test.config_b_id,
+        name: `Config B`,
+        stats: statsB
+      },
+      improvement,
+      confidence_level: confidenceLevel,
+      is_significant: confidenceLevel > 90,
+      recommended_winner: improvement > 0 ? test.config_b_id : test.config_a_id
+    }
   }
 }
 
@@ -1688,6 +2188,630 @@ export class SQLiteAdapter implements DatabaseAdapter {
     stmt.run(templateId, themeId)
     
     return this.getTemplateTheme(templateId) as Promise<EmailTemplateTheme>
+  }
+
+  // Configuration Management Methods
+  async getMarketingConfigs(): Promise<MarketingConfig[]> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM marketing_configs ORDER BY name
+    `)
+    
+    const configs = stmt.all()
+    return configs.map(config => ({
+      ...config,
+      cta_config: JSON.parse(config.cta_config),
+      modal_config: JSON.parse(config.modal_config),
+      offer_config: JSON.parse(config.offer_config),
+      social_proof_config: JSON.parse(config.social_proof_config),
+      is_active: Boolean(config.is_active),
+      is_default: Boolean(config.is_default)
+    }))
+  }
+
+  async getMarketingConfig(id: number): Promise<MarketingConfig> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM marketing_configs WHERE id = ?
+    `)
+    
+    const config = stmt.get(id)
+    if (!config) throw new Error(`Marketing config not found: ${id}`)
+    
+    return {
+      ...config,
+      cta_config: JSON.parse(config.cta_config),
+      modal_config: JSON.parse(config.modal_config),
+      offer_config: JSON.parse(config.offer_config),
+      social_proof_config: JSON.parse(config.social_proof_config),
+      is_active: Boolean(config.is_active),
+      is_default: Boolean(config.is_default)
+    }
+  }
+
+  async createMarketingConfig(config: Omit<MarketingConfig, 'id' | 'created_at' | 'updated_at'>): Promise<MarketingConfig> {
+    const stmt = this.db.prepare(`
+      INSERT INTO marketing_configs (name, description, cta_config, modal_config, offer_config, social_proof_config, is_active, is_default)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `)
+    
+    const result = stmt.run(
+      config.name,
+      config.description,
+      JSON.stringify(config.cta_config),
+      JSON.stringify(config.modal_config),
+      JSON.stringify(config.offer_config),
+      JSON.stringify(config.social_proof_config),
+      config.is_active ? 1 : 0,
+      config.is_default ? 1 : 0
+    )
+    
+    return this.getMarketingConfig(result.lastInsertRowid)
+  }
+
+  async updateMarketingConfig(id: number, config: Partial<MarketingConfig>): Promise<MarketingConfig> {
+    const updates: string[] = []
+    const values: any[] = []
+    
+    if (config.name !== undefined) {
+      updates.push('name = ?')
+      values.push(config.name)
+    }
+    if (config.description !== undefined) {
+      updates.push('description = ?')
+      values.push(config.description)
+    }
+    if (config.cta_config !== undefined) {
+      updates.push('cta_config = ?')
+      values.push(JSON.stringify(config.cta_config))
+    }
+    if (config.modal_config !== undefined) {
+      updates.push('modal_config = ?')
+      values.push(JSON.stringify(config.modal_config))
+    }
+    if (config.offer_config !== undefined) {
+      updates.push('offer_config = ?')
+      values.push(JSON.stringify(config.offer_config))
+    }
+    if (config.social_proof_config !== undefined) {
+      updates.push('social_proof_config = ?')
+      values.push(JSON.stringify(config.social_proof_config))
+    }
+    if (config.is_active !== undefined) {
+      updates.push('is_active = ?')
+      values.push(config.is_active ? 1 : 0)
+    }
+    if (config.is_default !== undefined) {
+      updates.push('is_default = ?')
+      values.push(config.is_default ? 1 : 0)
+    }
+    
+    updates.push('updated_at = CURRENT_TIMESTAMP')
+    values.push(id)
+    
+    const stmt = this.db.prepare(`
+      UPDATE marketing_configs SET ${updates.join(', ')} WHERE id = ?
+    `)
+    
+    stmt.run(...values)
+    
+    return this.getMarketingConfig(id)
+  }
+
+  async deleteMarketingConfig(id: number): Promise<void> {
+    const stmt = this.db.prepare(`
+      DELETE FROM marketing_configs WHERE id = ?
+    `)
+    
+    stmt.run(id)
+  }
+
+  async getActiveMarketingConfig(): Promise<MarketingConfig | null> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM marketing_configs WHERE is_active = 1 LIMIT 1
+    `)
+    
+    const config = stmt.get()
+    if (!config) return null
+    
+    return {
+      ...config,
+      cta_config: JSON.parse(config.cta_config),
+      modal_config: JSON.parse(config.modal_config),
+      offer_config: JSON.parse(config.offer_config),
+      social_proof_config: JSON.parse(config.social_proof_config),
+      is_active: Boolean(config.is_active),
+      is_default: Boolean(config.is_default)
+    }
+  }
+
+  // Theme Config Methods
+  async getThemeConfigs(): Promise<ThemeConfig[]> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM theme_configs ORDER BY name
+    `)
+    
+    const configs = stmt.all()
+    return configs.map(config => ({
+      ...config,
+      colors: JSON.parse(config.colors),
+      fonts: JSON.parse(config.fonts),
+      layout: JSON.parse(config.layout),
+      spacing: JSON.parse(config.spacing),
+      animations: JSON.parse(config.animations),
+      development: JSON.parse(config.development),
+      surface: JSON.parse(config.surface),
+      is_active: Boolean(config.is_active),
+      is_default: Boolean(config.is_default)
+    }))
+  }
+
+  async getThemeConfig(id: number): Promise<ThemeConfig> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM theme_configs WHERE id = ?
+    `)
+    
+    const config = stmt.get(id)
+    if (!config) throw new Error(`Theme config not found: ${id}`)
+    
+    return {
+      ...config,
+      colors: JSON.parse(config.colors),
+      fonts: JSON.parse(config.fonts),
+      layout: JSON.parse(config.layout),
+      spacing: JSON.parse(config.spacing),
+      animations: JSON.parse(config.animations),
+      development: JSON.parse(config.development),
+      surface: JSON.parse(config.surface),
+      is_active: Boolean(config.is_active),
+      is_default: Boolean(config.is_default)
+    }
+  }
+
+  async createThemeConfig(config: Omit<ThemeConfig, 'id' | 'created_at' | 'updated_at'>): Promise<ThemeConfig> {
+    const stmt = this.db.prepare(`
+      INSERT INTO theme_configs (name, description, colors, fonts, layout, spacing, animations, development, surface, is_active, is_default)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `)
+    
+    const result = stmt.run(
+      config.name,
+      config.description,
+      JSON.stringify(config.colors),
+      JSON.stringify(config.fonts),
+      JSON.stringify(config.layout),
+      JSON.stringify(config.spacing),
+      JSON.stringify(config.animations),
+      JSON.stringify(config.development),
+      JSON.stringify(config.surface),
+      config.is_active ? 1 : 0,
+      config.is_default ? 1 : 0
+    )
+    
+    return this.getThemeConfig(result.lastInsertRowid)
+  }
+
+  async updateThemeConfig(id: number, config: Partial<ThemeConfig>): Promise<ThemeConfig> {
+    const updates: string[] = []
+    const values: any[] = []
+    
+    if (config.name !== undefined) {
+      updates.push('name = ?')
+      values.push(config.name)
+    }
+    if (config.description !== undefined) {
+      updates.push('description = ?')
+      values.push(config.description)
+    }
+    if (config.colors !== undefined) {
+      updates.push('colors = ?')
+      values.push(JSON.stringify(config.colors))
+    }
+    if (config.fonts !== undefined) {
+      updates.push('fonts = ?')
+      values.push(JSON.stringify(config.fonts))
+    }
+    if (config.layout !== undefined) {
+      updates.push('layout = ?')
+      values.push(JSON.stringify(config.layout))
+    }
+    if (config.spacing !== undefined) {
+      updates.push('spacing = ?')
+      values.push(JSON.stringify(config.spacing))
+    }
+    if (config.animations !== undefined) {
+      updates.push('animations = ?')
+      values.push(JSON.stringify(config.animations))
+    }
+    if (config.development !== undefined) {
+      updates.push('development = ?')
+      values.push(JSON.stringify(config.development))
+    }
+    if (config.surface !== undefined) {
+      updates.push('surface = ?')
+      values.push(JSON.stringify(config.surface))
+    }
+    if (config.is_active !== undefined) {
+      updates.push('is_active = ?')
+      values.push(config.is_active ? 1 : 0)
+    }
+    if (config.is_default !== undefined) {
+      updates.push('is_default = ?')
+      values.push(config.is_default ? 1 : 0)
+    }
+    
+    updates.push('updated_at = CURRENT_TIMESTAMP')
+    values.push(id)
+    
+    const stmt = this.db.prepare(`
+      UPDATE theme_configs SET ${updates.join(', ')} WHERE id = ?
+    `)
+    
+    stmt.run(...values)
+    
+    return this.getThemeConfig(id)
+  }
+
+  async deleteThemeConfig(id: number): Promise<void> {
+    const stmt = this.db.prepare(`
+      DELETE FROM theme_configs WHERE id = ?
+    `)
+    
+    stmt.run(id)
+  }
+
+  async getActiveThemeConfig(): Promise<ThemeConfig | null> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM theme_configs WHERE is_active = 1 LIMIT 1
+    `)
+    
+    const config = stmt.get()
+    if (!config) return null
+    
+    return {
+      ...config,
+      colors: JSON.parse(config.colors),
+      fonts: JSON.parse(config.fonts),
+      layout: JSON.parse(config.layout),
+      spacing: JSON.parse(config.spacing),
+      animations: JSON.parse(config.animations),
+      development: JSON.parse(config.development),
+      surface: JSON.parse(config.surface),
+      is_active: Boolean(config.is_active),
+      is_default: Boolean(config.is_default)
+    }
+  }
+
+  // Content Config Methods
+  async getContentConfigs(): Promise<ContentConfig[]> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM content_configs ORDER BY language, name
+    `)
+    
+    const configs = stmt.all()
+    return configs.map(config => ({
+      ...config,
+      stories: JSON.parse(config.stories),
+      testimonials: JSON.parse(config.testimonials),
+      footer: JSON.parse(config.footer),
+      is_active: Boolean(config.is_active),
+      is_default: Boolean(config.is_default)
+    }))
+  }
+
+  async getContentConfig(id: number): Promise<ContentConfig> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM content_configs WHERE id = ?
+    `)
+    
+    const config = stmt.get(id)
+    if (!config) throw new Error(`Content config not found: ${id}`)
+    
+    return {
+      ...config,
+      stories: JSON.parse(config.stories),
+      testimonials: JSON.parse(config.testimonials),
+      footer: JSON.parse(config.footer),
+      is_active: Boolean(config.is_active),
+      is_default: Boolean(config.is_default)
+    }
+  }
+
+  async createContentConfig(config: Omit<ContentConfig, 'id' | 'created_at' | 'updated_at'>): Promise<ContentConfig> {
+    const stmt = this.db.prepare(`
+      INSERT INTO content_configs (language, name, about_book, author_bio, stories, testimonials, footer, is_active, is_default)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `)
+    
+    const result = stmt.run(
+      config.language,
+      config.name,
+      config.about_book,
+      config.author_bio,
+      JSON.stringify(config.stories),
+      JSON.stringify(config.testimonials),
+      JSON.stringify(config.footer),
+      config.is_active ? 1 : 0,
+      config.is_default ? 1 : 0
+    )
+    
+    return this.getContentConfig(result.lastInsertRowid)
+  }
+
+  async updateContentConfig(id: number, config: Partial<ContentConfig>): Promise<ContentConfig> {
+    const updates: string[] = []
+    const values: any[] = []
+    
+    if (config.language !== undefined) {
+      updates.push('language = ?')
+      values.push(config.language)
+    }
+    if (config.name !== undefined) {
+      updates.push('name = ?')
+      values.push(config.name)
+    }
+    if (config.about_book !== undefined) {
+      updates.push('about_book = ?')
+      values.push(config.about_book)
+    }
+    if (config.author_bio !== undefined) {
+      updates.push('author_bio = ?')
+      values.push(config.author_bio)
+    }
+    if (config.stories !== undefined) {
+      updates.push('stories = ?')
+      values.push(JSON.stringify(config.stories))
+    }
+    if (config.testimonials !== undefined) {
+      updates.push('testimonials = ?')
+      values.push(JSON.stringify(config.testimonials))
+    }
+    if (config.footer !== undefined) {
+      updates.push('footer = ?')
+      values.push(JSON.stringify(config.footer))
+    }
+    if (config.is_active !== undefined) {
+      updates.push('is_active = ?')
+      values.push(config.is_active ? 1 : 0)
+    }
+    if (config.is_default !== undefined) {
+      updates.push('is_default = ?')
+      values.push(config.is_default ? 1 : 0)
+    }
+    
+    updates.push('updated_at = CURRENT_TIMESTAMP')
+    values.push(id)
+    
+    const stmt = this.db.prepare(`
+      UPDATE content_configs SET ${updates.join(', ')} WHERE id = ?
+    `)
+    
+    stmt.run(...values)
+    
+    return this.getContentConfig(id)
+  }
+
+  async deleteContentConfig(id: number): Promise<void> {
+    const stmt = this.db.prepare(`
+      DELETE FROM content_configs WHERE id = ?
+    `)
+    
+    stmt.run(id)
+  }
+
+  async getActiveContentConfig(language: string = 'en'): Promise<ContentConfig | null> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM content_configs WHERE is_active = 1 AND language = ? LIMIT 1
+    `)
+    
+    const config = stmt.get(language)
+    if (!config) return null
+    
+    return {
+      ...config,
+      stories: JSON.parse(config.stories),
+      testimonials: JSON.parse(config.testimonials),
+      footer: JSON.parse(config.footer),
+      is_active: Boolean(config.is_active),
+      is_default: Boolean(config.is_default)
+    }
+  }
+
+  // Configuration A/B Testing Methods
+  async createConfigABTest(test: Omit<ConfigABTest, 'id' | 'created_at'>): Promise<ConfigABTest> {
+    const stmt = this.db.prepare(`
+      INSERT INTO config_ab_tests (test_name, config_type, config_a_id, config_b_id, start_date, end_date, status, winner_config_id, confidence_level, total_participants)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `)
+    
+    const result = stmt.run(
+      test.test_name,
+      test.config_type,
+      test.config_a_id,
+      test.config_b_id,
+      test.start_date,
+      test.end_date,
+      test.status,
+      test.winner_config_id,
+      test.confidence_level,
+      test.total_participants
+    )
+    
+    return this.getConfigABTest(result.lastInsertRowid)
+  }
+
+  async getConfigABTests(): Promise<ConfigABTest[]> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM config_ab_tests ORDER BY created_at DESC
+    `)
+    
+    return stmt.all()
+  }
+
+  async getConfigABTest(id: number): Promise<ConfigABTest> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM config_ab_tests WHERE id = ?
+    `)
+    
+    const test = stmt.get(id)
+    if (!test) throw new Error(`Config A/B test not found: ${id}`)
+    
+    return test
+  }
+
+  async updateConfigABTest(id: number, test: Partial<ConfigABTest>): Promise<ConfigABTest> {
+    const updates: string[] = []
+    const values: any[] = []
+    
+    if (test.test_name !== undefined) {
+      updates.push('test_name = ?')
+      values.push(test.test_name)
+    }
+    if (test.config_type !== undefined) {
+      updates.push('config_type = ?')
+      values.push(test.config_type)
+    }
+    if (test.config_a_id !== undefined) {
+      updates.push('config_a_id = ?')
+      values.push(test.config_a_id)
+    }
+    if (test.config_b_id !== undefined) {
+      updates.push('config_b_id = ?')
+      values.push(test.config_b_id)
+    }
+    if (test.start_date !== undefined) {
+      updates.push('start_date = ?')
+      values.push(test.start_date)
+    }
+    if (test.end_date !== undefined) {
+      updates.push('end_date = ?')
+      values.push(test.end_date)
+    }
+    if (test.status !== undefined) {
+      updates.push('status = ?')
+      values.push(test.status)
+    }
+    if (test.winner_config_id !== undefined) {
+      updates.push('winner_config_id = ?')
+      values.push(test.winner_config_id)
+    }
+    if (test.confidence_level !== undefined) {
+      updates.push('confidence_level = ?')
+      values.push(test.confidence_level)
+    }
+    if (test.total_participants !== undefined) {
+      updates.push('total_participants = ?')
+      values.push(test.total_participants)
+    }
+    
+    values.push(id)
+    
+    const stmt = this.db.prepare(`
+      UPDATE config_ab_tests SET ${updates.join(', ')} WHERE id = ?
+    `)
+    
+    stmt.run(...values)
+    
+    return this.getConfigABTest(id)
+  }
+
+  async deleteConfigABTest(id: number): Promise<void> {
+    const stmt = this.db.prepare(`
+      DELETE FROM config_ab_tests WHERE id = ?
+    `)
+    
+    stmt.run(id)
+  }
+
+  // Configuration Usage Tracking Methods
+  async trackConfigUsage(usage: Omit<ConfigUsage, 'id' | 'created_at' | 'updated_at'>): Promise<ConfigUsage> {
+    const stmt = this.db.prepare(`
+      INSERT INTO config_usage (config_type, config_id, visitor_id, page_view, email_submission, download_request, download_completed)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `)
+    
+    const result = stmt.run(
+      usage.config_type,
+      usage.config_id,
+      usage.visitor_id,
+      usage.page_view,
+      usage.email_submission,
+      usage.download_request,
+      usage.download_completed
+    )
+    
+    return {
+      id: result.lastInsertRowid,
+      ...usage,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  }
+
+  async getConfigStats(configId: number, configType: string): Promise<ConfigStats> {
+    const stmt = this.db.prepare(`
+      SELECT 
+        config_id,
+        config_type,
+        COUNT(*) as total_visitors,
+        SUM(download_completed) as total_conversions,
+        AVG(page_view) as avg_time_on_page,
+        SUM(CASE WHEN page_view = 1 AND download_completed = 0 THEN 1 ELSE 0 END) as bounces
+      FROM config_usage 
+      WHERE config_id = ? AND config_type = ?
+      GROUP BY config_id, config_type
+    `)
+    
+    const result = stmt.get(configId, configType)
+    if (!result) {
+      return {
+        config_id: configId,
+        config_type: configType as any,
+        total_visitors: 0,
+        total_conversions: 0,
+        conversion_rate: 0,
+        avg_time_on_page: 0,
+        bounce_rate: 0
+      }
+    }
+    
+    const totalVisitors = result.total_visitors || 0
+    const totalConversions = result.total_conversions || 0
+    const bounces = result.bounces || 0
+    
+    return {
+      config_id: configId,
+      config_type: configType as any,
+      total_visitors: totalVisitors,
+      total_conversions: totalConversions,
+      conversion_rate: totalVisitors > 0 ? (totalConversions / totalVisitors) * 100 : 0,
+      avg_time_on_page: result.avg_time_on_page || 0,
+      bounce_rate: totalVisitors > 0 ? (bounces / totalVisitors) * 100 : 0
+    }
+  }
+
+  async getConfigComparison(testId: number): Promise<ConfigComparison> {
+    const test = await this.getConfigABTest(testId)
+    const statsA = await this.getConfigStats(test.config_a_id, test.config_type)
+    const statsB = await this.getConfigStats(test.config_b_id, test.config_type)
+    
+    const improvement = statsB.conversion_rate - statsA.conversion_rate
+    const confidenceLevel = 95 // Placeholder - would need statistical calculation
+    
+    return {
+      config_a: {
+        id: test.config_a_id,
+        name: `Config A`,
+        stats: statsA
+      },
+      config_b: {
+        id: test.config_b_id,
+        name: `Config B`,
+        stats: statsB
+      },
+      improvement,
+      confidence_level: confidenceLevel,
+      is_significant: confidenceLevel > 90,
+      recommended_winner: improvement > 0 ? test.config_b_id : test.config_a_id
+    }
   }
 }
 

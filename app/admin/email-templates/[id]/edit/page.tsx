@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useEmailTemplates } from '@/lib/useEmailTemplates';
 import EmailTemplateEditor from '@/components/EmailTemplateEditor';
+import ThemeSelector from '@/components/ThemeSelector';
 
 interface EditEmailTemplatePageProps {
   params: {
@@ -295,6 +296,16 @@ export default function EditEmailTemplatePage({ params }: EditEmailTemplatePageP
                   </label>
                 </div>
               </div>
+            </div>
+
+            {/* Theme Selection */}
+            <div className="bg-white shadow rounded-lg p-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Theme Selection</h3>
+              <ThemeSelector
+                templateId={parseInt(id || '0')}
+                onThemeChange={(theme) => console.log('Theme selected:', theme.name)}
+                className="max-w-md"
+              />
             </div>
 
             {/* Categories */}

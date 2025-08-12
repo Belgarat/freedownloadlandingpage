@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ArrowLeft, Save, Eye, Plus } from 'lucide-react'
 import { useEmailTemplates } from '@/lib/useEmailTemplates'
 import EmailTemplateEditor from '@/components/EmailTemplateEditor'
+import ThemeSelector from '@/components/ThemeSelector'
 import type { EmailTemplateFormData } from '@/types/email-templates'
 
 export default function NewEmailTemplatePage() {
@@ -26,6 +27,7 @@ export default function NewEmailTemplatePage() {
     placeholders: [],
     category_ids: []
   })
+  const [selectedThemeId, setSelectedThemeId] = useState<number | null>(null)
 
   const handleSave = async () => {
     // Mark all fields as touched to show all errors
@@ -44,6 +46,22 @@ export default function NewEmailTemplatePage() {
     try {
       const template = await createTemplate(formData)
       if (template) {
+        // Assign theme if selected
+        if (selectedThemeId) {
+          try {
+            await fetch('/api/email-templates/themes/assign', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                template_id: template.id,
+                theme_id: selectedThemeId
+              })
+            })
+          } catch (error) {
+            console.error('Error assigning theme:', error)
+            // Don't fail the save if theme assignment fails
+          }
+        }
         router.push('/admin/email-templates')
       }
     } catch (error) {
@@ -316,6 +334,16 @@ export default function NewEmailTemplatePage() {
                   </div>
                 </div>
               )}
+
+              {/* Theme Selection */}
+              <div className="mb-6">
+                <ThemeSelector
+                  templateId={0} // Will be set after template creation
+                  onThemeChange={(theme) => setSelectedThemeId(theme.id)}
+                  className="max-w-md"
+                  allowSelection={false}
+                />
+              </div>
 
               {/* Template Editor */}
               <div className="mb-6">

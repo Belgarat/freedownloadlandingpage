@@ -391,8 +391,8 @@ async function testConfigType(type) {
 
 // Main test function
 async function runTests() {
-  console.log('🚀 Starting Admin API Test Suite...')
-  console.log(`📍 Base URL: ${BASE_URL}`)
+  console.log('Starting Admin API Test Suite...')
+  console.log(`Base URL: ${BASE_URL}`)
   
   const configTypes = ['marketing', 'theme', 'content', 'book', 'seo', 'email']
   
@@ -401,23 +401,23 @@ async function runTests() {
   }
   
   // Summary
-  console.log('\n📊 TEST SUMMARY')
+  console.log('\nTEST SUMMARY')
   console.log('===============')
-  console.log(`✅ Passed: ${testResults.passed}`)
-  console.log(`❌ Failed: ${testResults.failed}`)
-  console.log(`📝 Total: ${testResults.passed + testResults.failed}`)
+  console.log(`Passed: ${testResults.passed}`)
+  console.log(`Failed: ${testResults.failed}`)
+  console.log(`Total: ${testResults.passed + testResults.failed}`)
   
   if (testResults.errors.length > 0) {
-    console.log('\n❌ ERRORS:')
+    console.log('\nERRORS:')
     testResults.errors.forEach(({ type, error }) => {
       console.log(`  ${type}: ${error}`)
     })
   }
   
   if (testResults.passed === configTypes.length) {
-    console.log('\n🎉 ALL TESTS PASSED! Admin APIs are working correctly.')
+    console.log('\nALL TESTS PASSED! Admin APIs are working correctly.')
   } else {
-    console.log('\n⚠️  Some tests failed. Please check the errors above.')
+    console.log('\nSome tests failed. Please check the errors above.')
   }
 }
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ConfigService } from '@/lib/config-service'
+import configLoader from '@/lib/config-loader'
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,17 +13,28 @@ export async function GET(request: NextRequest) {
       configService.getActiveContentConfig()
     ])
 
-    // For now, we'll use the first active config of each type
-    // In the future, we can implement A/B testing logic here
+    // For backward compatibility, load book, seo, and email from JSON files
+    // until they are migrated to database
+    let bookConfig = null
+    let seoConfig = null
+    let emailConfig = null
+    
+    try {
+      const jsonConfig = await configLoader.loadConfig()
+      bookConfig = jsonConfig.book
+      seoConfig = jsonConfig.seo
+      emailConfig = jsonConfig.email
+    } catch (error) {
+      console.warn('Failed to load JSON config for backward compatibility:', error)
+    }
+
     const config = {
       marketing: marketingConfig,
       theme: themeConfig,
       content: contentConfig,
-      // For backward compatibility, we'll keep these as null for now
-      // They can be migrated to database later
-      book: null,
-      seo: null,
-      email: null
+      book: bookConfig,
+      seo: seoConfig,
+      email: emailConfig
     }
     
     return NextResponse.json({
@@ -71,13 +83,27 @@ export async function POST(request: NextRequest) {
       configService.getActiveContentConfig()
     ])
 
+    // For backward compatibility, load book, seo, and email from JSON files
+    let bookConfig = null
+    let seoConfig = null
+    let emailConfig = null
+    
+    try {
+      const jsonConfig = await configLoader.loadConfig()
+      bookConfig = jsonConfig.book
+      seoConfig = jsonConfig.seo
+      emailConfig = jsonConfig.email
+    } catch (error) {
+      console.warn('Failed to load JSON config for backward compatibility:', error)
+    }
+
     const config = {
       marketing: marketingConfig,
       theme: themeConfig,
       content: contentConfig,
-      book: null,
-      seo: null,
-      email: null
+      book: bookConfig,
+      seo: seoConfig,
+      email: emailConfig
     }
     
     return NextResponse.json({

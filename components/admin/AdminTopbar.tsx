@@ -9,6 +9,7 @@ const nav = [
   { href: '/admin/config', label: 'Configuration' },
   { href: '/admin/analytics', label: 'Analytics' },
   { href: '/admin/ab-testing', label: 'A/B Testing' },
+  { href: '/admin/email-templates', label: 'Email Templates' },
 ]
 
 export default function AdminTopbar() {

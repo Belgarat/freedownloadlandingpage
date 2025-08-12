@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Plus, Palette, Edit, Trash2, Eye, Copy, Filter, Search } from 'lucide-react'
 import type { EmailTheme, EmailThemeCategory } from '@/types/email-themes'
+import AdminTopbar from '@/components/admin/AdminTopbar'
 
 interface ThemeWithUsage extends EmailTheme {
   usage_count: number
@@ -132,6 +133,7 @@ export default function EmailThemesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <AdminTopbar />
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

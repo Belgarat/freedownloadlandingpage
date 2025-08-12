@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Plus, Mail, Copy, Eye, Edit, Trash2, Search, Filter, BarChart3, Palette } from 'lucide-react'
 import { useEmailTemplates } from '@/lib/useEmailTemplates'
 import type { EmailTemplate } from '@/types/email-templates'
+import AdminTopbar from '@/components/admin/AdminTopbar'
 
 export default function EmailTemplatesPage() {
   const router = useRouter()
@@ -105,6 +106,7 @@ export default function EmailTemplatesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <AdminTopbar />
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

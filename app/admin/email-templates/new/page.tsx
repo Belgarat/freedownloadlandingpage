@@ -7,6 +7,7 @@ import { useEmailTemplates } from '@/lib/useEmailTemplates'
 import EmailTemplateEditor from '@/components/EmailTemplateEditor'
 import ThemeSelector from '@/components/ThemeSelector'
 import type { EmailTemplateFormData } from '@/types/email-templates'
+import AdminTopbar from '@/components/admin/AdminTopbar'
 
 export default function NewEmailTemplatePage() {
   const router = useRouter()
@@ -177,6 +178,7 @@ export default function NewEmailTemplatePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <AdminTopbar />
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

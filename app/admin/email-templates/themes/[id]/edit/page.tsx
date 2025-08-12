@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { ArrowLeft, Save, Eye, EyeOff, Palette, Undo2 } from 'lucide-react'
 import type { EmailTheme, EmailThemeCategory, ThemeStyles } from '@/types/email-themes'
+import AdminTopbar from '@/components/admin/AdminTopbar'
 
 interface ThemeFormData {
   name: string
@@ -263,6 +264,7 @@ export default function EditThemePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <AdminTopbar />
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

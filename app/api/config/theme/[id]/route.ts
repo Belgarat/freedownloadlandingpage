@@ -4,19 +4,20 @@ import { configService } from '@/lib/config-service'
 // GET /api/config/theme/[id] - Get specific theme config
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const configId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(configId)) {
       return NextResponse.json({
         success: false,
         error: 'Invalid configuration ID'
       }, { status: 400 })
     }
 
-    const config = await configService.getThemeConfig(id)
+    const config = await configService.getThemeConfig(configId)
     
     return NextResponse.json({
       success: true,
@@ -35,12 +36,13 @@ export async function GET(
 // PUT /api/config/theme/[id] - Update theme config
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const configId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(configId)) {
       return NextResponse.json({
         success: false,
         error: 'Invalid configuration ID'
@@ -49,7 +51,7 @@ export async function PUT(
 
     const body = await request.json()
     
-    const config = await configService.updateThemeConfig(id, {
+    const config = await configService.updateThemeConfig(configId, {
       name: body.name,
       description: body.description,
       colors: body.colors,
@@ -79,19 +81,20 @@ export async function PUT(
 // DELETE /api/config/theme/[id] - Delete theme config
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
+    const configId = parseInt(id)
     
-    if (isNaN(id)) {
+    if (isNaN(configId)) {
       return NextResponse.json({
         success: false,
         error: 'Invalid configuration ID'
       }, { status: 400 })
     }
 
-    await configService.deleteThemeConfig(id)
+    await configService.deleteThemeConfig(configId)
     
     return NextResponse.json({
       success: true,

@@ -3,11 +3,12 @@ import { ConfigService } from '@/lib/config-service'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const configService = new ConfigService()
-    const config = await configService.getEmailConfig(parseInt(params.id))
+    const config = await configService.getEmailConfig(parseInt(id))
     
     return NextResponse.json({
       success: true,
@@ -25,13 +26,14 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const configService = new ConfigService()
     
-    const config = await configService.updateEmailConfig(parseInt(params.id), body)
+    const config = await configService.updateEmailConfig(parseInt(id), body)
     
     return NextResponse.json({
       success: true,
@@ -49,11 +51,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const configService = new ConfigService()
-    await configService.deleteEmailConfig(parseInt(params.id))
+    await configService.deleteEmailConfig(parseInt(id))
     
     return NextResponse.json({
       success: true,

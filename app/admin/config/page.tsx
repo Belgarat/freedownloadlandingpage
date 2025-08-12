@@ -5,6 +5,7 @@ import { useConfig } from '@/lib/useConfig'
 import { BookConfig, MarketingConfig, ContentConfig, ThemeConfig, SEOConfig, EmailConfig } from '@/lib/config-loader'
 import { Save, RefreshCw, ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/ui/ToastContext'
 import BookConfigEditor from '@/components/admin/BookConfigEditor'
 import MarketingConfigEditor from '@/components/admin/MarketingConfigEditor'
 import ContentConfigEditor from '@/components/admin/ContentConfigEditor'
@@ -15,10 +16,10 @@ import AdminTopbar from '@/components/admin/AdminTopbar'
 
 export default function ConfigAdmin() {
   const { config, loading, error } = useConfig()
+  const { addToast } = useToast()
   const [activeTab, setActiveTab] = useState('book')
   const [localConfig, setLocalConfig] = useState<any>(null)
   const [saving, setSaving] = useState(false)
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [lastSavedConfig, setLastSavedConfig] = useState<any>(null)
   const [isDirty, setIsDirty] = useState(false)
   const [preventReload, setPreventReload] = useState(false)
@@ -35,7 +36,6 @@ export default function ConfigAdmin() {
     if (!localConfig) return
 
     setSaving(true)
-    setSaveStatus('idle')
     setPreventReload(true) // Prevent reload during save
 
     try {
@@ -50,27 +50,47 @@ export default function ConfigAdmin() {
       const result = await response.json()
 
       if (result.success) {
-        setSaveStatus('success')
+        // Show success toast
+        addToast({
+          type: 'success',
+          title: 'Configuration Saved',
+          message: 'Your changes have been saved successfully.',
+          duration: 3000
+        })
+        
         // Don't update localConfig immediately to avoid flash
         // Just mark as not dirty and update last saved config
         setIsDirty(false)
         setLastSavedConfig(localConfig) // Use current localConfig instead of result.data
+        
         setTimeout(() => {
-          setSaveStatus('idle')
           setPreventReload(false) // Allow reload after save status clears
         }, 3000)
       } else {
-        setSaveStatus('error')
+        // Show error toast
+        addToast({
+          type: 'error',
+          title: 'Save Failed',
+          message: result.error || 'Failed to save configuration.',
+          duration: 5000
+        })
+        
         setTimeout(() => {
-          setSaveStatus('idle')
           setPreventReload(false)
         }, 3000)
       }
     } catch (error) {
       console.error('Error saving config:', error)
-      setSaveStatus('error')
+      
+      // Show error toast
+      addToast({
+        type: 'error',
+        title: 'Save Failed',
+        message: 'An unexpected error occurred while saving.',
+        duration: 5000
+      })
+      
       setTimeout(() => {
-        setSaveStatus('idle')
         setPreventReload(false)
       }, 3000)
     } finally {
@@ -222,11 +242,6 @@ export default function ConfigAdmin() {
               </button>
             </div>
           </div>
-          {saveStatus !== 'idle' && (
-            <div className={`mb-4 p-3 rounded-md ${saveStatus === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
-              {saveStatus === 'success' ? '✅ Configuration saved successfully!' : '❌ Error saving configuration'}
-            </div>
-          )}
           <div className="flex space-x-1">
             {tabs.map((tab) => (
               <button

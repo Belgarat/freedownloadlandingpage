@@ -4,6 +4,7 @@ import './globals.css'
 import ConfigStatus from '@/components/ConfigStatus'
 import ThemeVariables from '@/components/ThemeVariables'
 import BookSchemaInjector from '@/components/BookSchemaInjector'
+import { ToastProvider } from '@/components/ui/ToastContext'
 import configLoader from '@/lib/config-loader'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -50,11 +51,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Book Schema injected client-side from config */}
       </head>
       <body className={inter.className} style={{ fontFamily: 'var(--font-body, inherit)' }}>
-        <ThemeVariables />
+        <ToastProvider>
+          <ThemeVariables />
 
-        <BookSchemaInjector />
-        {children}
-        <ConfigStatus />
+          <BookSchemaInjector />
+          {children}
+          <ConfigStatus />
+        </ToastProvider>
       </body>
     </html>
   )

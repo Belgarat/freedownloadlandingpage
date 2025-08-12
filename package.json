@@ -38,7 +38,10 @@
     "db:info": "curl http://localhost:3000/api/sqlite/backup",
     "setup:local": "./scripts/setup-local.sh",
     "setup:sqlite": "./scripts/setup-sqlite.sh",
-    "setup:new": "./scripts/setup-new-instance.sh"
+    "setup:new": "./scripts/setup-new-instance.sh",
+    "config:migrate": "tsx lib/config-migration.ts migrate",
+    "config:rollback": "tsx lib/config-migration.ts rollback",
+    "config:cleanup": "tsx lib/config-migration.ts cleanup"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",
@@ -82,6 +85,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.0.0",
     "jsdom": "^26.1.0",
+    "tsx": "^4.20.3",
     "vitest": "^3.2.4"
   },
   "engines": {

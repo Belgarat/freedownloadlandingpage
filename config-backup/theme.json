@@ -1,0 +1,46 @@
+{
+  "colors": {
+    "primary": "#454d3a",
+    "secondary": "#435e40",
+    "accent": "#424029",
+    "background": "#0b1220",
+    "text": {
+      "primary": "#e5e7eb",
+      "secondary": "#cbd5e1",
+      "muted": "#94a3b8"
+    },
+    "success": "#10b981",
+    "error": "#ef4444",
+    "warning": "#f59e0b"
+  },
+  "fonts": {
+    "heading": "serif",
+    "body": "system-ui",
+    "mono": "ui-monospace"
+  },
+  "layout": {
+    "type": "sidebar",
+    "showCountdown": true,
+    "showStories": false,
+    "showTestimonials": false,
+    "showAwards": false,
+    "showRankings": false
+  },
+  "spacing": {
+    "container": "max-w-7xl",
+    "section": "py-20",
+    "element": "mb-6"
+  },
+  "animations": {
+    "enabled": true,
+    "duration": "300ms",
+    "easing": "ease-in-out"
+  },
+  "development": {
+    "debug": true,
+    "hotReload": true
+  },
+  "surface": {
+    "mode": "auto"
+  }
+}

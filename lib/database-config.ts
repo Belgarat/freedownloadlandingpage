@@ -93,6 +93,18 @@ export function resetDatabaseAdapter() {
   databaseAdapter = null
 }
 
+// Get database configuration for migration scripts
+export function getDatabaseConfig() {
+  const provider = determineDatabaseProvider()
+  const client = createDatabaseClient(provider)
+  
+  return {
+    engine: provider,
+    client,
+    path: provider === 'sqlite' ? (client as any).path : undefined
+  }
+}
+
 // Database setup utilities
 export async function setupDatabase() {
   const adapter = getDatabaseAdapter()

@@ -1,0 +1,23 @@
+{
+  "aboutBook": "<p>Test about</p>",
+  "authorBio": "<p>Test bio</p>",
+  "stories": [
+    {
+      "title": "Test",
+      "description": "Test",
+      "content": "<p>Test</p>"
+    }
+  ],
+  "testimonials": [
+    {
+      "text": "Test",
+      "author": "Test",
+      "rating": 5,
+      "source": "Test"
+    }
+  ],
+  "footer": {
+    "copyright": "Test",
+    "supportText": "Test"
+  }
+}

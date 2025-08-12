@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import type { ABTest } from '@/types/ab-testing'
 
 test.describe('A/B Testing API', () => {
   test.beforeEach(async ({ page }) => {
@@ -59,9 +60,9 @@ test.describe('A/B Testing API', () => {
     // Get all tests
     const getResponse = await page.request.get('/api/ab-testing/tests')
     expect(getResponse.status()).toBe(200)
-    const tests = await getResponse.json()
+    const tests: ABTest[] = await getResponse.json()
     expect(Array.isArray(tests)).toBe(true)
-    expect(tests.some(t => t.id === testId)).toBe(true)
+    expect(tests.some((t: ABTest) => t.id === testId)).toBe(true)
 
     // Update test status
     const updateResponse = await page.request.patch(`/api/ab-testing/tests/${testId}`, {
@@ -78,8 +79,8 @@ test.describe('A/B Testing API', () => {
     if (createdTest.test.variants && createdTest.test.variants.length > 0) {
       // Ottieni il test aggiornato per avere gli ID corretti delle varianti
       const updatedTestResponse = await page.request.get(`/api/ab-testing/tests`)
-      const updatedTests = await updatedTestResponse.json()
-      const updatedTest = updatedTests.find(t => t.id === testId)
+      const updatedTests: ABTest[] = await updatedTestResponse.json()
+      const updatedTest = updatedTests.find((t: ABTest) => t.id === testId)
       
       if (updatedTest && updatedTest.variants && updatedTest.variants.length > 0) {
         variantId = updatedTest.variants[0].id

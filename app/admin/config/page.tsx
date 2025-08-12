@@ -2,10 +2,17 @@
 
 import { useState, useEffect } from 'react'
 import { useConfig } from '@/lib/useConfig'
-import { BookConfig, MarketingConfig, ContentConfig, ThemeConfig, SEOConfig, EmailConfig } from '@/lib/config-loader'
-import { Save, RefreshCw, ArrowLeft } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { Save, RefreshCw } from 'lucide-react'
 import { useToast } from '@/components/ui/ToastContext'
+
+interface ConfigData {
+  book?: any
+  marketing?: any
+  content?: any
+  theme?: any
+  seo?: any
+  email?: any
+}
 import BookConfigEditor from '@/components/admin/BookConfigEditor'
 import MarketingConfigEditor from '@/components/admin/MarketingConfigEditor'
 import ContentConfigEditor from '@/components/admin/ContentConfigEditor'
@@ -18,12 +25,10 @@ export default function ConfigAdmin() {
   const { config, loading, error } = useConfig()
   const { addToast } = useToast()
   const [activeTab, setActiveTab] = useState('book')
-  const [localConfig, setLocalConfig] = useState<any>(null)
+  const [localConfig, setLocalConfig] = useState<ConfigData | null>(null)
   const [saving, setSaving] = useState(false)
-  const [lastSavedConfig, setLastSavedConfig] = useState<any>(null)
   const [isDirty, setIsDirty] = useState(false)
   const [preventReload, setPreventReload] = useState(false)
-  const router = useRouter()
 
   useEffect(() => {
     // Evita sovrascritture durante modifica o salvataggio
@@ -59,9 +64,8 @@ export default function ConfigAdmin() {
         })
         
         // Don't update localConfig immediately to avoid flash
-        // Just mark as not dirty and update last saved config
+        // Just mark as not dirty
         setIsDirty(false)
-        setLastSavedConfig(localConfig) // Use current localConfig instead of result.data
         
         setTimeout(() => {
           setPreventReload(false) // Allow reload after save status clears
@@ -203,10 +207,7 @@ export default function ConfigAdmin() {
     }
   }
 
-  const getTabColor = (tabId: string) => {
-    const tab = tabs.find(t => t.id === tabId)
-    return tab?.color || 'blue'
-  }
+
 
   return (
     <div className="min-h-screen bg-gray-50">

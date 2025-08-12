@@ -270,3 +270,198 @@ export interface ConfigComparison {
   is_significant: boolean
   recommended_winner?: number
 }
+
+// Book Configuration Types
+export interface BookConfig {
+  id?: number
+  name: string
+  description?: string
+  title: string
+  subtitle?: string
+  author: string
+  author_bio?: string
+  publisher?: string
+  publisher_url?: string
+  publisher_tagline?: string
+  substack_name?: string
+  description_content?: string
+  cover_image?: string
+  rating: number
+  review_count: number
+  publication_date?: string
+  isbn?: string
+  asin?: string
+  amazon_url?: string
+  goodreads_url?: string
+  substack_url?: string
+  file_size?: string
+  page_count?: number
+  language: string
+  format?: string
+  is_free: boolean
+  price?: number
+  categories: string[]
+  stories: Array<{
+    title: string
+    description: string
+  }>
+  awards: Array<{
+    title: string
+    type: string
+  }>
+  rankings: {
+    kindleStore?: string
+    sciFiAnthologies?: string
+    cyberpunkSciFi?: string
+    cyberpunkBooks?: string
+  }
+  ebook?: {
+    defaultFormat?: 'pdf' | 'epub'
+    pdf?: {
+      url: string
+      filename: string
+      size: string
+      uploadedAt: string
+    }
+    epub?: {
+      url: string
+      filename: string
+      size: string
+      uploadedAt: string
+    }
+  }
+  is_active: boolean
+  is_default: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+// SEO Configuration Types
+export interface SEOConfig {
+  id?: number
+  name: string
+  description?: string
+  meta: {
+    title?: string
+    description?: string
+    keywords?: string
+    author?: string
+    robots?: string
+    canonical?: string
+  }
+  openGraph: {
+    title?: string
+    description?: string
+    type?: string
+    url?: string
+    image?: string
+    siteName?: string
+  }
+  twitter: {
+    card?: string
+    title?: string
+    description?: string
+    image?: string
+  }
+  structured_data: {
+    book?: any
+    [key: string]: any
+  }
+  sitemap: {
+    enabled: boolean
+    priority: number
+    changefreq: string
+  }
+  is_active: boolean
+  is_default: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+// Email Configuration Types
+export interface EmailConfig {
+  id?: number
+  name: string
+  description?: string
+  sender: {
+    name: string
+    email: string
+    replyTo?: string
+  }
+  templates: {
+    download?: {
+      subject: string
+      html: string
+      text: string
+      message?: string
+    }
+    followup?: {
+      subject: string
+      html: string
+      text: string
+    }
+    [key: string]: any
+  }
+  settings: {
+    templateExpiryHours: number
+    maxRetries: number
+    tracking: boolean
+  }
+  is_active: boolean
+  is_default: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+// Form data types for new configurations
+export interface BookConfigFormData {
+  name: string
+  description?: string
+  title: string
+  subtitle?: string
+  author: string
+  author_bio?: string
+  publisher?: string
+  publisher_url?: string
+  publisher_tagline?: string
+  substack_name?: string
+  description_content?: string
+  cover_image?: string
+  rating: number
+  review_count: number
+  publication_date?: string
+  isbn?: string
+  asin?: string
+  amazon_url?: string
+  goodreads_url?: string
+  substack_url?: string
+  file_size?: string
+  page_count?: number
+  language: string
+  format?: string
+  is_free: boolean
+  price?: number
+  categories: string[]
+  stories: BookConfig['stories']
+  awards: BookConfig['awards']
+  rankings: BookConfig['rankings']
+  ebook?: BookConfig['ebook']
+}
+
+export interface SEOConfigFormData {
+  name: string
+  description?: string
+  meta: SEOConfig['meta']
+  openGraph: SEOConfig['openGraph']
+  twitter: SEOConfig['twitter']
+  structured_data: SEOConfig['structured_data']
+  sitemap: SEOConfig['sitemap']
+}
+
+export interface EmailConfigFormData {
+  name: string
+  description?: string
+  sender: EmailConfig['sender']
+  templates: EmailConfig['templates']
+  settings: EmailConfig['settings']
+}

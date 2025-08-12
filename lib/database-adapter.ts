@@ -20,6 +20,9 @@ import type {
   MarketingConfig,
   ThemeConfig,
   ContentConfig,
+  BookConfig,
+  SEOConfig,
+  EmailConfig,
   ConfigABTest,
   ConfigUsage,
   ConfigStats,
@@ -106,6 +109,30 @@ export interface DatabaseAdapter {
   updateContentConfig(id: number, config: Partial<ContentConfig>): Promise<ContentConfig>
   deleteContentConfig(id: number): Promise<void>
   getActiveContentConfig(language?: string): Promise<ContentConfig | null>
+  
+  // Book Configuration Management
+  getBookConfigs(): Promise<BookConfig[]>
+  getBookConfig(id: number): Promise<BookConfig>
+  createBookConfig(config: Omit<BookConfig, 'id' | 'created_at' | 'updated_at'>): Promise<BookConfig>
+  updateBookConfig(id: number, config: Partial<BookConfig>): Promise<BookConfig>
+  deleteBookConfig(id: number): Promise<void>
+  getActiveBookConfig(): Promise<BookConfig | null>
+  
+  // SEO Configuration Management
+  getSEOConfigs(): Promise<SEOConfig[]>
+  getSEOConfig(id: number): Promise<SEOConfig>
+  createSEOConfig(config: Omit<SEOConfig, 'id' | 'created_at' | 'updated_at'>): Promise<SEOConfig>
+  updateSEOConfig(id: number, config: Partial<SEOConfig>): Promise<SEOConfig>
+  deleteSEOConfig(id: number): Promise<void>
+  getActiveSEOConfig(): Promise<SEOConfig | null>
+  
+  // Email Configuration Management
+  getEmailConfigs(): Promise<EmailConfig[]>
+  getEmailConfig(id: number): Promise<EmailConfig>
+  createEmailConfig(config: Omit<EmailConfig, 'id' | 'created_at' | 'updated_at'>): Promise<EmailConfig>
+  updateEmailConfig(id: number, config: Partial<EmailConfig>): Promise<EmailConfig>
+  deleteEmailConfig(id: number): Promise<void>
+  getActiveEmailConfig(): Promise<EmailConfig | null>
   
   // Configuration A/B Testing
   createConfigABTest(test: Omit<ConfigABTest, 'id' | 'created_at'>): Promise<ConfigABTest>
@@ -1206,6 +1233,201 @@ export class SupabaseAdapter implements DatabaseAdapter {
       is_significant: confidenceLevel > 90,
       recommended_winner: improvement > 0 ? test.config_b_id : test.config_a_id
     }
+  }
+
+  // Book Configuration Management
+  async getBookConfigs(): Promise<BookConfig[]> {
+    const { data, error } = await this.supabase
+      .from('book_configs')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  }
+
+  async getBookConfig(id: number): Promise<BookConfig> {
+    const { data, error } = await this.supabase
+      .from('book_configs')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async createBookConfig(config: Omit<BookConfig, 'id' | 'created_at' | 'updated_at'>): Promise<BookConfig> {
+    const { data, error } = await this.supabase
+      .from('book_configs')
+      .insert(config)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async updateBookConfig(id: number, config: Partial<BookConfig>): Promise<BookConfig> {
+    const { data, error } = await this.supabase
+      .from('book_configs')
+      .update(config)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async deleteBookConfig(id: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('book_configs')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+  }
+
+  async getActiveBookConfig(): Promise<BookConfig | null> {
+    const { data, error } = await this.supabase
+      .from('book_configs')
+      .select('*')
+      .eq('is_active', true)
+      .single()
+
+    if (error && error.code !== 'PGRST116') throw error
+    return data || null
+  }
+
+  // SEO Configuration Management
+  async getSEOConfigs(): Promise<SEOConfig[]> {
+    const { data, error } = await this.supabase
+      .from('seo_configs')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  }
+
+  async getSEOConfig(id: number): Promise<SEOConfig> {
+    const { data, error } = await this.supabase
+      .from('seo_configs')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async createSEOConfig(config: Omit<SEOConfig, 'id' | 'created_at' | 'updated_at'>): Promise<SEOConfig> {
+    const { data, error } = await this.supabase
+      .from('seo_configs')
+      .insert(config)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async updateSEOConfig(id: number, config: Partial<SEOConfig>): Promise<SEOConfig> {
+    const { data, error } = await this.supabase
+      .from('seo_configs')
+      .update(config)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async deleteSEOConfig(id: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('seo_configs')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+  }
+
+  async getActiveSEOConfig(): Promise<SEOConfig | null> {
+    const { data, error } = await this.supabase
+      .from('seo_configs')
+      .select('*')
+      .eq('is_active', true)
+      .single()
+
+    if (error && error.code !== 'PGRST116') throw error
+    return data || null
+  }
+
+  // Email Configuration Management
+  async getEmailConfigs(): Promise<EmailConfig[]> {
+    const { data, error } = await this.supabase
+      .from('email_configs')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  }
+
+  async getEmailConfig(id: number): Promise<EmailConfig> {
+    const { data, error } = await this.supabase
+      .from('email_configs')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async createEmailConfig(config: Omit<EmailConfig, 'id' | 'created_at' | 'updated_at'>): Promise<EmailConfig> {
+    const { data, error } = await this.supabase
+      .from('email_configs')
+      .insert(config)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async updateEmailConfig(id: number, config: Partial<EmailConfig>): Promise<EmailConfig> {
+    const { data, error } = await this.supabase
+      .from('email_configs')
+      .update(config)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
+
+  async deleteEmailConfig(id: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('email_configs')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+  }
+
+  async getActiveEmailConfig(): Promise<EmailConfig | null> {
+    const { data, error } = await this.supabase
+      .from('email_configs')
+      .select('*')
+      .eq('is_active', true)
+      .single()
+
+    if (error && error.code !== 'PGRST116') throw error
+    return data || null
   }
 }
 
@@ -2811,6 +3033,340 @@ export class SQLiteAdapter implements DatabaseAdapter {
       confidence_level: confidenceLevel,
       is_significant: confidenceLevel > 90,
       recommended_winner: improvement > 0 ? test.config_b_id : test.config_a_id
+    }
+  }
+
+  // Book Configuration Management
+  async getBookConfigs(): Promise<BookConfig[]> {
+    const stmt = this.db.prepare('SELECT * FROM book_configs ORDER BY created_at DESC')
+    const results = stmt.all()
+    return results.map(this.transformBookConfig)
+  }
+
+  async getBookConfig(id: number): Promise<BookConfig> {
+    const stmt = this.db.prepare('SELECT * FROM book_configs WHERE id = ?')
+    const result = stmt.get(id)
+    if (!result) throw new Error(`Book config with id ${id} not found`)
+    return this.transformBookConfig(result)
+  }
+
+  async createBookConfig(config: Omit<BookConfig, 'id' | 'created_at' | 'updated_at'>): Promise<BookConfig> {
+    const stmt = this.db.prepare(`
+      INSERT INTO book_configs (
+        name, description, title, subtitle, author, author_bio, publisher, publisher_url, 
+        publisher_tagline, substack_name, description_content, cover_image, rating, review_count,
+        publication_date, isbn, asin, amazon_url, goodreads_url, substack_url, file_size,
+        page_count, language, format, is_free, price, categories, stories, awards, rankings, ebook,
+        is_active, is_default
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `)
+    
+    const result = stmt.run(
+      config.name, config.description, config.title, config.subtitle, config.author,
+      config.author_bio, config.publisher, config.publisher_url, config.publisher_tagline,
+      config.substack_name, config.description_content, config.cover_image, config.rating,
+      config.review_count, config.publication_date, config.isbn, config.asin, config.amazon_url,
+      config.goodreads_url, config.substack_url, config.file_size, config.page_count,
+      config.language, config.format, config.is_free ? 1 : 0, config.price,
+      JSON.stringify(config.categories), JSON.stringify(config.stories),
+      JSON.stringify(config.awards), JSON.stringify(config.rankings), JSON.stringify(config.ebook),
+      config.is_active ? 1 : 0, config.is_default ? 1 : 0
+    )
+    
+    return this.getBookConfig(result.lastInsertRowid)
+  }
+
+  async updateBookConfig(id: number, config: Partial<BookConfig>): Promise<BookConfig> {
+    const current = await this.getBookConfig(id)
+    const updated = { ...current, ...config }
+    
+    const stmt = this.db.prepare(`
+      UPDATE book_configs SET
+        name = ?, description = ?, title = ?, subtitle = ?, author = ?, author_bio = ?,
+        publisher = ?, publisher_url = ?, publisher_tagline = ?, substack_name = ?,
+        description_content = ?, cover_image = ?, rating = ?, review_count = ?,
+        publication_date = ?, isbn = ?, asin = ?, amazon_url = ?, goodreads_url = ?,
+        substack_url = ?, file_size = ?, page_count = ?, language = ?, format = ?,
+        is_free = ?, price = ?, categories = ?, stories = ?, awards = ?, rankings = ?,
+        ebook = ?, is_active = ?, is_default = ?, updated_at = datetime('now')
+      WHERE id = ?
+    `)
+    
+    stmt.run(
+      updated.name, updated.description, updated.title, updated.subtitle, updated.author,
+      updated.author_bio, updated.publisher, updated.publisher_url, updated.publisher_tagline,
+      updated.substack_name, updated.description_content, updated.cover_image, updated.rating,
+      updated.review_count, updated.publication_date, updated.isbn, updated.asin,
+      updated.amazon_url, updated.goodreads_url, updated.substack_url, updated.file_size,
+      updated.page_count, updated.language, updated.format, updated.is_free ? 1 : 0,
+      updated.price, JSON.stringify(updated.categories), JSON.stringify(updated.stories),
+      JSON.stringify(updated.awards), JSON.stringify(updated.rankings), JSON.stringify(updated.ebook),
+      updated.is_active ? 1 : 0, updated.is_default ? 1 : 0, id
+    )
+    
+    return this.getBookConfig(id)
+  }
+
+  async deleteBookConfig(id: number): Promise<void> {
+    const stmt = this.db.prepare('DELETE FROM book_configs WHERE id = ?')
+    const result = stmt.run(id)
+    if (result.changes === 0) throw new Error(`Book config with id ${id} not found`)
+  }
+
+  async getActiveBookConfig(): Promise<BookConfig | null> {
+    const stmt = this.db.prepare('SELECT * FROM book_configs WHERE is_active = 1 LIMIT 1')
+    const result = stmt.get()
+    return result ? this.transformBookConfig(result) : null
+  }
+
+  // SEO Configuration Management
+  async getSEOConfigs(): Promise<SEOConfig[]> {
+    const stmt = this.db.prepare('SELECT * FROM seo_configs ORDER BY created_at DESC')
+    const results = stmt.all()
+    return results.map(this.transformSEOConfig)
+  }
+
+  async getSEOConfig(id: number): Promise<SEOConfig> {
+    const stmt = this.db.prepare('SELECT * FROM seo_configs WHERE id = ?')
+    const result = stmt.get(id)
+    if (!result) throw new Error(`SEO config with id ${id} not found`)
+    return this.transformSEOConfig(result)
+  }
+
+  async createSEOConfig(config: Omit<SEOConfig, 'id' | 'created_at' | 'updated_at'>): Promise<SEOConfig> {
+    const stmt = this.db.prepare(`
+      INSERT INTO seo_configs (
+        name, description, meta_title, meta_description, meta_keywords, meta_author,
+        meta_robots, meta_canonical, og_title, og_description, og_type, og_url,
+        og_image, og_site_name, twitter_card, twitter_title, twitter_description,
+        twitter_image, structured_data, sitemap_enabled, sitemap_priority,
+        sitemap_changefreq, is_active, is_default
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `)
+    
+    const result = stmt.run(
+      config.name, config.description, config.meta.title, config.meta.description,
+      config.meta.keywords, config.meta.author, config.meta.robots, config.meta.canonical,
+      config.openGraph.title, config.openGraph.description, config.openGraph.type,
+      config.openGraph.url, config.openGraph.image, config.openGraph.siteName,
+      config.twitter.card, config.twitter.title, config.twitter.description,
+      config.twitter.image, JSON.stringify(config.structured_data), config.sitemap.enabled ? 1 : 0,
+      config.sitemap.priority, config.sitemap.changefreq, config.is_active ? 1 : 0,
+      config.is_default ? 1 : 0
+    )
+    
+    return this.getSEOConfig(result.lastInsertRowid)
+  }
+
+  async updateSEOConfig(id: number, config: Partial<SEOConfig>): Promise<SEOConfig> {
+    const current = await this.getSEOConfig(id)
+    const updated = { ...current, ...config }
+    
+    const stmt = this.db.prepare(`
+      UPDATE seo_configs SET
+        name = ?, description = ?, meta_title = ?, meta_description = ?, meta_keywords = ?,
+        meta_author = ?, meta_robots = ?, meta_canonical = ?, og_title = ?, og_description = ?,
+        og_type = ?, og_url = ?, og_image = ?, og_site_name = ?, twitter_card = ?,
+        twitter_title = ?, twitter_description = ?, twitter_image = ?, structured_data = ?,
+        sitemap_enabled = ?, sitemap_priority = ?, sitemap_changefreq = ?, is_active = ?,
+        is_default = ?, updated_at = datetime('now')
+      WHERE id = ?
+    `)
+    
+    stmt.run(
+      updated.name, updated.description, updated.meta.title, updated.meta.description,
+      updated.meta.keywords, updated.meta.author, updated.meta.robots, updated.meta.canonical,
+      updated.openGraph.title, updated.openGraph.description, updated.openGraph.type,
+      updated.openGraph.url, updated.openGraph.image, updated.openGraph.siteName,
+      updated.twitter.card, updated.twitter.title, updated.twitter.description,
+      updated.twitter.image, JSON.stringify(updated.structured_data), updated.sitemap.enabled ? 1 : 0,
+      updated.sitemap.priority, updated.sitemap.changefreq, updated.is_active ? 1 : 0,
+      updated.is_default ? 1 : 0, id
+    )
+    
+    return this.getSEOConfig(id)
+  }
+
+  async deleteSEOConfig(id: number): Promise<void> {
+    const stmt = this.db.prepare('DELETE FROM seo_configs WHERE id = ?')
+    const result = stmt.run(id)
+    if (result.changes === 0) throw new Error(`SEO config with id ${id} not found`)
+  }
+
+  async getActiveSEOConfig(): Promise<SEOConfig | null> {
+    const stmt = this.db.prepare('SELECT * FROM seo_configs WHERE is_active = 1 LIMIT 1')
+    const result = stmt.get()
+    return result ? this.transformSEOConfig(result) : null
+  }
+
+  // Email Configuration Management
+  async getEmailConfigs(): Promise<EmailConfig[]> {
+    const stmt = this.db.prepare('SELECT * FROM email_configs ORDER BY created_at DESC')
+    const results = stmt.all()
+    return results.map(this.transformEmailConfig)
+  }
+
+  async getEmailConfig(id: number): Promise<EmailConfig> {
+    const stmt = this.db.prepare('SELECT * FROM email_configs WHERE id = ?')
+    const result = stmt.get(id)
+    if (!result) throw new Error(`Email config with id ${id} not found`)
+    return this.transformEmailConfig(result)
+  }
+
+  async createEmailConfig(config: Omit<EmailConfig, 'id' | 'created_at' | 'updated_at'>): Promise<EmailConfig> {
+    const stmt = this.db.prepare(`
+      INSERT INTO email_configs (
+        name, description, sender_name, sender_email, reply_to, templates,
+        template_expiry_hours, max_retries, tracking, is_active, is_default
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `)
+    
+    const result = stmt.run(
+      config.name, config.description, config.sender.name, config.sender.email,
+      config.sender.replyTo, JSON.stringify(config.templates), config.settings.templateExpiryHours,
+      config.settings.maxRetries, config.settings.tracking ? 1 : 0,
+      config.is_active ? 1 : 0, config.is_default ? 1 : 0
+    )
+    
+    return this.getEmailConfig(result.lastInsertRowid)
+  }
+
+  async updateEmailConfig(id: number, config: Partial<EmailConfig>): Promise<EmailConfig> {
+    const current = await this.getEmailConfig(id)
+    const updated = { ...current, ...config }
+    
+    const stmt = this.db.prepare(`
+      UPDATE email_configs SET
+        name = ?, description = ?, sender_name = ?, sender_email = ?, reply_to = ?,
+        templates = ?, template_expiry_hours = ?, max_retries = ?, tracking = ?,
+        is_active = ?, is_default = ?, updated_at = datetime('now')
+      WHERE id = ?
+    `)
+    
+    stmt.run(
+      updated.name, updated.description, updated.sender.name, updated.sender.email,
+      updated.sender.replyTo, JSON.stringify(updated.templates), updated.settings.templateExpiryHours,
+      updated.settings.maxRetries, updated.settings.tracking ? 1 : 0,
+      updated.is_active ? 1 : 0, updated.is_default ? 1 : 0, id
+    )
+    
+    return this.getEmailConfig(id)
+  }
+
+  async deleteEmailConfig(id: number): Promise<void> {
+    const stmt = this.db.prepare('DELETE FROM email_configs WHERE id = ?')
+    const result = stmt.run(id)
+    if (result.changes === 0) throw new Error(`Email config with id ${id} not found`)
+  }
+
+  async getActiveEmailConfig(): Promise<EmailConfig | null> {
+    const stmt = this.db.prepare('SELECT * FROM email_configs WHERE is_active = 1 LIMIT 1')
+    const result = stmt.get()
+    return result ? this.transformEmailConfig(result) : null
+  }
+
+  // Helper methods for data transformation
+  private transformBookConfig(row: any): BookConfig {
+    return {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      title: row.title,
+      subtitle: row.subtitle,
+      author: row.author,
+      author_bio: row.author_bio,
+      publisher: row.publisher,
+      publisher_url: row.publisher_url,
+      publisher_tagline: row.publisher_tagline,
+      substack_name: row.substack_name,
+      description_content: row.description_content,
+      cover_image: row.cover_image,
+      rating: row.rating,
+      review_count: row.review_count,
+      publication_date: row.publication_date,
+      isbn: row.isbn,
+      asin: row.asin,
+      amazon_url: row.amazon_url,
+      goodreads_url: row.goodreads_url,
+      substack_url: row.substack_url,
+      file_size: row.file_size,
+      page_count: row.page_count,
+      language: row.language,
+      format: row.format,
+      is_free: Boolean(row.is_free),
+      price: row.price,
+      categories: row.categories ? JSON.parse(row.categories) : [],
+      stories: row.stories ? JSON.parse(row.stories) : [],
+      awards: row.awards ? JSON.parse(row.awards) : [],
+      rankings: row.rankings ? JSON.parse(row.rankings) : {},
+      ebook: row.ebook ? JSON.parse(row.ebook) : undefined,
+      is_active: Boolean(row.is_active),
+      is_default: Boolean(row.is_default),
+      created_at: row.created_at,
+      updated_at: row.updated_at
+    }
+  }
+
+  private transformSEOConfig(row: any): SEOConfig {
+    return {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      meta: {
+        title: row.meta_title,
+        description: row.meta_description,
+        keywords: row.meta_keywords,
+        author: row.meta_author,
+        robots: row.meta_robots,
+        canonical: row.meta_canonical
+      },
+      openGraph: {
+        title: row.og_title,
+        description: row.og_description,
+        type: row.og_type,
+        url: row.og_url,
+        image: row.og_image,
+        siteName: row.og_site_name
+      },
+      twitter: {
+        card: row.twitter_card,
+        title: row.twitter_title,
+        description: row.twitter_description,
+        image: row.twitter_image
+      },
+      structured_data: row.structured_data ? JSON.parse(row.structured_data) : {},
+      sitemap: {
+        enabled: Boolean(row.sitemap_enabled),
+        priority: row.sitemap_priority,
+        changefreq: row.sitemap_changefreq
+      },
+      is_active: Boolean(row.is_active),
+      is_default: Boolean(row.is_default),
+      created_at: row.created_at,
+      updated_at: row.updated_at
+    }
+  }
+
+  private transformEmailConfig(row: any): EmailConfig {
+    return {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      sender: {
+        name: row.sender_name,
+        email: row.sender_email,
+        replyTo: row.reply_to
+      },
+      templates: row.templates ? JSON.parse(row.templates) : {},
+      settings: {
+        templateExpiryHours: row.template_expiry_hours,
+        maxRetries: row.max_retries,
+        tracking: Boolean(row.tracking)
+      },
+      is_active: Boolean(row.is_active),
+      is_default: Boolean(row.is_default),
+      created_at: row.created_at,
+      updated_at: row.updated_at
     }
   }
 }

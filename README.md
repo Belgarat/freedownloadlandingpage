@@ -39,7 +39,7 @@ This landing page is designed for the book "Fish Cannot Carry Guns" by Michael B
 ### 1. Clone and Setup
 
 ```bash
-git clone https://github.com/yourusername/booklandingstack.git
+git clone https://github.com/Belgarat/booklandingstack.git
 cd booklandingstack
 npm install
 ```

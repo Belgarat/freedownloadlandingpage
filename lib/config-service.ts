@@ -6,13 +6,19 @@ import type {
   MarketingConfig, 
   ThemeConfig, 
   ContentConfig,
+  BookConfig,
+  SEOConfig,
+  EmailConfig,
   ConfigABTest,
   ConfigUsage,
   ConfigStats,
   ConfigComparison,
   MarketingConfigFormData,
   ThemeConfigFormData,
-  ContentConfigFormData
+  ContentConfigFormData,
+  BookConfigFormData,
+  SEOConfigFormData,
+  EmailConfigFormData
 } from '@/types/config'
 
 export class ConfigService {
@@ -380,9 +386,234 @@ export class ConfigService {
         return this.getThemeConfigs()
       case 'content':
         return this.getContentConfigs()
+      case 'book':
+        return this.getBookConfigs()
+      case 'seo':
+        return this.getSEOConfigs()
+      case 'email':
+        return this.getEmailConfigs()
       default:
         throw new Error(`Unknown config type: ${type}`)
     }
+  }
+
+  // Book Configuration Methods
+  async getBookConfigs(): Promise<BookConfig[]> {
+    return this.adapter.getBookConfigs()
+  }
+
+  async getBookConfig(id: number): Promise<BookConfig> {
+    return this.adapter.getBookConfig(id)
+  }
+
+  async createBookConfig(data: BookConfigFormData): Promise<BookConfig> {
+    // If this is the first config, make it active and default
+    const existingConfigs = await this.adapter.getBookConfigs()
+    const isFirst = existingConfigs.length === 0
+
+    return this.adapter.createBookConfig({
+      name: data.name,
+      description: data.description,
+      title: data.title,
+      subtitle: data.subtitle,
+      author: data.author,
+      author_bio: data.author_bio,
+      publisher: data.publisher,
+      publisher_url: data.publisher_url,
+      publisher_tagline: data.publisher_tagline,
+      substack_name: data.substack_name,
+      description_content: data.description_content,
+      cover_image: data.cover_image,
+      rating: data.rating,
+      review_count: data.review_count,
+      publication_date: data.publication_date,
+      isbn: data.isbn,
+      asin: data.asin,
+      amazon_url: data.amazon_url,
+      goodreads_url: data.goodreads_url,
+      substack_url: data.substack_url,
+      file_size: data.file_size,
+      page_count: data.page_count,
+      language: data.language,
+      format: data.format,
+      is_free: data.is_free,
+      price: data.price,
+      categories: data.categories,
+      stories: data.stories,
+      awards: data.awards,
+      rankings: data.rankings,
+      ebook: data.ebook,
+      is_active: isFirst,
+      is_default: isFirst
+    })
+  }
+
+  async updateBookConfig(id: number, data: Partial<BookConfigFormData>): Promise<BookConfig> {
+    return this.adapter.updateBookConfig(id, data)
+  }
+
+  async deleteBookConfig(id: number): Promise<void> {
+    const config = await this.adapter.getBookConfig(id)
+    
+    // Don't allow deletion of the last active config
+    if (config.is_active) {
+      const allConfigs = await this.adapter.getBookConfigs()
+      const activeConfigs = allConfigs.filter(c => c.is_active)
+      
+      if (activeConfigs.length <= 1) {
+        throw new Error('Cannot delete the last active book configuration')
+      }
+    }
+
+    await this.adapter.deleteBookConfig(id)
+  }
+
+  async activateBookConfig(id: number): Promise<void> {
+    // Deactivate all other configs
+    const allConfigs = await this.adapter.getBookConfigs()
+    
+    for (const config of allConfigs) {
+      if (config.id !== id) {
+        await this.adapter.updateBookConfig(config.id!, { is_active: false })
+      }
+    }
+    
+    // Activate the selected config
+    await this.adapter.updateBookConfig(id, { is_active: true })
+  }
+
+  async getActiveBookConfig(): Promise<BookConfig | null> {
+    return this.adapter.getActiveBookConfig()
+  }
+
+  // SEO Configuration Methods
+  async getSEOConfigs(): Promise<SEOConfig[]> {
+    return this.adapter.getSEOConfigs()
+  }
+
+  async getSEOConfig(id: number): Promise<SEOConfig> {
+    return this.adapter.getSEOConfig(id)
+  }
+
+  async createSEOConfig(data: SEOConfigFormData): Promise<SEOConfig> {
+    // If this is the first config, make it active and default
+    const existingConfigs = await this.adapter.getSEOConfigs()
+    const isFirst = existingConfigs.length === 0
+
+    return this.adapter.createSEOConfig({
+      name: data.name,
+      description: data.description,
+      meta: data.meta,
+      openGraph: data.openGraph,
+      twitter: data.twitter,
+      structured_data: data.structured_data,
+      sitemap: data.sitemap,
+      is_active: isFirst,
+      is_default: isFirst
+    })
+  }
+
+  async updateSEOConfig(id: number, data: Partial<SEOConfigFormData>): Promise<SEOConfig> {
+    return this.adapter.updateSEOConfig(id, data)
+  }
+
+  async deleteSEOConfig(id: number): Promise<void> {
+    const config = await this.adapter.getSEOConfig(id)
+    
+    // Don't allow deletion of the last active config
+    if (config.is_active) {
+      const allConfigs = await this.adapter.getSEOConfigs()
+      const activeConfigs = allConfigs.filter(c => c.is_active)
+      
+      if (activeConfigs.length <= 1) {
+        throw new Error('Cannot delete the last active SEO configuration')
+      }
+    }
+
+    await this.adapter.deleteSEOConfig(id)
+  }
+
+  async activateSEOConfig(id: number): Promise<void> {
+    // Deactivate all other configs
+    const allConfigs = await this.adapter.getSEOConfigs()
+    
+    for (const config of allConfigs) {
+      if (config.id !== id) {
+        await this.adapter.updateSEOConfig(config.id!, { is_active: false })
+      }
+    }
+    
+    // Activate the selected config
+    await this.adapter.updateSEOConfig(id, { is_active: true })
+  }
+
+  async getActiveSEOConfig(): Promise<SEOConfig | null> {
+    return this.adapter.getActiveSEOConfig()
+  }
+
+  // Email Configuration Methods
+  async getEmailConfigs(): Promise<EmailConfig[]> {
+    return this.adapter.getEmailConfigs()
+  }
+
+  async getEmailConfig(id: number): Promise<EmailConfig> {
+    return this.adapter.getEmailConfig(id)
+  }
+
+  async createEmailConfig(data: EmailConfigFormData): Promise<EmailConfig> {
+    // If this is the first config, make it active and default
+    const existingConfigs = await this.adapter.getEmailConfigs()
+    const isFirst = existingConfigs.length === 0
+
+    return this.adapter.createEmailConfig({
+      name: data.name,
+      description: data.description,
+      sender: data.sender,
+      templates: data.templates,
+      settings: data.settings,
+      is_active: isFirst,
+      is_default: isFirst
+    })
+  }
+
+  async updateEmailConfig(id: number, data: Partial<EmailConfigFormData>): Promise<EmailConfig> {
+    return this.adapter.updateEmailConfig(id, data)
+  }
+
+  async deleteEmailConfig(id: number): Promise<void> {
+    const config = await this.adapter.getEmailConfig(id)
+    
+    // Don't allow deletion of the last active config
+    if (config.is_active) {
+      const allConfigs = await this.adapter.getEmailConfigs()
+      const activeConfigs = allConfigs.filter(c => c.is_active)
+      
+      if (activeConfigs.length <= 1) {
+        throw new Error('Cannot delete the last active email configuration')
+      }
+    }
+
+    await this.adapter.deleteEmailConfig(id)
+  }
+
+  async activateEmailConfig(id: number): Promise<void> {
+    // Deactivate all other configs
+    const allConfigs = await this.adapter.getEmailConfigs()
+    
+    if (allConfigs.length === 0) return
+    
+    for (const config of allConfigs) {
+      if (config.id !== id) {
+        await this.adapter.updateEmailConfig(config.id!, { is_active: false })
+      }
+    }
+    
+    // Activate the selected config
+    await this.adapter.updateEmailConfig(id, { is_active: true })
+  }
+
+  async getActiveEmailConfig(): Promise<EmailConfig | null> {
+    return this.adapter.getActiveEmailConfig()
   }
 }
 

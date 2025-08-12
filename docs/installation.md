@@ -27,7 +27,7 @@ git --version   # Should be 2.x or higher
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/booklandingstack.git
+git clone https://github.com/Belgarat/booklandingstack.git
 
 # Navigate to the project directory
 cd booklandingstack

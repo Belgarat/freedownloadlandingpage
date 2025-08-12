@@ -1,32 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ConfigService } from '@/lib/config-service'
-import configLoader from '@/lib/config-loader'
 
 export async function GET(request: NextRequest) {
   try {
     const configService = new ConfigService()
     
     // Get active configurations from database
-    const [marketingConfig, themeConfig, contentConfig] = await Promise.all([
+    const [marketingConfig, themeConfig, contentConfig, bookConfig, seoConfig, emailConfig] = await Promise.all([
       configService.getActiveMarketingConfig(),
       configService.getActiveThemeConfig(),
-      configService.getActiveContentConfig()
+      configService.getActiveContentConfig(),
+      configService.getActiveBookConfig(),
+      configService.getActiveSEOConfig(),
+      configService.getActiveEmailConfig()
     ])
-
-    // For backward compatibility, load book, seo, and email from JSON files
-    // until they are migrated to database
-    let bookConfig = null
-    let seoConfig = null
-    let emailConfig = null
-    
-    try {
-      const jsonConfig = await configLoader.loadConfig()
-      bookConfig = jsonConfig.book
-      seoConfig = jsonConfig.seo
-      emailConfig = jsonConfig.email
-    } catch (error) {
-      console.warn('Failed to load JSON config for backward compatibility:', error)
-    }
 
     const config = {
       marketing: marketingConfig,
@@ -73,29 +60,33 @@ export async function POST(request: NextRequest) {
       const contentResult = await configService.createContentConfig(body.content)
       results.push({ type: 'content', id: contentResult.id })
     }
+    
+    if (body.book) {
+      const bookResult = await configService.createBookConfig(body.book)
+      results.push({ type: 'book', id: bookResult.id })
+    }
+    
+    if (body.seo) {
+      const seoResult = await configService.createSEOConfig(body.seo)
+      results.push({ type: 'seo', id: seoResult.id })
+    }
+    
+    if (body.email) {
+      const emailResult = await configService.createEmailConfig(body.email)
+      results.push({ type: 'email', id: emailResult.id })
+    }
 
     console.log('✅ Configuration saved to database:', results)
     
     // Return the updated config
-    const [marketingConfig, themeConfig, contentConfig] = await Promise.all([
+    const [marketingConfig, themeConfig, contentConfig, bookConfig, seoConfig, emailConfig] = await Promise.all([
       configService.getActiveMarketingConfig(),
       configService.getActiveThemeConfig(),
-      configService.getActiveContentConfig()
+      configService.getActiveContentConfig(),
+      configService.getActiveBookConfig(),
+      configService.getActiveSEOConfig(),
+      configService.getActiveEmailConfig()
     ])
-
-    // For backward compatibility, load book, seo, and email from JSON files
-    let bookConfig = null
-    let seoConfig = null
-    let emailConfig = null
-    
-    try {
-      const jsonConfig = await configLoader.loadConfig()
-      bookConfig = jsonConfig.book
-      seoConfig = jsonConfig.seo
-      emailConfig = jsonConfig.email
-    } catch (error) {
-      console.warn('Failed to load JSON config for backward compatibility:', error)
-    }
 
     const config = {
       marketing: marketingConfig,

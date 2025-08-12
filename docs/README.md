@@ -68,10 +68,10 @@ Welcome to the complete documentation for Book Landing Stack - a modern, feature
 
 ## 📖 Additional Resources
 
-- **[GitHub Repository](https://github.com/yourusername/booklandingstack)** - Source code
-- **[Issues](https://github.com/yourusername/booklandingstack/issues)** - Bug reports and feature requests
-- **[Discussions](https://github.com/yourusername/booklandingstack/discussions)** - Community discussions
-- **[Releases](https://github.com/yourusername/booklandingstack/releases)** - Version history
+- **[GitHub Repository](https://github.com/Belgarat/booklandingstack)** - Source code
+- **[Issues](https://github.com/Belgarat/booklandingstack/issues)** - Bug reports and feature requests
+- **[Discussions](https://github.com/Belgarat/booklandingstack/discussions)** - Community discussions
+- **[Releases](https://github.com/Belgarat/booklandingstack/releases)** - Version history
 
 ## 🤝 Support
 

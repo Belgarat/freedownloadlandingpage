@@ -5,12 +5,19 @@ import { useConfig } from '@/lib/useConfig'
 import { Save, RefreshCw } from 'lucide-react'
 import { useToast } from '@/components/ui/ToastContext'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ConfigData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   book?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   marketing?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   theme?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   seo?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   email?: any
 }
 import BookConfigEditor from '@/components/admin/BookConfigEditor'

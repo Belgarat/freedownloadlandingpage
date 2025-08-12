@@ -5,6 +5,16 @@ import { ConfigService } from '@/lib/config-service'
 function transformConfigForFrontend(config: any) {
   const { marketing, theme, content, book, seo, email } = config
 
+  // Transform marketing config to match frontend expectations
+  const transformedMarketing = marketing ? {
+    ...marketing,
+    // Map database fields to frontend expected fields
+    offer: marketing.offer_config,
+    cta: marketing.cta_config,
+    modal: marketing.modal_config,
+    socialProof: marketing.social_proof_config
+  } : null
+
   // Transform book config to match frontend expectations
   const transformedBook = book ? {
     ...book,
@@ -71,7 +81,7 @@ function transformConfigForFrontend(config: any) {
   } : null
 
   return {
-    marketing,
+    marketing: transformedMarketing,
     theme,
     content,
     book: transformedBook,

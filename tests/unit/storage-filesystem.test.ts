@@ -3,6 +3,59 @@ import { filesystemStorage } from '@/lib/storage/filesystem'
 import fs from 'fs'
 import path from 'path'
 
+// Mock File and Blob for Node.js environment
+class MockFile {
+  name: string
+  type: string
+  private content: string | Buffer
+
+  constructor(content: string | Buffer | (string | Buffer)[], name: string, options?: { type?: string }) {
+    // Handle array of content (like new File(['content'], 'name'))
+    if (Array.isArray(content)) {
+      this.content = content[0] as string | Buffer
+    } else {
+      this.content = content
+    }
+    this.name = name
+    this.type = options?.type || 'text/plain'
+  }
+
+  async arrayBuffer(): Promise<ArrayBuffer> {
+    if (typeof this.content === 'string') {
+      return new TextEncoder().encode(this.content).buffer
+    } else {
+      return this.content.buffer
+    }
+  }
+}
+
+class MockBlob {
+  type: string
+  private content: string | Buffer
+
+  constructor(content: string | Buffer | (string | Buffer)[], options?: { type?: string }) {
+    // Handle array of content (like new Blob(['content']))
+    if (Array.isArray(content)) {
+      this.content = content[0] as string | Buffer
+    } else {
+      this.content = content
+    }
+    this.type = options?.type || 'text/plain'
+  }
+
+  async arrayBuffer(): Promise<ArrayBuffer> {
+    if (typeof this.content === 'string') {
+      return new TextEncoder().encode(this.content).buffer
+    } else {
+      return this.content.buffer
+    }
+  }
+}
+
+// Mock global File and Blob
+global.File = MockFile as any
+global.Blob = MockBlob as any
+
 describe('Filesystem Storage Adapter', () => {
   const testUploadsDir = path.join(process.cwd(), 'public', 'uploads', 'test')
   

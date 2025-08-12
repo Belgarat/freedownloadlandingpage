@@ -25,11 +25,14 @@ sqlite3 data/landingfree.db < migrations/sqlite/03_ab_testing_tables.sql
 echo "  - Email templates..."
 sqlite3 data/landingfree.db < migrations/sqlite/04_email_templates.sql
 
-echo "  - Email themes..."
-sqlite3 data/landingfree.db < migrations/sqlite/05_email_themes.sql
-
-echo "  - Email template analytics..."
-sqlite3 data/landingfree.db < migrations/sqlite/06_email_template_analytics.sql
+        echo "  - Email themes..."
+        sqlite3 data/landingfree.db < migrations/sqlite/05_email_themes.sql
+        
+        echo "  - Email template analytics..."
+        sqlite3 data/landingfree.db < migrations/sqlite/06_email_template_analytics.sql
+        
+        echo "  - Configuration tables..."
+        sqlite3 data/landingfree.db < migrations/sqlite/07_config_tables.sql
 
 # Verify setup
 echo "✅ Verifying database setup..."
@@ -37,13 +40,19 @@ TABLE_COUNT=$(sqlite3 data/landingfree.db "SELECT COUNT(*) FROM sqlite_master WH
 echo "  - Created $TABLE_COUNT tables"
 
 # Check key tables have data
-AB_TESTS=$(sqlite3 data/landingfree.db "SELECT COUNT(*) FROM ab_tests;")
-EMAIL_TEMPLATES=$(sqlite3 data/landingfree.db "SELECT COUNT(*) FROM email_templates;")
-EMAIL_THEMES=$(sqlite3 data/landingfree.db "SELECT COUNT(*) FROM email_themes;")
-
-echo "  - A/B Tests: $AB_TESTS"
-echo "  - Email Templates: $EMAIL_TEMPLATES"
-echo "  - Email Themes: $EMAIL_THEMES"
+        AB_TESTS=$(sqlite3 data/landingfree.db "SELECT COUNT(*) FROM ab_tests;")
+        EMAIL_TEMPLATES=$(sqlite3 data/landingfree.db "SELECT COUNT(*) FROM email_templates;")
+        EMAIL_THEMES=$(sqlite3 data/landingfree.db "SELECT COUNT(*) FROM email_themes;")
+        MARKETING_CONFIGS=$(sqlite3 data/landingfree.db "SELECT COUNT(*) FROM marketing_configs;")
+        THEME_CONFIGS=$(sqlite3 data/landingfree.db "SELECT COUNT(*) FROM theme_configs;")
+        CONTENT_CONFIGS=$(sqlite3 data/landingfree.db "SELECT COUNT(*) FROM content_configs;")
+        
+        echo "  - A/B Tests: $AB_TESTS"
+        echo "  - Email Templates: $EMAIL_TEMPLATES"
+        echo "  - Email Themes: $EMAIL_THEMES"
+        echo "  - Marketing Configs: $MARKETING_CONFIGS"
+        echo "  - Theme Configs: $THEME_CONFIGS"
+        echo "  - Content Configs: $CONTENT_CONFIGS"
 
 echo ""
 echo "🎉 Setup complete! You can now run:"

@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { getDatabaseAdapter } from '@/lib/database-config'
 
 export async function GET(request: NextRequest) {
   try {
+    const adapter = getDatabaseAdapter()
     const health = {
       database: 'unknown',
       tables: {
@@ -21,46 +17,42 @@ export async function GET(request: NextRequest) {
 
     // Test database connection
     try {
-      const { data, error } = await supabase
-        .from('ab_tests')
-        .select('count')
-        .limit(1)
-      
-      if (error) {
-        if (error.message.includes('relation "ab_tests" does not exist')) {
-          health.database = 'connected'
-          health.tables.ab_tests = false
-        } else {
-          health.database = 'error'
-          console.error('Database error:', error)
-        }
-      } else {
+      // Try to query ab_tests table
+      const tests = await adapter.getABTests()
+      health.database = 'connected'
+      health.tables.ab_tests = true
+    } catch (err: any) {
+      if (err.message?.includes('no such table') || err.message?.includes('does not exist')) {
         health.database = 'connected'
-        health.tables.ab_tests = true
+        health.tables.ab_tests = false
+      } else {
+        health.database = 'error'
+        console.error('Database error:', err)
       }
-    } catch (err) {
-      health.database = 'error'
-      console.error('Database connection error:', err)
     }
 
     // Test other tables if ab_tests exists
     if (health.tables.ab_tests) {
       try {
-        await supabase.from('ab_variants').select('count').limit(1)
+        await adapter.getABVariants('test-id')
         health.tables.ab_variants = true
       } catch (err) {
         health.tables.ab_variants = false
       }
 
       try {
-        await supabase.from('ab_test_results').select('count').limit(1)
+        // Test ab_test_results table
+        const stmt = adapter.db.prepare('SELECT COUNT(*) FROM ab_test_results')
+        stmt.get()
         health.tables.ab_test_results = true
       } catch (err) {
         health.tables.ab_test_results = false
       }
 
       try {
-        await supabase.from('ab_visitor_assignments').select('count').limit(1)
+        // Test ab_visitor_assignments table
+        const stmt = adapter.db.prepare('SELECT COUNT(*) FROM ab_visitor_assignments')
+        stmt.get()
         health.tables.ab_visitor_assignments = true
       } catch (err) {
         health.tables.ab_visitor_assignments = false

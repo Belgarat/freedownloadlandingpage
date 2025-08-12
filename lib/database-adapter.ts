@@ -725,61 +725,68 @@ export class SQLiteAdapter implements DatabaseAdapter {
     // Create tables if they don't exist
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS ab_tests (
-        id TEXT PRIMARY KEY,
+        id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))),2) || '-' || substr('89ab',abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))),2) || '-' || lower(hex(randomblob(6)))),
         name TEXT NOT NULL,
         description TEXT,
         type TEXT NOT NULL,
-        status TEXT NOT NULL DEFAULT 'draft',
+        status TEXT DEFAULT 'draft',
         traffic_split INTEGER DEFAULT 50,
         start_date TEXT,
         end_date TEXT,
         target_element TEXT,
         target_selector TEXT,
         conversion_goal TEXT,
-        statistical_significance REAL DEFAULT 0.95,
+        statistical_significance REAL DEFAULT 0,
         total_visitors INTEGER DEFAULT 0,
         conversions INTEGER DEFAULT 0,
         conversion_rate REAL DEFAULT 0,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now'))
       );
 
       CREATE TABLE IF NOT EXISTS ab_variants (
-        id TEXT PRIMARY KEY,
+        id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))),2) || '-' || substr('89ab',abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))),2) || '-' || lower(hex(randomblob(6)))),
         test_id TEXT NOT NULL,
         name TEXT NOT NULL,
-        content TEXT,
+        description TEXT,
+        value TEXT NOT NULL,
         css_class TEXT,
         css_style TEXT,
-        is_control BOOLEAN DEFAULT FALSE,
-        is_winner BOOLEAN DEFAULT FALSE,
         visitors INTEGER DEFAULT 0,
         conversions INTEGER DEFAULT 0,
         conversion_rate REAL DEFAULT 0,
-        confidence_level REAL DEFAULT 0,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (test_id) REFERENCES ab_tests (id) ON DELETE CASCADE
+        is_control INTEGER DEFAULT 0,
+        is_winner INTEGER DEFAULT 0,
+        confidence_level REAL,
+        improvement REAL,
+        traffic_split REAL,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY (test_id) REFERENCES ab_tests(id) ON DELETE CASCADE
       );
 
       CREATE TABLE IF NOT EXISTS ab_test_results (
-        id TEXT PRIMARY KEY,
+        id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))),2) || '-' || substr('89ab',abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))),2) || '-' || lower(hex(randomblob(6)))),
         test_id TEXT NOT NULL,
         variant_id TEXT NOT NULL,
         visitor_id TEXT NOT NULL,
-        event_type TEXT NOT NULL,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (test_id) REFERENCES ab_tests (id) ON DELETE CASCADE,
-        FOREIGN KEY (variant_id) REFERENCES ab_variants (id) ON DELETE CASCADE
+        timestamp TEXT DEFAULT (datetime('now')),
+        conversion INTEGER DEFAULT 0,
+        conversion_value REAL,
+        created_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY (test_id) REFERENCES ab_tests(id) ON DELETE CASCADE,
+        FOREIGN KEY (variant_id) REFERENCES ab_variants(id) ON DELETE CASCADE
       );
 
       CREATE TABLE IF NOT EXISTS ab_visitor_assignments (
+        id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))),2) || '-' || substr('89ab',abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))),2) || '-' || lower(hex(randomblob(6)))),
         visitor_id TEXT NOT NULL,
         test_id TEXT NOT NULL,
         variant_id TEXT NOT NULL,
-        assigned_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (visitor_id, test_id),
-        FOREIGN KEY (test_id) REFERENCES ab_tests (id) ON DELETE CASCADE,
-        FOREIGN KEY (variant_id) REFERENCES ab_variants (id) ON DELETE CASCADE
+        assigned_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY (test_id) REFERENCES ab_tests(id) ON DELETE CASCADE,
+        FOREIGN KEY (variant_id) REFERENCES ab_variants(id) ON DELETE CASCADE,
+        UNIQUE(visitor_id, test_id)
       );
 
       CREATE TABLE IF NOT EXISTS analytics (

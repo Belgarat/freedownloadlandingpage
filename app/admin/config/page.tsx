@@ -21,20 +21,22 @@ export default function ConfigAdmin() {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [lastSavedConfig, setLastSavedConfig] = useState<any>(null)
   const [isDirty, setIsDirty] = useState(false)
+  const [preventReload, setPreventReload] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
     // Evita sovrascritture durante modifica o salvataggio
-    if (config && (!localConfig || (!isDirty && !saving))) {
+    if (config && (!localConfig || (!isDirty && !saving && !preventReload))) {
       setLocalConfig(config)
     }
-  }, [config, isDirty, saving])
+  }, [config, isDirty, saving, preventReload])
 
   const handleSave = async () => {
     if (!localConfig) return
 
     setSaving(true)
     setSaveStatus('idle')
+    setPreventReload(true) // Prevent reload during save
 
     try {
       const response = await fetch('/api/config', {
@@ -53,15 +55,24 @@ export default function ConfigAdmin() {
         // Just mark as not dirty and update last saved config
         setIsDirty(false)
         setLastSavedConfig(localConfig) // Use current localConfig instead of result.data
-        setTimeout(() => setSaveStatus('idle'), 3000)
+        setTimeout(() => {
+          setSaveStatus('idle')
+          setPreventReload(false) // Allow reload after save status clears
+        }, 3000)
       } else {
         setSaveStatus('error')
-        setTimeout(() => setSaveStatus('idle'), 3000)
+        setTimeout(() => {
+          setSaveStatus('idle')
+          setPreventReload(false)
+        }, 3000)
       }
     } catch (error) {
       console.error('Error saving config:', error)
       setSaveStatus('error')
-      setTimeout(() => setSaveStatus('idle'), 3000)
+      setTimeout(() => {
+        setSaveStatus('idle')
+        setPreventReload(false)
+      }, 3000)
     } finally {
       setSaving(false)
     }

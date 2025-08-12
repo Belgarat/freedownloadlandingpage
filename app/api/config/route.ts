@@ -1,11 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
-import configLoader from '@/lib/config-loader'
-import fs from 'fs'
-import path from 'path'
+import { ConfigService } from '@/lib/config-service'
 
 export async function GET(request: NextRequest) {
   try {
-    const config = await configLoader.loadConfig()
+    const configService = new ConfigService()
+    
+    // Get active configurations from database
+    const [marketingConfig, themeConfig, contentConfig] = await Promise.all([
+      configService.getActiveMarketingConfig(),
+      configService.getActiveThemeConfig(),
+      configService.getActiveContentConfig()
+    ])
+
+    // For now, we'll use the first active config of each type
+    // In the future, we can implement A/B testing logic here
+    const config = {
+      marketing: marketingConfig,
+      theme: themeConfig,
+      content: contentConfig,
+      // For backward compatibility, we'll keep these as null for now
+      // They can be migrated to database later
+      book: null,
+      seo: null,
+      email: null
+    }
     
     return NextResponse.json({
       success: true,
@@ -24,63 +42,48 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    const configService = new ConfigService()
     
-    // Validate the configuration structure
-    if (!body.book || !body.marketing || !body.content || !body.theme || !body.seo || !body.email) {
-      return NextResponse.json({
-        success: false,
-        error: 'Invalid configuration structure'
-      }, { status: 400 })
+    // Save configurations to database
+    const results = []
+    
+    if (body.marketing) {
+      const marketingResult = await configService.createMarketingConfig(body.marketing)
+      results.push({ type: 'marketing', id: marketingResult.id })
+    }
+    
+    if (body.theme) {
+      const themeResult = await configService.createThemeConfig(body.theme)
+      results.push({ type: 'theme', id: themeResult.id })
+    }
+    
+    if (body.content) {
+      const contentResult = await configService.createContentConfig(body.content)
+      results.push({ type: 'content', id: contentResult.id })
     }
 
-    // Save each configuration file
-    const configPath = path.join(process.cwd(), 'config')
+    console.log('✅ Configuration saved to database:', results)
     
-    // Save book.json
-    fs.writeFileSync(
-      path.join(configPath, 'book.json'),
-      JSON.stringify(body.book, null, 2)
-    )
+    // Return the updated config
+    const [marketingConfig, themeConfig, contentConfig] = await Promise.all([
+      configService.getActiveMarketingConfig(),
+      configService.getActiveThemeConfig(),
+      configService.getActiveContentConfig()
+    ])
 
-    // Save marketing.json
-    fs.writeFileSync(
-      path.join(configPath, 'marketing.json'),
-      JSON.stringify(body.marketing, null, 2)
-    )
-
-    // Save content.json
-    fs.writeFileSync(
-      path.join(configPath, 'content.json'),
-      JSON.stringify(body.content, null, 2)
-    )
-
-    // Save theme.json
-    fs.writeFileSync(
-      path.join(configPath, 'theme.json'),
-      JSON.stringify(body.theme, null, 2)
-    )
-
-    // Save seo.json
-    fs.writeFileSync(
-      path.join(configPath, 'seo.json'),
-      JSON.stringify(body.seo, null, 2)
-    )
-
-    // Save email.json
-    fs.writeFileSync(
-      path.join(configPath, 'email.json'),
-      JSON.stringify(body.email, null, 2)
-    )
-
-    console.log('✅ Configuration saved successfully')
-    
-    // Reload the config to return the updated data
-    const updatedConfig = await configLoader.loadConfig()
+    const config = {
+      marketing: marketingConfig,
+      theme: themeConfig,
+      content: contentConfig,
+      book: null,
+      seo: null,
+      email: null
+    }
     
     return NextResponse.json({
       success: true,
       message: 'Configuration saved successfully',
-      data: updatedConfig
+      data: config
     })
   } catch (error) {
     console.error('❌ Error saving config in API:', error)

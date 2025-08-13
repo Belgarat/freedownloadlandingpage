@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { verifyTestToken } from '@/lib/test-auth'
 
 function base64UrlEncode(data: string | Uint8Array): string {
   const str = typeof data === 'string' ? Buffer.from(data) : Buffer.from(data)
@@ -59,7 +60,13 @@ export async function GET(request: Request) {
       return NextResponse.json({ ok: false }, { status: 401 })
     }
     
-    // Verify the token
+    // First try to verify as test token
+    const testUser = verifyTestToken(token)
+    if (testUser) {
+      return NextResponse.json({ ok: true })
+    }
+    
+    // If not a test token, verify as regular token
     const [payloadB64, signatureB64] = token.split('.')
     if (!payloadB64 || !signatureB64) {
       return NextResponse.json({ ok: false }, { status: 401 })

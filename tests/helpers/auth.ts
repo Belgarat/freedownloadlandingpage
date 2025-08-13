@@ -9,7 +9,7 @@ export async function authenticateAsAdmin(page: Page) {
       value: token,
       domain: 'localhost',
       path: '/',
-      httpOnly: true,
+      httpOnly: false, // Set to false for testing
       secure: false,
       sameSite: 'Lax'
     }

@@ -29,6 +29,7 @@
     "test:install": "playwright install",
     "test:unit": "vitest",
     "test:unit:run": "vitest run",
+    "screenshots": "node scripts/generate-screenshots.js",
     "release": "./scripts/release.sh",
     "release:patch": "./scripts/release.sh patch",
     "release:minor": "./scripts/release.sh minor",

@@ -129,6 +129,7 @@ export interface ContentConfig {
   name: string
   about_book: string
   author_bio: string
+  show_genre_components?: boolean
   stories: Array<{
     title: string
     description: string
@@ -143,6 +144,53 @@ export interface ContentConfig {
   footer: {
     copyright: string
     supportText: string
+  }
+  // Genre-specific components
+  world_map?: {
+    title: string
+    description: string
+    imageUrl?: string
+    locations: Array<{
+      name: string
+      description: string
+      x: number
+      y: number
+    }>
+  }
+  timeline?: Array<{
+    id: string
+    title: string
+    description: string
+    date: string
+    category?: string
+    imageUrl?: string
+  }>
+  character_profiles?: Array<{
+    id: string
+    name: string
+    role: string
+    description: string
+    imageUrl?: string
+    traits: string[]
+    background: string
+  }>
+  mood_board?: {
+    atmosphere: string
+    items: Array<{
+      id: string
+      type: 'image' | 'text' | 'color'
+      content: string
+      description?: string
+    }>
+  }
+  world_building?: {
+    sections: Array<{
+      id: string
+      title: string
+      content: string
+      type: 'setting' | 'magic' | 'technology' | 'culture' | 'history'
+      icon?: string
+    }>
   }
   is_active: boolean
   is_default: boolean
@@ -280,6 +328,7 @@ export interface BookConfig {
   subtitle?: string
   author: string
   author_bio?: string
+  genre?: string
   publisher?: string
   publisher_url?: string
   publisher_tagline?: string

@@ -9,6 +9,11 @@ import BookHeader from '@/components/landing/BookHeader'
 import BookCoverSection from '@/components/landing/BookCoverSection'
 import BookDetailsSection from '@/components/landing/BookDetailsSection'
 import FooterSection from '@/components/landing/FooterSection'
+import WorldMap from '@/components/landing/WorldMap'
+import Timeline from '@/components/landing/Timeline'
+import CharacterProfiles from '@/components/landing/CharacterProfiles'
+import MoodBoard from '@/components/landing/MoodBoard'
+import WorldBuilding from '@/components/landing/WorldBuilding'
 import { useAnalytics } from '@/lib/useAnalytics'
 import { useConfig } from '@/lib/useConfig'
 import { useABTestByType } from '@/lib/useABTesting'
@@ -26,6 +31,10 @@ export default function Home() {
   const gridCols = layoutType === 'full-width' ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'
   const leftColClass = ''
   const rightColClass = ''
+  
+  // Genre-specific components
+  const bookGenre = book?.genre || 'contemporary'
+  const showGenreComponents = content?.show_genre_components !== false
   
   // Get offer end date from environment
   const offerEndDate = useMemo(() => {
@@ -77,6 +86,51 @@ export default function Home() {
             {/* Book Details Section */}
             <BookDetailsSection className={rightColClass} offerEndDate={offerEndDate} />
           </main>
+
+          {/* Genre-specific components */}
+          {showGenreComponents && (
+            <div className="mt-12">
+              <div className={`${containerMax} mx-auto`}>
+                {/* World Map for Fantasy and Historical */}
+                {(bookGenre === 'fantasy' || bookGenre === 'historical') && content?.world_map && (
+                  <div className="mb-8">
+                    <WorldMap mapData={content.world_map} />
+                  </div>
+                )}
+                
+                {/* Timeline for Thriller, Sci-Fi, Mystery, Historical, Biography */}
+                {(bookGenre === 'thriller' || bookGenre === 'scifi' || bookGenre === 'mystery' || bookGenre === 'historical' || bookGenre === 'biography') && content?.timeline && (
+                  <div className="mb-8">
+                    <Timeline events={content.timeline} />
+                  </div>
+                )}
+                
+                {/* Character Profiles for Fantasy, YA, Biography */}
+                {(bookGenre === 'fantasy' || bookGenre === 'young-adult' || bookGenre === 'biography') && content?.character_profiles && (
+                  <div className="mb-8">
+                    <CharacterProfiles characters={content.character_profiles} />
+                  </div>
+                )}
+                
+                {/* Mood Board for Romance */}
+                {bookGenre === 'romance' && content?.mood_board && (
+                  <div className="mb-8">
+                    <MoodBoard 
+                      items={content.mood_board.items} 
+                      atmosphere={content.mood_board.atmosphere}
+                    />
+                  </div>
+                )}
+                
+                {/* World Building for Fantasy and Sci-Fi */}
+                {(bookGenre === 'fantasy' || bookGenre === 'scifi') && content?.world_building && (
+                  <div className="mb-8">
+                    <WorldBuilding sections={content.world_building.sections} />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Footer with imprint logo and info - mobile optimized */}
           <FooterSection />

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('Configuration API E2E Tests', () => {
-  const baseUrl = 'http://localhost:3001'
+  const baseUrl = 'http://localhost:3010'
 
   test.describe('Marketing Config API', () => {
     test('should get all marketing configs', async ({ request }) => {

@@ -78,7 +78,7 @@ test.describe('A/B Testing Section', () => {
       expect(parseFloat(conversionRateText?.replace('%', '') || '0')).toBeGreaterThanOrEqual(0)
     } else {
       // If no tests exist, just check that the page loaded successfully
-      await expect(page.getByText('A/B Testing')).toBeVisible()
+      await expect(page.getByRole('heading', { name: 'A/B Testing' })).toBeVisible()
     }
   })
 
@@ -98,7 +98,7 @@ test.describe('A/B Testing Section', () => {
       await expect(statusElements.first()).toBeVisible()
     } else {
       // If no tests exist, just check that the page loaded successfully
-      await expect(page.getByText('A/B Testing')).toBeVisible()
+      await expect(page.getByRole('heading', { name: 'A/B Testing' })).toBeVisible()
     }
   })
 
@@ -196,7 +196,7 @@ test.describe('A/B Testing Section', () => {
     
     // Click Create Test
     await page.click('text=Create Test')
-    await expect(page.getByText('Create Test')).toBeVisible()
+    await expect(page.getByRole('tab', { name: 'Create Test' })).toBeVisible()
     await expect(page.locator('[data-testid="template-cta_button_text"]')).toBeVisible()
     
     // Back to Overview

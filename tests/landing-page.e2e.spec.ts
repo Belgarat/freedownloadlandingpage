@@ -131,8 +131,12 @@ test.describe('Download Page', () => {
     const downloadReadyText = page.getByText('Your Download is Ready!')
     await expect(downloadReadyText).toBeVisible({ timeout: 15000 })
     
+    // Wait for download button to be enabled
     const downloadButton = page.getByRole('button', { name: 'Download PDF' })
     await expect(downloadButton).toBeVisible()
+    
+    // Wait for button to be enabled (not disabled)
+    await expect(downloadButton).toBeEnabled({ timeout: 10000 })
     
     // Trigger download
     await downloadButton.click()

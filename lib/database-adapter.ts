@@ -406,9 +406,14 @@ export class SupabaseAdapter implements DatabaseAdapter {
 
   // Email Templates
   async createEmailTemplate(template: any) {
+    const templateData = {
+      ...template,
+      type: template.type || 'download'
+    }
+    
     const { data, error } = await this.supabase
       .from('email_templates')
-      .insert(template)
+      .insert(templateData)
       .select()
       .single()
     
@@ -2067,8 +2072,8 @@ export class SQLiteAdapter implements DatabaseAdapter {
   async createEmailTemplate(template: any) {
     const stmt = this.db.prepare(`
       INSERT INTO email_templates (
-        name, subject, html_content, text_content, description, is_default
-      ) VALUES (?, ?, ?, ?, ?, ?)
+        name, subject, html_content, text_content, description, is_default, type
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
     `)
     
     const result = stmt.run(
@@ -2077,7 +2082,8 @@ export class SQLiteAdapter implements DatabaseAdapter {
       template.html_content,
       template.text_content,
       template.description,
-      template.is_default ? 1 : 0
+      template.is_default ? 1 : 0,
+      template.type || 'download'
     )
     
     return { id: result.lastInsertRowid, ...template }
@@ -2103,7 +2109,7 @@ export class SQLiteAdapter implements DatabaseAdapter {
     const stmt = this.db.prepare(`
       UPDATE email_templates SET
         name = ?, subject = ?, html_content = ?, text_content = ?,
-        description = ?, is_default = ?, updated_at = CURRENT_TIMESTAMP
+        description = ?, is_default = ?, type = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `)
     
@@ -2114,6 +2120,7 @@ export class SQLiteAdapter implements DatabaseAdapter {
       data.text_content,
       data.description,
       data.is_default ? 1 : 0,
+      data.type || 'download',
       id
     )
     

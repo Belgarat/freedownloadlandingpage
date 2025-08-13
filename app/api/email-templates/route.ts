@@ -46,7 +46,30 @@ export async function GET(request: NextRequest) {
     const adapter = getDatabaseAdapter()
     const templates = await adapter.getEmailTemplates()
     
-    return NextResponse.json(templates)
+    // Get active email config to determine which templates are active
+    const emailConfigs = await adapter.getEmailConfigs()
+    const activeConfig = emailConfigs.find(config => config.is_active)
+    
+    let activeTemplates: Record<string, number> = {}
+    if (activeConfig && activeConfig.templates) {
+      // templates is already an object from the database adapter
+      const templatesConfig = activeConfig.templates
+      activeTemplates = {
+        download: templatesConfig.download?.templateId,
+        followup: templatesConfig.followup?.templateId
+      }
+    }
+    
+    // Add isActive flag to templates
+    const templatesWithActiveFlag = templates.map(template => ({
+      ...template,
+      isActive: activeTemplates.download === template.id || activeTemplates.followup === template.id
+    }))
+    
+    return NextResponse.json({
+      templates: templatesWithActiveFlag,
+      activeTemplates
+    })
   } catch (error) {
     console.error('Error fetching email templates:', error)
     return NextResponse.json(

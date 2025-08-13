@@ -75,6 +75,7 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
   // Utilities
   const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n))
   const hexToRgb = (hex: string) => {
+    if (!hex || typeof hex !== 'string') return { r: 0, g: 0, b: 0 }
     const h = hex.replace('#', '')
     const v = h.length === 3 ? h.split('').map((c) => c + c).join('') : h
     const num = parseInt(v, 16)
@@ -150,6 +151,22 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
   }
 
   const applyColorsWithLocks = (newColors: Partial<ThemeConfig['colors']>) => {
+    if (!config.colors) {
+      // Initialize default colors if not present
+      const defaultColors = {
+        primary: '#0f766e',
+        secondary: '#0891b2',
+        accent: '#f59e0b',
+        background: '#ffffff',
+        text: { primary: '#1f2937', secondary: '#6b7280', muted: '#9ca3af' },
+        success: '#10b981',
+        error: '#ef4444',
+        warning: '#f59e0b'
+      }
+      onChange({ ...config, colors: defaultColors })
+      return
+    }
+    
     const merged = { ...config.colors }
     if (newColors.primary && !locks.primary) merged.primary = newColors.primary
     if (newColors.secondary && !locks.secondary) merged.secondary = newColors.secondary
@@ -187,15 +204,19 @@ export default function ThemeConfigEditor({ config, onChange }: ThemeConfigEdito
   }
 
   const textContrast = useMemo(() => {
+    if (!config.colors || !config.colors.background || !config.colors.text) {
+      return { primary: 1, secondary: 1, muted: 1 }
+    }
     const bg = config.colors.background
     return {
-      primary: contrastRatio(config.colors.text.primary, bg),
-      secondary: contrastRatio(config.colors.text.secondary, bg),
-      muted: contrastRatio(config.colors.text.muted, bg),
+      primary: contrastRatio(config.colors.text.primary || '#000000', bg),
+      secondary: contrastRatio(config.colors.text.secondary || '#666666', bg),
+      muted: contrastRatio(config.colors.text.muted || '#999999', bg),
     }
   }, [config.colors])
 
   const autoFixTextContrast = () => {
+    if (!config.colors || !config.colors.background) return
     const auto = bestTextColor(config.colors.background)
     applyColorsWithLocks({ text: auto })
   }

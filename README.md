@@ -177,6 +177,11 @@ npm run setup:sqlite    # Setup SQLite database only
 npm run db:info         # Check database status
 npm run db:backup       # Create database backup
 
+# Backup & Restore
+npm run backup          # Create database backup (retention: 10)
+npm run backup:list     # List available backups
+npm run backup:restore  # Restore database from backup
+
 # Testing
 npm run test            # Run all tests
 npm run test:storage    # Run storage tests only
@@ -184,6 +189,12 @@ npm run test:component  # Run component tests only
 npm run test:api        # Run API tests only
 npm run test:all        # Run all tests with timeout
 npm run test:report     # Show test report
+
+# Documentation
+- [Development Guidelines](./docs/DEVELOPMENT_GUIDELINES.md) - **Linee guida di sviluppo e best practices**
+- [API Documentation](./docs/API.md)
+- [Database Schema](./docs/DATABASE.md)
+- [Genre Templates](./docs/PHASE1_GENRE_TEMPLATES.md)
 
 # Deployment
 npm run deploy:development  # Deploy to development environment

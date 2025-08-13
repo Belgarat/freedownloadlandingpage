@@ -1,25 +1,94 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { EmailConfig } from '@/lib/config-loader'
-import EmailTemplateEditor from '@/components/EmailTemplateEditor'
-import { Mail, Settings, Eye, EyeOff, Info, AlertCircle } from 'lucide-react'
+import { Mail, Settings, Info, ExternalLink, Plus } from 'lucide-react'
+import { useToast } from '@/components/ui/ToastContext'
 
 interface EmailConfigEditorProps {
   config: EmailConfig
   onChange: (config: EmailConfig) => void
 }
 
+interface EmailTemplate {
+  id: string
+  name: string
+  type: 'download' | 'followup'
+  isActive: boolean
+}
+
 export default function EmailConfigEditor({ config, onChange }: EmailConfigEditorProps) {
-  const [activeTab, setActiveTab] = useState<'sender' | 'download' | 'followup' | 'settings'>('sender')
+  const [activeTab, setActiveTab] = useState<'sender' | 'templates' | 'settings'>('sender')
   const [showAdvanced, setShowAdvanced] = useState(false)
+  const [templates, setTemplates] = useState<EmailTemplate[]>([])
+  const [loading, setLoading] = useState(false)
+  const { addToast } = useToast()
 
   const tabs = [
     { id: 'sender', label: 'Mittente', icon: Mail },
-    { id: 'download', label: 'Email Download', icon: Mail },
-    { id: 'followup', label: 'Email Follow-up', icon: Mail },
+    { id: 'templates', label: 'Template Email', icon: Mail },
     { id: 'settings', label: 'Impostazioni', icon: Settings }
   ] as const
+
+  // Carica i template disponibili
+  useEffect(() => {
+    const loadTemplates = async () => {
+      setLoading(true)
+      try {
+        const response = await fetch('/api/email-templates')
+        if (response.ok) {
+          const data = await response.json()
+          setTemplates(data.templates || [])
+        }
+      } catch (error) {
+        console.error('Error loading templates:', error)
+        addToast({
+          type: 'error',
+          title: 'Errore',
+          message: 'Impossibile caricare i template email',
+          duration: 5000
+        })
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadTemplates()
+  }, [addToast])
+
+  const handleTemplateSelect = async (templateId: string, type: 'download' | 'followup') => {
+    try {
+      const response = await fetch(`/api/email-templates/${templateId}/activate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type })
+      })
+
+      if (response.ok) {
+        addToast({
+          type: 'success',
+          title: 'Template Attivato',
+          message: `Template ${type} aggiornato con successo`,
+          duration: 3000
+        })
+        
+        // Ricarica i template per aggiornare lo stato
+        const templatesResponse = await fetch('/api/email-templates')
+        if (templatesResponse.ok) {
+          const data = await templatesResponse.json()
+          setTemplates(data.templates || [])
+        }
+      }
+    } catch (error) {
+      console.error('Error activating template:', error)
+      addToast({
+        type: 'error',
+        title: 'Errore',
+        message: 'Impossibile attivare il template',
+        duration: 5000
+      })
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -30,7 +99,7 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
           <div>
             <h3 className="text-sm font-medium text-blue-900">Configurazione Email</h3>
             <p className="text-sm text-blue-700 mt-1">
-              Personalizza le email inviate agli utenti. Usa i placeholder per inserire contenuti dinamici.
+              Configura le impostazioni generali per l'invio delle email. I template email sono gestiti nella sezione dedicata.
             </p>
           </div>
         </div>
@@ -106,101 +175,114 @@ export default function EmailConfigEditor({ config, onChange }: EmailConfigEdito
         </div>
       )}
 
-      {/* Download Email Template */}
-      {activeTab === 'download' && (
-        <div className="space-y-4">
+      {/* Template Selection */}
+      {activeTab === 'templates' && (
+        <div className="space-y-6">
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <h4 className="text-sm font-medium text-green-900 mb-2">Email di Download</h4>
-            <p className="text-sm text-green-700">
-              Questa email viene inviata quando un utente richiede il download del libro.
+            <h4 className="text-sm font-medium text-green-900 mb-2">Gestione Template Email</h4>
+            <p className="text-sm text-green-700 mb-3">
+              Seleziona i template da utilizzare per le email di download e follow-up. I template sono gestiti nella sezione dedicata.
             </p>
+            <a
+              href="/admin/email-templates"
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Gestisci Template</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Oggetto Email</label>
-              <input
-                type="text"
-                value={config.templates.download.subject}
-                onChange={(e) => onChange({...config, templates: {...config.templates, download: {...config.templates.download, subject: e.target.value}}})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
-                placeholder="Il tuo libro è pronto!"
-              />
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3"></div>
+              <p className="text-gray-600">Caricamento template...</p>
             </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Download Template */}
+              <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <h5 className="text-sm font-medium text-gray-900 mb-3">Template Download</h5>
+                <p className="text-xs text-gray-600 mb-4">Template utilizzato per l'email di download del libro</p>
+                
+                {templates.filter(t => t.type === 'download').length > 0 ? (
+                  <div className="space-y-2">
+                    {templates.filter(t => t.type === 'download').map((template) => (
+                      <div
+                        key={template.id}
+                        className={`p-3 border rounded-md cursor-pointer transition-colors ${
+                          template.isActive
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                        onClick={() => handleTemplateSelect(template.id, 'download')}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-gray-900">{template.name}</span>
+                          {template.isActive && (
+                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                              Attivo
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-4 text-gray-500">
+                    <p className="text-sm">Nessun template download disponibile</p>
+                    <a
+                      href="/admin/email-templates/new"
+                      className="text-blue-600 hover:text-blue-700 text-sm mt-2 inline-block"
+                    >
+                      Crea il primo template
+                    </a>
+                  </div>
+                )}
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Contenuto HTML</label>
-              <EmailTemplateEditor
-                value={config.templates.download.html || config.templates.download.message}
-                onChange={(value) => onChange({...config, templates: {...config.templates, download: {...config.templates.download, html: value}}})}
-                placeholder="Scrivi il contenuto HTML dell'email..."
-                className="mb-4"
-              />
+              {/* Follow-up Template */}
+              <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <h5 className="text-sm font-medium text-gray-900 mb-3">Template Follow-up</h5>
+                <p className="text-xs text-gray-600 mb-4">Template utilizzato per l'email di follow-up</p>
+                
+                {templates.filter(t => t.type === 'followup').length > 0 ? (
+                  <div className="space-y-2">
+                    {templates.filter(t => t.type === 'followup').map((template) => (
+                      <div
+                        key={template.id}
+                        className={`p-3 border rounded-md cursor-pointer transition-colors ${
+                          template.isActive
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                        onClick={() => handleTemplateSelect(template.id, 'followup')}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-gray-900">{template.name}</span>
+                          {template.isActive && (
+                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                              Attivo
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-4 text-gray-500">
+                    <p className="text-sm">Nessun template follow-up disponibile</p>
+                    <a
+                      href="/admin/email-templates/new"
+                      className="text-blue-600 hover:text-blue-700 text-sm mt-2 inline-block"
+                    >
+                      Crea il primo template
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Contenuto Testuale</label>
-              <textarea
-                value={config.templates.download.text || config.templates.download.message}
-                onChange={(e) => onChange({...config, templates: {...config.templates, download: {...config.templates.download, text: e.target.value}}})}
-                rows={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
-                placeholder="Scrivi il contenuto testuale dell'email..."
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Versione testuale per client email che non supportano HTML
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Follow-up Email Template */}
-      {activeTab === 'followup' && (
-        <div className="space-y-4">
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-            <h4 className="text-sm font-medium text-orange-900 mb-2">Email di Follow-up</h4>
-            <p className="text-sm text-orange-700">
-              Questa email viene inviata 24-48 ore dopo se l'utente non ha scaricato il libro.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Oggetto Email</label>
-              <input
-                type="text"
-                value={config.templates.followup.subject}
-                onChange={(e) => onChange({...config, templates: {...config.templates, followup: {...config.templates.followup, subject: e.target.value}}})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-input"
-                placeholder="Hai dimenticato di scaricare il libro?"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Contenuto HTML</label>
-              <EmailTemplateEditor
-                value={config.templates.followup.html}
-                onChange={(value) => onChange({...config, templates: {...config.templates, followup: {...config.templates.followup, html: value}}})}
-                placeholder="Scrivi il contenuto HTML dell'email di follow-up..."
-                className="mb-4"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Contenuto Testuale</label>
-              <textarea
-                value={config.templates.followup.text}
-                onChange={(e) => onChange({...config, templates: {...config.templates, followup: {...config.templates.followup, text: e.target.value}}})}
-                rows={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 admin-textarea"
-                placeholder="Scrivi il contenuto testuale dell'email di follow-up..."
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Versione testuale per client email che non supportano HTML
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       )}
 

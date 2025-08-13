@@ -41,7 +41,10 @@
     "setup:new": "./scripts/setup-new-instance.sh",
     "config:migrate": "tsx lib/config-migration.ts migrate",
     "config:rollback": "tsx lib/config-migration.ts rollback",
-    "config:cleanup": "tsx lib/config-migration.ts cleanup"
+    "config:cleanup": "tsx lib/config-migration.ts cleanup",
+    "backup": "./scripts/backup.sh",
+    "backup:list": "ls -lh /tmp/backups/development.db.backup.* 2>/dev/null | sort -r || echo 'Nessun backup trovato'",
+    "backup:restore": "./scripts/restore.sh"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",

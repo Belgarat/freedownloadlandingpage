@@ -374,14 +374,15 @@ export default function EmailTemplatesPage() {
                       >
                         <Copy className="h-5 w-5" />
                       </button>
-                      <button
-                        onClick={() => handleDeleteTemplate(template)}
-                        className="p-3 text-gray-400 hover:text-red-600"
-                        title="Delete"
-                        disabled={template.is_default}
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </button>
+                      {!template.is_default && (
+                        <button
+                          onClick={() => handleDeleteTemplate(template)}
+                          className="p-3 text-gray-400 hover:text-red-600"
+                          title="Delete"
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </li>

@@ -64,7 +64,11 @@ export function useEmailTemplates() {
         body: JSON.stringify(templateData)
       })
       
-      if (!response.ok) throw new Error('Failed to update template')
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to update template: ${response.status} ${errorText}`)
+      }
+      
       const template = await response.json()
       setTemplates(prev => prev.map(t => t.id === id ? template : t))
       return template

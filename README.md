@@ -2,7 +2,7 @@
 
 A beautiful Next.js 15 landing page for free ebook downloads with email collection, Resend integration, Supabase analytics tracking, and comprehensive Playwright testing. This is an example implementation of the Book Landing Stack framework.
 
-**Version 2.1.0** - Complete Database Migration & Modern Architecture
+**Version 2.2.0** - Genre Templates System & Interactive Components
 
 ## Features
 
@@ -33,6 +33,10 @@ A beautiful Next.js 15 landing page for free ebook downloads with email collecti
 - 🔔 Modern toast notification system
 - 📊 Comprehensive API testing suite (6/6 tests PASS)
 - 🏗️ Production-ready architecture with TypeScript types
+- 🎨 10 Genre-specific templates (Fantasy, Romance, Thriller, Sci-Fi, etc.)
+- 🗺️ Interactive components (World Maps, Timelines, Character Profiles)
+- 🎭 Mood boards and world building for immersive experiences
+- 🎯 Visual preview system with color palettes and typography
 
 ## Book Information
 

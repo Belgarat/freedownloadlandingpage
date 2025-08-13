@@ -635,7 +635,7 @@ export default function ABTestingDashboard() {
                            <div>
                              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Conversion Goal</p>
                              <p className="text-sm text-gray-700 font-medium capitalize">
-                               {test.conversion_goal.type.replace('_', ' ')}
+                               {test.conversion_goal?.type?.replace('_', ' ') || 'Not specified'}
                              </p>
                            </div>
                          </div>

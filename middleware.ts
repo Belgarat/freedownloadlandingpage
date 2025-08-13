@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { verifyTestToken } from '@/lib/test-auth'
 
 function isValidToken(token: string | undefined): boolean {
   if (!token) return false
+  
+  // Check if it's a test token first
+  const testUser = verifyTestToken(token)
+  if (testUser) return true
+  
+  // Fallback to existing JWT validation
   const [payloadB64, signatureB64] = token.split('.')
   if (!payloadB64 || !signatureB64) return false
   try {

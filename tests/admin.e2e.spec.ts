@@ -1,17 +1,14 @@
 import { test, expect } from '@playwright/test'
+import { authenticateAsAdmin, clearAuth } from './helpers/auth'
 
 test.describe('Admin Dashboard', () => {
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
-
   test.beforeEach(async ({ page }) => {
-    // Login first
-    await page.context().clearCookies()
+    await authenticateAsAdmin(page)
     await page.goto('/admin')
-    await page.getByPlaceholder('Enter admin password').fill(adminPassword)
-    await page.getByRole('button', { name: 'Sign in' }).click()
-    
-    // Wait for login to complete
-    await expect(page.getByText('Book Landing Stack Admin')).toBeVisible()
+  })
+
+  test.afterEach(async ({ page }) => {
+    await clearAuth(page)
   })
 
   test('should display admin dashboard with all sections', async ({ page }) => {

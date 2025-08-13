@@ -1,9 +1,15 @@
 import { test, expect } from '@playwright/test'
+import { authenticateAsAdmin, clearAuth } from './helpers/auth'
 
 test.describe('Email Themes Management', () => {
   test.beforeEach(async ({ page }) => {
+    await authenticateAsAdmin(page)
     // Navigate to email templates page first
     await page.goto('/admin/email-templates')
+  })
+
+  test.afterEach(async ({ page }) => {
+    await clearAuth(page)
   })
 
   test('should navigate to themes page and display themes', async ({ page }) => {

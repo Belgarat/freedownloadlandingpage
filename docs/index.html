@@ -65,6 +65,7 @@
                     <div class="hidden md:ml-6 md:flex md:space-x-8">
                         <a href="#about" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">About</a>
                         <a href="#features" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">Features</a>
+                        <a href="#screenshots" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">Screenshots</a>
                         <a href="#roadmap" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">Roadmap</a>
                         <a href="deploy.html" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">Deploy</a>
                         <a href="#whatsnew" class="text-gray-900 hover:text-book-blue px-3 py-2 text-sm font-medium">What's New</a>
@@ -363,42 +364,110 @@
         </div>
     </section>
 
+    <!-- Application Screenshots Section -->
+    <section id="screenshots" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">See It In Action</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Real screenshots from the Book Landing Stack application
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-4">📧 Email Templates Management</h3>
+                    <div class="bg-white border rounded-lg p-4 text-center">
+                        <div class="text-gray-400 text-sm mb-2">Screenshot placeholder</div>
+                        <div class="bg-gray-200 h-48 rounded flex items-center justify-center">
+                            <span class="text-gray-500">Admin Email Templates Panel</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-3">
+                            Complete CRUD operations for email templates with default protection
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-4">📊 Admin Dashboard</h3>
+                    <div class="bg-white border rounded-lg p-4 text-center">
+                        <div class="text-gray-400 text-sm mb-2">Screenshot placeholder</div>
+                        <div class="bg-gray-200 h-48 rounded flex items-center justify-center">
+                            <span class="text-gray-500">Admin Dashboard</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-3">
+                            Analytics, configuration, and template management in one place
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-4">📱 Landing Page</h3>
+                    <div class="bg-white border rounded-lg p-4 text-center">
+                        <div class="text-gray-400 text-sm mb-2">Screenshot placeholder</div>
+                        <div class="bg-gray-200 h-48 rounded flex items-center justify-center">
+                            <span class="text-gray-500">Landing Page</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-3">
+                            High-converting landing page with email capture and download
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-4">📈 Analytics</h3>
+                    <div class="bg-white border rounded-lg p-4 text-center">
+                        <div class="text-gray-400 text-sm mb-2">Screenshot placeholder</div>
+                        <div class="bg-gray-200 h-48 rounded flex items-center justify-center">
+                            <span class="text-gray-500">Analytics Dashboard</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-3">
+                            Real-time analytics and conversion tracking
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- What's New Section -->
     <section id="whatsnew" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-bold text-gray-900 mb-4">What's New (v2.2.0)</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Complete genre templates system with 10 specialized templates and interactive components
+                    Complete email template management system with authentication, testing, and database integrity
                 </p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold mb-3">🗄️ Database Migration</h3>
+                    <h3 class="text-lg font-semibold mb-3">📧 Email Template Management</h3>
                     <ul class="space-y-2 text-gray-700 list-disc pl-5">
-                        <li>Complete migration from JSON files to database-driven configuration</li>
-                        <li>Multi-database support (SQLite for dev, Supabase for production)</li>
-                        <li>Full CRUD API endpoints for all configuration types</li>
-                        <li>Comprehensive data migration scripts and backup system</li>
+                        <li>Complete CRUD operations for email templates</li>
+                        <li>Default template protection (cannot be deleted)</li>
+                        <li>Template duplication and preview functionality</li>
+                        <li>Follow-up email template support</li>
                     </ul>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold mb-3">🎨 Modern UX & Architecture</h3>
+                    <h3 class="text-lg font-semibold mb-3">🔐 Authentication & Testing</h3>
                     <ul class="space-y-2 text-gray-700 list-disc pl-5">
-                        <li>Toast notification system with auto-dismiss and multiple types</li>
-                        <li>Enhanced admin interface with improved save experience</li>
-                        <li>Production-ready TypeScript types and error handling</li>
-                        <li>Comprehensive testing suite (6/6 API tests PASS)</li>
+                        <li>JWT-based authentication system for E2E tests</li>
+                        <li>Complete test infrastructure with Playwright</li>
+                        <li>Protected admin routes with middleware</li>
+                        <li>All admin tests now passing (6/6)</li>
                     </ul>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold mb-3">🛡️ Security Improvements</h3>
+                    <h3 class="text-lg font-semibold mb-3">🗄️ Database Integrity</h3>
                     <ul class="space-y-2 text-gray-700 list-disc pl-5">
-                        <li>Automatic session expiration and secure token validation</li>
-                        <li>Proper security headers via Next.js middleware</li>
-                        <li>Tamper-proof authentication with HMAC signatures</li>
-                        <li>Centralized error handling and logging</li>
+                        <li>Automatic cleanup of duplicate templates</li>
+                        <li>Scripts to ensure default templates exist</li>
+                        <li>Foreign key constraint management</li>
+                        <li>Database migration and backup system</li>
                     </ul>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">

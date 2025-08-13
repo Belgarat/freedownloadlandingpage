@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
       const templatesConfig = activeConfig.templates
       activeTemplates = {
         download: templatesConfig.download?.templateId,
-        followup: templatesConfig.followup?.templateId
+        followup: templatesConfig.follow_up?.templateId || templatesConfig.followup?.templateId
       }
     }
     

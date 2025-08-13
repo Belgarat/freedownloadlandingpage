@@ -58,6 +58,15 @@ async function ensureDefaultTemplates() {
             description: 'Default download email template',
             is_default: 1
           }
+        } else if (type === 'followup') {
+          defaultTemplate = {
+            name: 'Default Follow-up Email',
+            subject: 'How are you enjoying the book?',
+            html_content: '<p>Hello {{user_name}},</p><p>We hope you are enjoying {{book_title}}!</p><p>How is your reading experience going?</p>',
+            text_content: 'Hello {{user_name}},\n\nWe hope you are enjoying {{book_title}}!\n\nHow is your reading experience going?',
+            description: 'Default follow-up email template',
+            is_default: 1
+          }
         } else if (type === 'fallback') {
           defaultTemplate = {
             name: 'Fallback Email Template',

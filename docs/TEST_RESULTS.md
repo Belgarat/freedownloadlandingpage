@@ -46,8 +46,8 @@
 
 #### Email Themes Tests (12/12 ❌)
 - **Issue**: Tests timeout waiting for elements that don't exist
-- **Root Cause**: Email themes functionality may not be fully implemented
-- **Solution**: Review and complete email themes implementation
+- **Root Cause**: Email themes functionality may not be fully implemented + authentication required
+- **Solution**: Review and complete email themes implementation + implement test authentication
 
 #### Genre Templates Tests (5/5 ❌)
 - **Issue**: Tests timeout waiting for "Genre Templates" tab
@@ -83,6 +83,7 @@
 2. **Review Email Themes**: Complete implementation or mark tests as skipped
 3. **Review Genre Templates**: Verify admin panel implementation
 4. **Fix A/B Testing API**: Resolve 500 error in test creation
+5. **✅ Fixed Email Templates API**: Resolved templates.filter error - API now returns correct structure
 
 ### Test Improvements
 1. **Add Authentication Mock**: For protected admin pages

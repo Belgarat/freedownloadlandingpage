@@ -153,11 +153,11 @@ CREATE INDEX idx_download_tokens_expires_at ON download_tokens(expires_at);
 npm run dev
 ```
 
-Visit `http://localhost:3000` to see your landing page!
+Visit `http://localhost:3010` to see your landing page!
 
 ### 7. Admin Panel
 
-Access the admin panel at `http://localhost:3000/admin` with:
+Access the admin panel at `http://localhost:3010/admin` with:
 - **Username**: admin
 - **Password**: admin123 (change in production!)
 

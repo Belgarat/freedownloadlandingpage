@@ -265,6 +265,7 @@ const handleSubmit = async (data) => {
 - ✅ **Commit atomici** e descrittivi
 - ✅ **Pull request** per merge
 - ✅ **Versioning semantico**
+- ✅ **Porta 3010** per sviluppo (mai 3000)
 
 ### **Branch Strategy**
 ```
@@ -427,6 +428,34 @@ cp /tmp/development.db.backup.$(ls -t /tmp/development.db.backup.* | head -1) /t
 
 ---
 
+## 🖥️ Development Environment
+
+### **REGOLE FONDAMENTALI**
+- ✅ **Porta 3010** sempre per sviluppo locale
+- ✅ **Database SQLite** in `/tmp/development.db`
+- ✅ **Backup automatici** prima di operazioni critiche
+- ✅ **Environment variables** in `.env.local`
+
+### **Setup Ambiente**
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Setup database locale
+npm run setup:local
+
+# 3. Avvia server su porta 3010
+npm run dev
+
+# 4. Accedi a http://localhost:3010
+```
+
+### **Porte Standard**
+- **3010**: Server di sviluppo Next.js
+- **3000**: Evitare (potrebbe essere usata da altri servizi)
+- **5432**: PostgreSQL (se usato)
+- **8000**: Altri servizi di sviluppo
+
 ## 🔧 Tools e Scripts
 
 ### **Script Utili**
@@ -447,7 +476,7 @@ npm run config:migrate
 ### **Comandi Frequenti**
 ```bash
 # Development
-npm run dev
+npm run dev          # Avvia server su porta 3010
 npm run build
 npm run test:unit
 npm run test:e2e
@@ -455,6 +484,19 @@ npm run test:e2e
 # Database
 sqlite3 /tmp/development.db ".tables"
 sqlite3 /tmp/development.db "SELECT * FROM email_templates;"
+```
+
+### **Porta di Sviluppo Standard**
+- ✅ **Sempre usare porta 3010** per il server di sviluppo
+- ✅ **Evita conflitti** con altri servizi sulla porta 3000
+- ✅ **Configurazione consistente** per tutto il team
+
+```bash
+# Avvia server su porta 3010
+npm run dev
+
+# Oppure esplicitamente
+PORT=3010 npm run dev
 ```
 
 ---
@@ -481,6 +523,16 @@ const templates = activeConfig.templates || {}
 // Problema: params non awaited
 // Soluzione: await params
 const { id } = await params
+```
+
+#### **Porta Già in Uso**
+```bash
+# Problema: Port 3000 is already in use
+# Soluzione: Usa sempre porta 3010
+npm run dev  # Usa automaticamente porta 3010
+
+# Se necessario, specifica esplicitamente
+PORT=3010 npm run dev
 ```
 
 ### **Debug Tips**

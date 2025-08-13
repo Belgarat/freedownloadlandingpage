@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useConfig } from '@/lib/useConfig'
 import { Save, RefreshCw } from 'lucide-react'
 import { useToast } from '@/components/ui/ToastContext'
+import { GenreService } from '@/lib/genre-service'
+import { GenreType } from '@/types/genre-templates'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ConfigData {
@@ -26,6 +28,7 @@ import ContentConfigEditor from '@/components/admin/ContentConfigEditor'
 import ThemeConfigEditor from '@/components/admin/ThemeConfigEditor'
 import SEOConfigEditor from '@/components/admin/SEOConfigEditor'
 import EmailConfigEditor from '@/components/admin/EmailConfigEditor'
+import GenreSelector from '@/components/admin/GenreSelector'
 import AdminTopbar from '@/components/admin/AdminTopbar'
 
 export default function ConfigAdmin() {
@@ -36,6 +39,7 @@ export default function ConfigAdmin() {
   const [saving, setSaving] = useState(false)
   const [isDirty, setIsDirty] = useState(false)
   const [preventReload, setPreventReload] = useState(false)
+  const [currentGenre, setCurrentGenre] = useState<GenreType | undefined>(undefined)
 
   useEffect(() => {
     // Evita sovrascritture durante modifica o salvataggio
@@ -43,6 +47,45 @@ export default function ConfigAdmin() {
       setLocalConfig(config)
     }
   }, [config, isDirty, saving, preventReload])
+
+  const handleGenreSelect = async (genre: GenreType) => {
+    if (!localConfig) return
+
+    try {
+      // Apply genre preset to current configuration
+      const genreConfig = GenreService.applyGenrePreset(genre, localConfig)
+      
+      // Merge with existing config
+      const updatedConfig = {
+        ...localConfig,
+        theme: { ...localConfig.theme, ...genreConfig.theme },
+        content: { ...localConfig.content, ...genreConfig.content },
+        marketing: { ...localConfig.marketing, ...genreConfig.marketing },
+        book: { ...localConfig.book, ...genreConfig.book },
+        seo: { ...localConfig.seo, ...genreConfig.seo },
+        email: { ...localConfig.email, ...genreConfig.email }
+      }
+      
+      setLocalConfig(updatedConfig)
+      setCurrentGenre(genre)
+      setIsDirty(true)
+      
+      addToast({
+        type: 'success',
+        title: 'Genre Applied',
+        message: `Applied ${genre} template. Don't forget to save your changes!`,
+        duration: 4000
+      })
+    } catch (error) {
+      console.error('Error applying genre:', error)
+      addToast({
+        type: 'error',
+        title: 'Genre Application Failed',
+        message: 'Failed to apply genre template.',
+        duration: 5000
+      })
+    }
+  }
 
   const handleSave = async () => {
     if (!localConfig) return
@@ -120,6 +163,7 @@ export default function ConfigAdmin() {
     { id: 'theme', name: 'Theme', color: 'orange' },
     { id: 'seo', name: 'SEO', color: 'red' },
     { id: 'email', name: 'Email', color: 'indigo' },
+    { id: 'genres', name: 'Genre Templates', color: 'pink' },
   ]
 
   if (loading) {
@@ -207,6 +251,13 @@ export default function ConfigAdmin() {
           <EmailConfigEditor
             config={localConfig.email}
             onChange={(newEmailConfig) => { setLocalConfig({...localConfig, email: newEmailConfig}); setIsDirty(true) }}
+          />
+        )
+      case 'genres':
+        return (
+          <GenreSelector
+            onGenreSelect={handleGenreSelect}
+            currentGenre={currentGenre}
           />
         )
       default:

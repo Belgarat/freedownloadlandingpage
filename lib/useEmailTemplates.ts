@@ -14,7 +14,9 @@ export function useEmailTemplates() {
       const response = await fetch('/api/email-templates')
       if (!response.ok) throw new Error('Failed to fetch templates')
       const data = await response.json()
-      setTemplates(data)
+      // Handle both array and object response formats
+      const templatesArray = Array.isArray(data) ? data : (data.templates || [])
+      setTemplates(templatesArray)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {

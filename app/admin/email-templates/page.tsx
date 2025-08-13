@@ -58,7 +58,7 @@ export default function EmailTemplatesPage() {
   }
 
   // Filter templates based on search and filters
-  const filteredTemplates = templates.filter(template => {
+  const filteredTemplates = (Array.isArray(templates) ? templates : []).filter(template => {
     // Search filter
     const matchesSearch = searchTerm === '' || 
       template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

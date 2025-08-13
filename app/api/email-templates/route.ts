@@ -92,6 +92,10 @@ export async function POST(request: NextRequest) {
       )
     }
     
+    // Ensure new templates are never default unless explicitly requested
+    // and there's a specific business need for it
+    const shouldBeDefault = body.is_default === true && body.name && body.name.toLowerCase().includes('default')
+    
     // Create template
     const template = await adapter.createEmailTemplate({
       name: body.name,
@@ -99,7 +103,7 @@ export async function POST(request: NextRequest) {
       html_content: body.html_content,
       text_content: body.text_content,
       description: body.description,
-      is_default: body.is_default || false
+      is_default: shouldBeDefault
     })
     
     // Create placeholders if provided

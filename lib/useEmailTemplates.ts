@@ -81,7 +81,11 @@ export function useEmailTemplates() {
         method: 'DELETE'
       })
       
-      if (!response.ok) throw new Error('Failed to delete template')
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`Failed to delete template: ${response.status} ${errorText}`)
+      }
+      
       setTemplates(prev => prev.filter(t => t.id !== id))
       return true
     } catch (err) {
@@ -102,7 +106,7 @@ export function useEmailTemplates() {
         description: template.description ? `${template.description} (Copy)` : 'Duplicated template',
         html_content: template.html_content,
         text_content: template.text_content || '',
-        is_default: false,
+        is_default: false, // Duplicates are never default
         category_ids: template.categories?.map(c => c.id) || []
       }
 

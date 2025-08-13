@@ -184,7 +184,7 @@ export class GenreService {
     const urgencyTexts = {
       fantasy: 'Limited time offer - Join the adventure!',
       romance: 'Love is in the air - Get your copy now!',
-      thriller: 'The clock is ticking - Don't miss out!',
+      thriller: 'The clock is ticking - Don\'t miss out!',
       scifi: 'The future is now - Download today!',
       mystery: 'The mystery awaits - Claim your copy!',
       historical: 'Step back in time - Free for a limited time!',

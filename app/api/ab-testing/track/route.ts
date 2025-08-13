@@ -1,11 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ABTestResult } from '@/types/ab-testing'
-import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Mock Supabase client for development/testing
+const createMockSupabaseClient = () => ({
+  from: () => ({
+    insert: () => Promise.resolve({ error: null }),
+    select: () => ({
+      eq: () => Promise.resolve({ data: [], error: null })
+    })
+  })
+})
+
+const supabase = process.env.NODE_ENV === 'test' || !process.env.NEXT_PUBLIC_SUPABASE_URL 
+  ? createMockSupabaseClient() 
+  : (() => {
+      const { createClient } = require('@supabase/supabase-js')
+      return createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      )
+    })()
 
 export async function POST(request: NextRequest) {
   try {

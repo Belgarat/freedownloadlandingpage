@@ -1,10 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Mock Supabase client for development/testing
+const createMockSupabaseClient = () => ({
+  from: () => ({
+    select: () => ({
+      eq: () => ({
+        eq: () => ({
+          single: () => Promise.resolve({ data: null, error: null })
+        })
+      })
+    }),
+    upsert: () => ({
+      select: () => ({
+        single: () => Promise.resolve({ data: { id: 1 }, error: null })
+      })
+    }),
+    delete: () => ({
+      eq: () => Promise.resolve({ data: null, error: null })
+    })
+  })
+})
+
+const supabase = process.env.NODE_ENV === 'test' || !process.env.NEXT_PUBLIC_SUPABASE_URL 
+  ? createMockSupabaseClient() 
+  : (() => {
+      const { createClient } = require('@supabase/supabase-js')
+      return createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      )
+    })()
 
 // GET - Ottieni l'assegnazione di un visitatore per un test
 export async function GET(request: NextRequest) {

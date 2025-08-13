@@ -12,7 +12,7 @@ export default defineConfig({
     timeout: 10000, // 10 secondi timeout per expect
   },
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:3010',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -40,7 +40,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm run dev',
-    url: 'http://localhost:3000',
+    url: 'http://localhost:3010',
     reuseExistingServer: !process.env.CI,
     timeout: 120000, // 2 minuti timeout per il server
   },
